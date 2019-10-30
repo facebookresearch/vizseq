@@ -24,28 +24,36 @@ Built-in metrics:
 
 \* **with multi-process acceleration**
 
-## Requirements and Installation
-* Python >= 3.7
-* PyTorch >= 1.2
+## Installation
+* Python 3.6+ and PyTorch 1.2+ required
 
-To install VizSeq:
 ```bash
 > pip install vizseq
 ```
 
-Install from source
+#### Install from source
 ```bash
+> git clone https://github.com/facebookresearch/vizseq
+> cd vizseq
 > pip install -e .
 ```
 
 ## Get Started
-### Visualization in Jupyter Notebook
-Example notebooks
+Full documentation
+
+### Jupyter Notebook UI
+[Example notebook](examples/jupyter_notebook.ipynb)
+
+[fairseq integration](examples/fairseq_integration.ipynb)
 
 ### Web App UI
-First, launch the web server
+(Optional) Download Example data:
 ```bash
-python -m vizseq.server
+> bash get_example_data.sh
+```
+Launch the web server:
+```bash
+> python -m vizseq.server --data-root ./examples/data
 ```
 
 And then, open the following URL
@@ -53,48 +61,8 @@ And then, open the following URL
 http://localhost:9001
 ```
 
-## Download Example Data
-```bash
-> bash get_example_data.sh
-```
-
-## Documentation
-
-## Adding New Metrics
-First, add `new_metric.py` file to `vizseq/scorers`, and then register the scoring function: 
-
-```python
-from typing import Optional, Dict, List, Set
-
-from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
-
-@register_scorer('metric_id', 'Metric Name')
-class METEORScorer(VizSeqScorer):
-    def score(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
-    ) -> VizSeqScore:
-        return VizSeqScore.make(
-            corpus_score=99.9,
-            sent_scores=[99.9, 99.9],
-            group_scores={'long': 99.9, 'short': 99.9}
-        )
-``` 
-Add the unit test and run:
-```bash
-python -m unittest tests.scorers.test_<metric>
-```
-
-## Data
-VizSeq's data is organized by datasets in the folder structure as follows:
-```bash
-<data_root>/<task_or_dataset_name>/src_*.{txt,zip}
-<data_root>/<task_or_dataset_name>/ref_*.txt
-<data_root>/<task_or_dataset_name>/tag_*.txt
-<data_root>/<task_or_dataset_name>/pred_*.txt
-```
-where `src_*.{txt,zip}`, `ref_*.txt`, `tag_*.txt` and `pred_*.txt` are for sources, references, tags (optional) and predictions, respectively.
-
+## License
+VizSeq is [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) licensed. See the LICENSE file for details.
 
 ## Citation
 Please cite as
