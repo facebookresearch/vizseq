@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+</head>
+
+<body>
+
+{% from 'macros.html' import visualize_dict, copy_to_clipboard %}
+
+{{ visualize_dict() }}
+{{ copy_to_clipboard() }}
+
+{% for s, n in metrics_and_names %}
+<div class="container-fluid">
+    <h4>{{ n }}</h4>
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover table-sm table-bordered">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="tooltip"
+                                data-placement="bottom" title="Copy to clipboard"
+                                onclick="copyToClipboard('#csv_{{ s }}')">CSV</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="tooltip"
+                                data-placement="bottom" title="Copy to clipboard"
+                                onclick="copyToClipboard('#latex_{{ s }}')">LaTeX</button>
+                    </th>
+                    {% for m in models %} <th scope="col" style="word-wrap: break-word">{{ m }}</th> {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">All</th>{% for m in models %} <td>{{ corpus_scores[s][m] }}</td> {% endfor %}
+                </tr>
+                {% for t in tag_set %}
+                <tr>
+                    <th scope="row">{{ t }}</th>{% for m in models %}<td>{{ group_scores[s][t][m] }}</td>{% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <span id="latex_{{ s }}" style="display:none">{{ corpus_and_group_score_latex[s] }}</span>
+    <span id="csv_{{ s }}" style="display:none">{{ corpus_and_group_score_csv[s] }}</span>
+</div>
+{% endfor %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+</script>
+
+</body>
+</html>

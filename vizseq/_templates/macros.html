@@ -1,0 +1,120 @@
+{% macro stats_table() %}
+<div class="container-fluid">
+    <br>
+    <div class="row">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Type</th>
+                <th scope="col">Examples</th>
+                <th scope="col">Tokens / Frames</th>
+                <th scope="col">Chars / Duration (ms)</th>
+            </tr>
+            </thead>
+            <tbody id="statsTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function updateStatsTable(stats) {
+        enum_src_names_and_types.forEach(function (e) {
+            let trNode = document.createElement('tr');
+            trNode.innerHTML +=
+                `<th scope="row">Source ${e[1]}</th>
+                     <td>${e[2]}</td>
+                     <td>${stats['n_examples']}</td>
+                     <td>${stats['n_src_tokens'][e[1]]}</td>
+                     <td>${stats['n_src_chars'][e[1]]}</td>`
+            ;
+            document.getElementById('statsTable').appendChild(trNode);
+        });
+        enum_ref_names.forEach(function (e) {
+            let trNode = document.createElement('tr');
+            trNode.innerHTML +=
+                `<th scope="row">Reference ${e[1]}</th>
+                     <td>Text</td>
+                     <td>${stats['n_examples']}</td>
+                     <td>${stats['n_ref_tokens'][e[1]]}</td>
+                     <td>${stats['n_ref_chars'][e[1]]}</td>`
+            ;
+            document.getElementById('statsTable').appendChild(trNode);
+        });
+    }
+</script>
+{% endmacro %}
+
+
+{% macro nav_pages(page_no, group1, group2, group3, group4) %}
+<nav aria-label="Next Pages">
+    <ul class="pagination">
+        {% if group1|length > 0 %}
+        {% for i in group1 %}
+        <li class="page-item">
+            <a class="page-link" href="javascript:deriveURL(urlArgs, &quot;p_no&quot;, &quot;{{ i }}&quot;);">{{ i }}</a>
+        </li>
+        {% endfor %}
+        <li class="page-item">&emsp;&emsp;</li>
+        {% endif %}
+
+        {% for i in group2 %}
+        <li class="page-item">
+            <a class="page-link" href="javascript:deriveURL(urlArgs, &quot;p_no&quot;, &quot;{{ i }}&quot;);">{{ i }}</a>
+        </li>
+        {% endfor %}
+
+        <li class="page-item">
+            <a class="page-link" href="#"><b>{{ page_no }}</b></a>
+        </li>
+
+        {% for i in group3 %}
+        <li class="page-item">
+            <a class="page-link" href="javascript:deriveURL(urlArgs, &quot;p_no&quot;, &quot;{{ i }}&quot;);">{{ i }}</a>
+        </li>
+        {% endfor %}
+
+        {% if group4|length > 0 %}
+        <li class="page-item">&emsp;&emsp;</li>
+        {% for i in group4 %}
+        <li class="page-item">
+            <a class="page-link" href="javascript:deriveURL(urlArgs, &quot;p_no&quot;, &quot;{{ i }}&quot;);">{{ i }}</a>
+        </li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+</nav>
+{% endmacro %}
+
+{% macro visualize_dict() %}
+<script>
+    function visualizeDict(dict) {
+        let values = Object.keys(dict).map(k => dict[k]);
+        let worse_v = Math.min(...values);
+        let best_v = Math.max(...values);
+        let visualized = {};
+        Object.keys(dict).forEach(function (k) {
+            if (dict[k] === worse_v) {
+                visualized[k] = '<span style="font-style:italic"><u>' + dict[k] + '</u></span>';
+            } else if (dict[k] === best_v) {
+                visualized[k] = '<span style="font-weight:bold">' + dict[k] + '</span>';
+            } else {
+                visualized[k] = dict[k];
+            }
+        });
+        return visualized;
+    }
+</script>
+{% endmacro %}
+
+{% macro copy_to_clipboard() %}
+<script>
+    function copyToClipboard(elementId) {
+        let $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(elementId).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+</script>
+{% endmacro %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h3>{% block title %}List{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container"><br><h3>Upload</h3><br></div>
+
+<div class="container">
+    <div class="container w-75">
+        <br>
+        <form enctype="multipart/form-data" method="post" action="/upload">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01"
+                           aria-describedby="inputGroupFileAddon01">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose zip file</label>
+                </div>
+            </div>
+            <div class="container" align="right">
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <br>
+    <div class="container w-75">
+        <h6>Example folder structure inside the zip file:</h6>
+    </div>
+    <div class="container border w-75">
+        &nbsp;Multi30k.zip<br>
+        &nbsp;&emsp;&emsp;|- multi30k_test<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- src_0.zip<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|- src.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|- 0001.jpg<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|- 0002.jpg<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|- 1000.jpg<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- src_1.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- src_m.{txt,zip}<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- ref_0.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- ref_1.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- ref_n.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- tag_0.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- pred_model_1.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- pred_model_2.txt<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;...<br>
+        &nbsp;&emsp;&emsp;&emsp;&emsp;|- pred_model_k.txt<br>
+    </div>
+</div>
+
+{% endblock %}

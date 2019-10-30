@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/3c563f9647.js"></script>
+
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+</head>
+
+<body>
+
+{{ span_highlight_js }}
+
+{% for i in range(cur_idx|length) %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <b># {{ i + 1 }} / {{ n_cur_samples }} / {{ n_samples }} ( {{ cur_idx[i] + 1 }} / {{ total_examples }} )</b>
+            </div>
+            <div class="col" align="right">
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover table-sm table-borderless">
+            <tbody>
+            {% for j, src_name, src_type in enum_src_names_and_types %}
+            {% set cur_src = src[j][i] %}
+            <tr style="background-color:#FDF2E9" id="srcRow{{ j }}{{ i }}">
+                <th scope="row">Source {{ src_name }}</th>
+                {% if src_type == 'text' %}
+                <td>{{ cur_src }}</td>
+                {% elif src_type == 'image' %}
+                <td><img src="{{ cur_src }}"></td>
+                {% elif src_type == 'audio' %}
+                <td>
+                    <audio controls src="{{ cur_src }}" id="audio_{{ i }}_{{ j }}"></audio>
+                </td>
+                {% elif src_type == 'video' %}
+                <td>
+                    <video height="240" controls src="{{ cur_src }}" id="video_{{ i }}_{{ j }}"></video>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+
+            <tr style="background-color:#EAF2F8">
+            {% if google_translation|length > 0 %}
+                <th class="text-nowrap" scope="row">Google Translate</th><td>{{ google_translation[i] }}</td>
+            {% endif %}
+            </tr>
+
+            {% for j, ref_name in enum_ref_names %}
+            {% set cur_ref = ref[j][i] %}
+            {% if cur_ref|length > 0 %}
+            <tr style="background-color:#FEF9E7">
+                <th scope="row">Reference {{ ref_name }}</th><td>{{ cur_ref }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+            {% for _, m in enum_models %}
+            <tr><th scope="row">{{ m }}</th><td>{{ hypo[m][i] }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="table table-hover table-sm table-bordered">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Model</th>{% for _, s in enum_metrics %}<th scope="col">{{ s }}</th>{% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for _, m in enum_models %}
+            <tr>
+                <td>{{ m }}</td>{% for _, s in enum_metrics %}<td>{{ sent_scores[i][s][m] }}</td>{% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+{% endfor %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+</script>
+</body>
+</html>

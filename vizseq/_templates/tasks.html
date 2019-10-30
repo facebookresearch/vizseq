@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h3>{% block title %}List{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container"><br><h3>Tasks</h3><br></div>
+
+<script>
+    function setAll(checkGroupId, if_checked) {
+        let checkNodes = document.getElementById(checkGroupId).children;
+        for (let i = 0; i < checkNodes.length; i++) {
+            if (checkNodes[i].classList.contains("form-check-input")) {
+                checkNodes[i].checked = if_checked;
+            }
+        }
+    }
+    function submitForm(checkGroupId, modelInputId, formId) {
+        let models = [];
+        let checkNodes = document.getElementById(checkGroupId).children;
+        for (let i = 0; i < checkNodes.length; i++) {
+            if (checkNodes[i].classList.contains("form-check-input") && checkNodes[i].checked) {
+                models.push(checkNodes[i].nextElementSibling.textContent);
+            }
+        }
+
+        document.getElementById(modelInputId).value = models.join(",");
+        document.getElementById(formId).submit();
+    }
+</script>
+
+<div class="container" id="mainDiv">
+    <div class="accordion" id="accordionDiv">
+        {% for i, task, task_name, enum_models in enum_tasks_and_names_and_enum_models %}
+        {% if i == 0 %}
+        {% set btn_class = 'btn btn-link' %}
+        {% set collapse_class = 'collapse show' %}
+        {% else %}
+        {% set btn_class = 'btn btn-link collapsed' %}
+        {% set collapse_class = 'collapse' %}
+        {% endif %}
+
+        <div class="card">
+            <div class="card-header" id="heading{{ i }}">
+                <h3 class="mb-0">
+                    <button class="{{ btn_class }}" type="button" data-toggle="collapse" data-target="#collapse{{ i }}"
+                            aria-expanded="false" aria-controls="collapse{{ i }}">{{ task_name }}</button>
+                </h3>
+            </div>
+
+            <div id="collapse{{ i }}" class="{{ collapse_class }}" aria-labelledby="heading{{ i }}"
+                 data-parent="#accordionDiv">
+                <div class="card-body">
+                    <form action="/view" method="get" id="form{{ i }}">
+                        <div class="form-group">
+                            <div class="form-check" id="checkGroup{{ i }}">
+                                {% for j, model in enum_models %}
+                                <input class="form-check-input" type="checkbox" id="check{{ i }}_{{ j }}">
+                                <label class="form-check-label" for="check{{ i }}_{{ j }}">{{ model }}</label>
+                                <br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <input type="hidden" name="t" value="{{ task }}" />
+                        <input type="hidden" name="m" value="" id="modelInput{{ i }}" />
+                        <div>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    onclick="setAll('checkGroup{{ i }}', true);">Select All</button>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    onclick="setAll('checkGroup{{ i }}', false);">Clear</button>
+                        </div>
+                        <br>
+                        <button type="button" class="btn btn-primary"
+                                onclick="submitForm('checkGroup{{ i }}', 'modelInput{{ i }}', 'form{{ i }}');">
+                            View</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+
+
+</div>
+{% endblock %}

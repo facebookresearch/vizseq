@@ -1,0 +1,609 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h3>{% block title %}View{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+
+<div class="container"><br><h3>{{ task_name }}</h3><br></div>
+
+{{ span_highlight_js }}
+{% from 'macros.html' import nav_pages, stats_table, visualize_dict, copy_to_clipboard %}
+
+{{ visualize_dict() }}
+{{ copy_to_clipboard() }}
+
+<script>
+    const urlArgs = {{ url_args|safe }};
+    const task = '{{ task }}';
+    const taskName = '{{ task_name }}';
+    const models = {{ models|safe }};
+    const tagSet = {{ tag_set|safe }};
+    const enum_src_names_and_types = {{ enum_src_names_and_types|safe }};
+    const enum_ref_names = {{ enum_ref_names|safe }};
+    const enum_metrics_and_names = {{ enum_metrics_and_names|safe }};
+    const all_metrics_and_names = {{ all_metrics_and_names|safe }};
+    const allTokenization = {{ all_tokenization|safe }};
+    const tokenization = '{{ tokenization }}';
+
+    const plotCfg = {
+        responsive: true,
+        modeBarButtonsToRemove: ['toImage', 'sendDataToCloud', 'hoverClosestCartesian', 'hoverCompareCartesian',
+            'lasso2d', 'autoScale2d', 'zoomIn2d', 'zoomOut2d', 'select2d', 'toggleSpikelines'],
+        modeBarButtonsToAdd: [
+            {name: 'Download SVG', icon: Plotly.Icons.camera,
+                click: function(gd) {Plotly.downloadImage(gd, {format: 'svg'})}},
+            {name: 'Download PNG', icon: Plotly.Icons.camera,
+                click: function(gd) {Plotly.downloadImage(gd, {format: 'png'})}},
+        ]
+    };
+
+    function doJsonAjax(url, callback, method='GET') {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                callback(JSON.parse(this.responseText));
+            }
+        };
+        xhttp.open(method, url, true);
+        xhttp.send();
+    }
+
+    function deriveURL(args, key, newValue) {
+        let newArgs = JSON.parse(JSON.stringify(args));
+        newArgs[key] = newValue;
+        let pairs = Object.keys(newArgs).map(k => k + "=" + newArgs[k]);
+        window.location.href = location.protocol + "//" + location.hostname + ":" + location.port + location.pathname +
+            "?" + pairs.join("&");
+    }
+
+    function getGTranslate(selfId, srcRowId, sent, lang) {
+        let callback = function(jsonResponse) {
+            let trNode = document.createElement('tr');
+            trNode.setAttribute('style', 'background-color:#EAF2F8');
+            trNode.innerHTML = '<th class="text-nowrap" scope="row">Google Translate</th><td>' +
+                jsonResponse['translation'] + '</td>';
+            document.getElementById(srcRowId).after(trNode);
+            $('#' + selfId).remove();
+        };
+        let url = location.protocol + '//' + location.hostname + ':' + location.port + "/g_translate?s=" +
+            encodeURIComponent(sent) + "&l=" +  encodeURIComponent(lang);
+        doJsonAjax(url, callback);
+    }
+
+    function submitSearchForm() {
+        let models = [];
+        let nodes = document.getElementById('selectModels').children;
+        for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].selected) { models.push(nodes[i].textContent); }
+        }
+        document.getElementById('modelInput').value = models.join(",");
+
+        let s_metrics = '';
+        let nodes2 = document.getElementById('selectSorting').children;
+        for (let i = 0; i < nodes2.length; i++) {
+            if (nodes2[i].value === '6' && nodes2[i].selected) { s_metrics = nodes2[i].id.slice(13); }
+        }
+        document.getElementById('sMetricInput').value = s_metrics;
+
+        document.getElementById('searchForm').submit();
+    }
+
+    function updateTaskCfg() {
+        let taskName = document.getElementById('taskNameText').value;
+        let description = document.getElementById('descriptionText').value;
+        let cfgMetrics = [];
+        let nodes = document.getElementById('selectCfgMetrics').children;
+        for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].selected) { cfgMetrics.push(nodes[i].value); }
+        }
+        let cfgTokenization = undefined;
+        let nodes2 = document.getElementById('selectCfgTokenization').children;
+        for (let i = 0; i < nodes2.length; i++) {
+            if (nodes2[i].selected) { cfgTokenization = nodes2[i].value; }
+        }
+
+
+        let url = '/task_cfg?t=' + task + '&d=' + encodeURIComponent(description) + '&n=' + encodeURIComponent(taskName)
+            + '&m=' + cfgMetrics.join(',') + '&tkn=' + encodeURIComponent(cfgTokenization);
+        $.ajax(url, {
+            type: 'POST',
+            success: function () {
+                window.alert('Updated!'); deriveURL(urlArgs, 'p_no', '1');
+            }
+        });
+    }
+
+    function resetTaskCfgMetrics() {
+        all_metrics_and_names.forEach(function (e) { document.getElementById(e[0] + 'CfgMetricOption').selected = false; });
+        enum_metrics_and_names.forEach(function (e) { document.getElementById(e[1] + 'CfgMetricOption').selected = true; });
+    }
+
+    function resetTaskCfgTokenization() {
+        allTokenization.forEach(function (e) { document.getElementById(e + 'CfgTokenizationOption').selected = false; });
+        document.getElementById(tokenization + 'CfgTokenizationOption').selected = true;
+    }
+
+    function resetTaskCfg() {
+        document.getElementById('taskNameText').value = taskName;
+        resetTaskCfgMetrics();
+        resetTaskCfgTokenization();
+    }
+</script>
+
+<div class="container">
+
+    <ul class="nav nav-tabs" id="tabList" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="examplesTab" data-toggle="tab" href="#examplesTabPane" role="tab"
+               aria-controls="examples" aria-selected="true">Examples</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="datasetTab" data-toggle="tab" href="#datasetTabPane" role="tab"
+               aria-controls="dataset" aria-selected="false">Dataset</a>
+        </li>
+        <li class="nav-item" id="navTagsTab">
+            <a class="nav-link" id="tagsTab" data-toggle="tab" href="#tagsTabPane" role="tab"
+               aria-controls="tags" aria-selected="false">Tags</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="ngramsTab" data-toggle="tab" href="#ngramsTabPane" role="tab"
+               aria-controls="ngrams" aria-selected="false">N-Grams</a>
+        </li>
+        {% if models|length > 0 %}
+        {% for i, metric, metric_name in enum_metrics_and_names %}
+        <li class="nav-item">
+            <a class="nav-link" id="scores{{ i }}Tab" data-toggle="tab" href="#scores{{ i }}TabPane" role="tab"
+               aria-controls="scores{{ i }}" aria-selected="false">{{ metric_name }}</a>
+        </li>
+        {% endfor %}
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" id="configTab" data-toggle="tab" href="#configTabPane" role="tab"
+               aria-controls="config" aria-selected="false">Configuration</a>
+        </li>
+    </ul>
+
+    <div class="tab-content w-100" id="tabContent">
+        <div class="tab-pane fade show active" id="examplesTabPane" role="tabpanel" aria-labelledby="examplesTab">
+            <div class="container">
+                <br>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container">
+                            <form class="form-inline my-1 my-lg-0" action="/view" method="get" id="searchForm">
+                                <input type="hidden" name="t" value="{{ task }}" />
+                                <input type="text" class="form-control mr-lg-3" style="width:40%" placeholder="Search"
+                                       name="q" value="{{ query }}">
+                                <label class="border mr-lg-3" style="width:10%">
+                                    <select class="selectpicker w-10" name="tag" multiple title="Tags"
+                                            data-live-search="true" data-selected-text-format="static" id="selectTags">
+                                        {% for t in tag_set %}<option selected>{{ t }}</option>{% endfor %}
+                                    </select>
+                                </label>
+                                <label class="border mr-lg-3" style="width:10%">
+                                    <select class="selectpicker" multiple title="Models" data-live-search="true"
+                                            data-selected-text-format="static" id="selectModels">
+                                        {% for m in models %}
+                                        <option selected>{{ m }}</option>
+                                        {% endfor %}
+                                        <input type="hidden" id="modelInput" name="m" value="" />
+                                    </select>
+                                </label>
+                                <label class="border mr-lg-3" style="width:10%">
+                                    <select class="selectpicker" name="s" title="Sorting"
+                                            data-selected-text-format="static" id="selectSorting">
+                                        <option value="0" {% if sorting == 0 %} selected {% endif %}>Original</option>
+                                        <option value="1" {% if sorting == 1 %} selected {% endif %}>Random</option>
+                                        {% if src_has_text %}
+                                        <option value="4" {% if sorting == 4 %} selected {% endif %}>
+                                            By Source Length</option>
+                                        {% endif %}
+                                        <option value="2" {% if sorting == 2 %} selected {% endif %}>
+                                            By Reference Length</option>
+                                        <h6 class="dropdown-header">By alphabetical order</h6>
+                                        {% if src_has_text %}
+                                        <option value="5" {% if sorting == 5 %} selected {% endif %}>
+                                            By Source Alphabetical Order</option>
+                                        {% endif %}
+                                        <option value="3" {% if sorting == 3 %} selected {% endif %}>
+                                            By Reference Alphabetical Order</option>
+                                        {% for _, s, n in enum_metrics_and_names %}
+                                        <option id="sortingMetric{{ s }}" value="6"
+                                                {% if sorting == 6 and s == s_metric %} selected {% endif %}>
+                                            By metric: {{ n }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="hidden" id="sMetricInput" name="s_metric" value="{{ s_metric }}" />
+                                </label>
+                                <label class="border mr-lg-5" style="width:10%">
+                                    <select class="selectpicker" name="p_sz" title="Page Size"
+                                            data-selected-text-format="static" id="selectPageSize">
+                                        {% for sz in page_sizes %}
+                                        {% if sz == page_sz %}
+                                        <option value="{{ sz }}" selected>{{ sz }}</option>
+                                        {% else %}
+                                        <option value="{{ sz }}">{{ sz }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                                <button type="button" class="btn btn-primary" onclick="submitSearchForm();">
+                                    Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+
+            <div class="container">
+                {{ nav_pages(page_no, pagination[0], pagination[1], pagination[2], pagination[3]) }}
+                <br>
+                {% for i in range(cur_idx|length) %}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <b># {{ i + 1 }} / {{ n_cur_samples }} / {{ n_samples }} ( {{ cur_idx[i] + 1 }} / {{ total_examples }} )</b>
+                            </div>
+                            <div class="col" align="right" id="sentTagBadges">
+                                {% for t in tags[i] %}<span class="badge badge-primary">{{ t }}</span>{% endfor %}
+                                {% for t in auto_tags[i] %}<span class="badge badge-secondary">{{ t }}</span>{% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover table-sm table-borderless">
+                            <tbody>
+                            {% for j, src_name, src_type in enum_src_names_and_types %}
+                            {% set cur_src = src[j][i] %}
+                            {% set cur_viz_src = viz_src[j][i] %}
+                            <tr style="background-color:#FDF2E9" id="srcRow{{ j }}_{{ i }}">
+                                <th class="text-nowrap" scope="row">Source {{ src_name }}</th>
+                                {% if src_type == 'text' %}
+                                <td>
+                                    {{ cur_viz_src }}
+                                    <a href="javascript:getGTranslate('gTranslate{{ j }}_{{ i }}', 'srcRow{{ j }}_{{ i }}', '{{ cur_src }}', '{{ trg_lang[i] }}');"
+                                       title="Google Translate" id="gTranslate{{ j }}_{{ i }}">GTranslate</a>
+                                </td>
+                                {% elif src_type == 'image' %}
+                                <td><img style="max-height:240px" src="{{ cur_src }}"></td>
+                                {% elif src_type == 'audio' %}
+                                <td><audio id="audio_{{ i }}" controls src="{{ cur_src }}"></audio></td>
+                                {% elif src_type == 'video' %}
+                                <td><video height="240" controls src="{{ cur_src }}"></video></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+
+                            {% for j, ref_name in enum_ref_names %}
+                            {% set cur_ref = ref[j][i] %}
+                            {% if cur_ref|length > 0 %}
+                            <tr style="background-color:#FEF9E7">
+                                <th class="text-nowrap" scope="row">Reference {{ ref_name }}</th><td>{{ cur_ref }}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% for m in models %}
+                            <tr><th scope="row">{{ m }}</th><td>{{ hypo[m][i] }}</td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        {% if enum_metrics_and_names|length > 0 and models|length > 0 %}
+                        <table class="table table-hover table-sm table-bordered">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Model</th>
+                                {% for _, s, _ in enum_metrics_and_names %}<th scope="col">{{ s }}</th>{% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for m in models %}
+                            <tr>
+                                <td>{{ m }}</td>
+                                {% for _, s, _ in enum_metrics_and_names %}
+                                <td>{{ cur_sent_scores[i][s][m] }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                {% endfor %}
+
+                <br>
+                {{ nav_pages(page_no, pagination[0], pagination[1], pagination[2], pagination[3]) }}
+                <br>
+
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="datasetTabPane" role="tabpanel" aria-labelledby="datasetTab">
+            {{ stats_table() }}
+
+            <div class="d-flex justify-content-center" id="datasetSpinner">
+                <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+            </div>
+
+            <div class="container-fluid">
+                <br>
+                <div class="row"><div class="col w-100"><div id="sentLenPlot" align="center"></div></div></div>
+                <div class="row"><div class="col w-100"><div id="srcTknFreqPlot" align="center"></div></div></div>
+                <div class="row"><div class="col w-100"><div id="refTknFreqPlot" align="center"></div></div></div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tagsTabPane" role="tabpanel" aria-labelledby="tagsTab">
+            <br>
+            <div class="container" align="center">
+                <div class="d-flex justify-content-center" id="tagCountSpinner">
+                        <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+                </div>
+
+                <div class="row"><div class="col w-100"><div id="tagCountPlot"></div></div></div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="ngramsTabPane" role="tabpanel" aria-labelledby="ngramsTab">
+            <div class="container">
+                <br>
+                <div class="container">
+
+                    <div class="d-flex justify-content-center" id="ngramsSpinner">
+                        <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+                    </div>
+
+                    <div class="row" id="ngramsDiv"></div>
+                </div>
+            </div>
+        </div>
+
+        {% if models|length > 0 %}
+        {% for i, s, _ in enum_metrics_and_names %}
+        <div class="tab-pane fade" id="scores{{ i }}TabPane" role="tabpanel" aria-labelledby="scores{{ i }}Tab">
+
+            <div class="d-flex justify-content-center" id="{{ s }}ScoreSpinner">
+                <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+            </div>
+
+            <div class="row"><div class="col"><div id="sentScoresPlot4{{ s }}" align="center"></div></div></div>
+
+            <div class="row">
+                <div class="col">
+                    <table class="table table-hover table-sm table-bordered">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip"
+                                        data-placement="bottom" title="Copy to clipboard"
+                                        onclick="copyToClipboard('#csv_{{ s }}')">CSV</button>
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip"
+                                        data-placement="bottom" title="Copy to clipboard"
+                                        onclick="copyToClipboard('#latex_{{ s }}')">LaTeX</button>
+                            </th>
+                            {% for m in models %} <th scope="col">{{ m }}</th> {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody id="tableBodyMetric_{{ s }}"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <span id="latex_{{ s }}" style="display:none"></span>
+            <span id="csv_{{ s }}" style="display:none"></span>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="tab-pane fade" id="configTabPane" role="tabpanel" aria-labelledby="configTab">
+            <div class="container-fluid">
+                <form id="cfgForm">
+                    <br>
+                    <div class="row">
+                        <div class="col w-100">
+                            <div class="form-group">
+                                <label for="taskIDText">Task ID</label>
+                                <input type="text" class="form-control" id="taskIDText" placeholder="{{ task }}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col w-100">
+                            <div class="form-group">
+                                <label for="taskNameText">Task Name</label>
+                                <input type="text" class="form-control" id="taskNameText" name="n"
+                                       value="{{ task_name }}">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col w-100">
+                            <div class="form-group">
+                                <label for="descriptionText">Description</label>
+                                <input type="text" class="form-control" id="descriptionText" name="d"
+                                       value="{{ description }}">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row w-100">
+                        <div class="col w-50 align-center">
+                            <select class="selectpicker" multiple title="Metrics" data-live-search="true"
+                                    data-selected-text-format="static" id="selectCfgMetrics">
+                                {% for s, n in all_metrics_and_names %}
+                                <option id="{{ s }}CfgMetricOption" value="{{ s }}">{{ n }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col w-50 align-center">
+                            <select class="selectpicker" title="Tokenization" data-live-search="true"
+                                    data-selected-text-format="static" id="selectCfgTokenization">
+                                {% for t in all_tokenization %}
+                                <option id="{{ t }}CfgTokenizationOption" value="{{ t }}">{{ t }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row w-100">
+                        <div class="col w-100">
+                            <br>
+                            <br>
+                            <br>
+                            <button type="button" class="btn btn-primary" onclick="updateTaskCfg('cfgForm');">
+                                Update</button>
+                            <button type="button" class="btn btn-secondary" onclick="resetTaskCfg();">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function plotSentenceLength(srcLens, refLens) {
+            let data = [];
+            Object.keys(srcLens).forEach(function (k) {
+                data.push(
+                    {x: srcLens[k], type: 'histogram', opacity: 0.75, name: 'Source ' + k, histnorm: 'probability'}
+                );
+            });
+            Object.keys(refLens).forEach(function (k) {
+                data.push(
+                    {x: refLens[k], type: 'histogram', opacity: 0.75, name: 'Reference ' + k, histnorm: 'probability'}
+                );
+            });
+            const layout = {
+                title: {text:'Sentence Length'}, barmode: 'overlay', margin: {t: 28}, xaxis: {title: 'Length'},
+                yaxis: {title: 'Percentage'}
+            };
+            Plotly.newPlot('sentLenPlot', data, layout, plotCfg);
+        }
+
+        function plotTokenFrequency(plotDivId, tknFreq, side) {
+            let data = [];
+            Object.keys(tknFreq).forEach(function (k) {
+                let curTknFreq = tknFreq[k];
+                if (curTknFreq.length > 0) {
+                    const percentages = [...Array(curTknFreq.length).keys()].map(e => e / curTknFreq.length * 100);
+                    data.push({ x: percentages, y: curTknFreq, name: side + ' ' + k, line: { width: 3} });
+                }
+            });
+            if (data.length === 0)
+                return;
+            const layout = {
+                title: {text: side + ' Token Frequency'}, margin: { t: 28 }, xaxis: {title: 'Percentage'},
+                yaxis: {title: 'Frequency (log2)'}
+            };
+            Plotly.newPlot(plotDivId, data, layout, plotCfg);
+        }
+
+        function plotTagCount(tagCount) {
+            if (tagCount.length === 0) {
+                $('#tagsTabPane').remove();
+                $('#navTagsTab').remove();
+                return;
+            }
+            let x = tagCount.map(e => e[0]);
+            let y = tagCount.map(e => e[1]);
+            const data = [{y: y, x: x,  type: 'bar',  text: x}];
+            const layout = {margin: {l: 60, r: 10, b: 100, t: 10}, yaxis: {title: 'Number of Examples'}};
+            Plotly.newPlot('tagCountPlot', data, layout, plotCfg);
+            $('#tagCountSpinner').remove();
+        }
+
+        function plotSentScores(sentScores, metric) {
+            const layout = {
+                barmode: 'overlay',  margin: {t: 28}, xaxis: {title: 'Score'}, yaxis: {title: 'Percentage of Examples'}
+            };
+            let data = [];
+            models.forEach(function(m) {
+                data.push(
+                    {x: sentScores[metric][m], type: 'histogram', opacity: 0.75, name: m, histnorm: 'probability'}
+                );
+            });
+            Plotly.newPlot("sentScoresPlot4" + metric, data, layout, plotCfg);
+        }
+
+        doJsonAjax('/stats?t=' + urlArgs['t'], function (jsonData) {
+            plotSentenceLength(jsonData['src_lens'], jsonData['ref_lens']);
+            plotTokenFrequency('srcTknFreqPlot', jsonData['src_tkn_log2_freq'], 'Source');
+            plotTokenFrequency('refTknFreqPlot', jsonData['ref_tkn_log2_freq'], 'Reference');
+            updateStatsTable(jsonData);
+            $('#datasetSpinner').remove();
+
+            plotTagCount(jsonData['tag_freq']);
+        });
+
+        if (enum_metrics_and_names.length > 0) {
+            doJsonAjax('/scores?t=' + urlArgs['t'] + '&m=' + urlArgs['m'], function (jsonData) {
+                enum_metrics_and_names.forEach(function (e) {
+                    let s = e[1];
+                    plotSentScores(jsonData['sent_scores'], s);
+
+                    document.getElementById('latex_' + s).innerText = jsonData['corpus_group_scores_latex'];
+                    document.getElementById('csv_' + s).innerText = jsonData['corpus_group_scores_csv'];
+                    let corpusScores = visualizeDict(jsonData['corpus_scores'][s]);
+
+                    let tbodyNode = document.getElementById('tableBodyMetric_' + s);
+                    let trNode1 = document.createElement('tr');
+                    let tdNodes1 = models.map(m => '<td>' + corpusScores[m] + '</td>');
+                    trNode1.innerHTML = '<th scope="row">All</th>' + tdNodes1.join('');
+                    tbodyNode.appendChild(trNode1);
+                    tagSet.forEach(function (t) {
+                        let groupScores = visualizeDict(jsonData['group_scores'][s][t]);
+                        let trNode = document.createElement('tr');
+                        let tdNodes = models.map(m => '<td>' + groupScores[m] + '</td>');
+                        trNode.innerHTML = '<th scope="row">' + t + '</th>' + tdNodes.join('');
+                        tbodyNode.appendChild(trNode);
+                    });
+
+                    $('#' + s + 'ScoreSpinner').remove();
+                });
+            });
+        }
+
+        doJsonAjax('/ngrams?t=' + urlArgs['t'], function (jsonData) {
+            Object.keys(jsonData).forEach(function (n) {
+                let theadHTML =
+                    `<thead class="thead-light">
+                        <tr><th scope="col">${n}-Gram</th><th scope="col">Count</th></tr>
+                    </thead>`;
+                let trHTMLs = jsonData[n].map(
+                    t =>
+                        `<tr>
+                            <td><a href="javascript:deriveURL(urlArgs, 'q', '${t[0]}');">${t[0]}</a></td>
+                            <td>${t[1]}</td>
+                        </tr>`
+                );
+                let tbodyHTML = `<tbody>${trHTMLs.join('')}</tbody>`;
+
+                let colHTML =
+                    `<div class="col">
+                        <table class="table table-hover table-sm table-bordered text-center">
+                            ${theadHTML}${tbodyHTML}
+                        </table>
+                    </div>`;
+                document.getElementById('ngramsDiv').innerHTML += colHTML;
+                $('#ngramsSpinner').remove();
+            });
+        });
+
+        resetTaskCfgMetrics();
+        resetTaskCfgTokenization();
+    </script>
+</div>
+
+{% endblock %}

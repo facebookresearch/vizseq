@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h3>{% block title %}About{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <br><br><br>
+    <h2>VizSeq</h2>
+    <br>
+    <h5>A visual analysis toolkit for text generation tasks.</h5>
+    <br>
+    <br>
+    <br>
+    <h5>Version: {{ version }}</h5>
+    <br>
+    <br>
+    <h5><a href="https://github.com/facebookresearch/vizseq">https://github.com/facebookresearch/vizseq</a></h5>
+</div>
+
+
+{% endblock %}

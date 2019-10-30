@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h3>{% block title %}Configuration{% endblock %}</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container"><br>
+    <h3>Configuration</h3><br></div>
+
+<script>
+    const g_cred_path = '{{ g_cred_path}}';
+
+    function submitForm() {
+        let path = document.getElementById('googleCredentialText').value;
+        $.ajax('/config?g_cred_path=' + encodeURIComponent(path), {
+            type: 'POST',
+            success: function (response) {
+                let jsonData = JSON.parse(response);
+                if (jsonData['valid']) { window.alert('Updated!') } else { window.alert(path + ' does not exist!') }
+            }
+        });
+    }
+
+    function resetCfg() {
+        document.getElementById('googleCredentialText').value = g_cred_path;
+    }
+</script>
+
+<div class="container">
+    <form id="cfgForm">
+        <div class="form-group">
+            <label for="googleCredentialText">Google Translate Credential JSON Path</label>
+            <input type="text" class="form-control" id="googleCredentialText" name="g_cred_path"
+                   value="{{ g_cred_path }}">
+        </div>
+        <br>
+        <br>
+        <br>
+        <button type="button" class="btn btn-primary" onclick="submitForm();">Update</button>
+        <button type="button" class="btn btn-secondary" onclick="resetCfg();">Reset</button>
+    </form>
+</div>
+
+{% endblock %}
