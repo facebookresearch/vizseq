@@ -1,0 +1,60 @@
+{
+  "main": [
+    "/main.199ebc8369f25524f3f8.css",
+    "/main.06f824a4644e82efc9d4.js"
+  ],
+  "component---site-src-pages-index-jsc-4-f-f99": [
+    "/component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css",
+    "/component---site-src-pages-index-jsc-4-f-f99.9c368cd77feab99ceff1.js"
+  ],
+  "component---theme-doc-page-1-be-9be": [],
+  "docsMetadata---docs-1-da-721": [
+    "/docsMetadata---docs-1-da-721.e0b211fe0353e4094c4a.js"
+  ],
+  "component---theme-doc-item-178-a40": [
+    "/component---theme-doc-item-178-a40.de2648345892298aff25.css",
+    "/component---theme-doc-item-178-a40.dcc325fd6c789bd070dd.js"
+  ],
+  "content---docs-installation-3-b-8-7c6": [
+    "/content---docs-installation-3-b-8-7c6.3146542816bec846af91.js"
+  ],
+  "metadata---docs-installation-0-bc-056": [
+    "/metadata---docs-installation-0-bc-056.ad99099880d54903f1e0.js"
+  ],
+  "content---docs-metrics-1-db-f2c": [
+    "/content---docs-metrics-1-db-f2c.c8986825cb796318cc4b.js"
+  ],
+  "metadata---docs-metricsb-52-48a": [
+    "/metadata---docs-metricsb-52-48a.b1ffdfc7c411b602707d.js"
+  ],
+  "content---docs-new-metric-8-a-9-9c2": [
+    "/content---docs-new-metric-8-a-9-9c2.a22e5fee63b0c362bb29.js"
+  ],
+  "metadata---docs-new-metric-9-b-1-e1e": [
+    "/metadata---docs-new-metric-9-b-1-e1e.049486c8cd03fe06ad69.js"
+  ],
+  "content---docs-ipynb-examplef-77-cb5": [
+    "/content---docs-ipynb-examplef-77-cb5.ffb1067b88f3b50ed794.js"
+  ],
+  "metadata---docs-ipynb-example-8-d-3-81d": [
+    "/metadata---docs-ipynb-example-8-d-3-81d.f56a3ddd58aced4016b5.js"
+  ],
+  "content---docs-overview-1-db-071": [
+    "/content---docs-overview-1-db-071.ecccf1d7fe844b6ba43f.js"
+  ],
+  "metadata---docs-overview-7-c-6-bb7": [
+    "/metadata---docs-overview-7-c-6-bb7.9887da0ce9321a14976b.js"
+  ],
+  "content---docs-data-sourcescb-3-d95": [
+    "/content---docs-data-sourcescb-3-d95.9b0928f861994987227a.js"
+  ],
+  "metadata---docs-data-sources-222-a05": [
+    "/metadata---docs-data-sources-222-a05.9a3012892d32aa569ece.js"
+  ],
+  "content---docs-web-app-example-42-f-6de": [
+    "/content---docs-web-app-example-42-f-6de.8e6716d7be803f21323c.js"
+  ],
+  "metadata---docs-web-app-example-117-a21": [
+    "/metadata---docs-web-app-example-117-a21.ba789b47b4ed3109389d.js"
+  ]
+}

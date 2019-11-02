@@ -1,0 +1,316 @@
+{
+  "entrypoints": [
+    "main"
+  ],
+  "origins": {
+    "0": [
+      1,
+      20,
+      21,
+      0
+    ],
+    "@site/src/pages/index.js": [
+      0,
+      1
+    ],
+    "@theme/DocItem": [
+      2
+    ],
+    "@site/docs/data_sources.md": [
+      3
+    ],
+    "@site/docs/installation.md": [
+      4
+    ],
+    "@site/docs/ipynb_example.md": [
+      5
+    ],
+    "@site/docs/metrics.md": [
+      6
+    ],
+    "@site/docs/new_metric.md": [
+      7
+    ],
+    "@site/docs/overview.md": [
+      8
+    ],
+    "@site/docs/web_app_example.md": [
+      9
+    ],
+    "@docusaurus-plugin-content-docs/docs-b5f.json": [
+      10
+    ],
+    "main": [
+      19,
+      11
+    ],
+    "@docusaurus-plugin-content-docs/docs-data-sources-b51.json": [
+      12
+    ],
+    "@docusaurus-plugin-content-docs/docs-installation-422.json": [
+      13
+    ],
+    "@docusaurus-plugin-content-docs/docs-ipynb-example-20c.json": [
+      14
+    ],
+    "@docusaurus-plugin-content-docs/docs-metrics-481.json": [
+      15
+    ],
+    "@docusaurus-plugin-content-docs/docs-new-metric-d04.json": [
+      16
+    ],
+    "@docusaurus-plugin-content-docs/docs-overview-20d.json": [
+      17
+    ],
+    "@docusaurus-plugin-content-docs/docs-web-app-example-296.json": [
+      18
+    ],
+    "runtime~main": [
+      11,
+      19
+    ],
+    "@theme/DocPage": [
+      0,
+      20
+    ],
+    "@theme/NotFound": [
+      0,
+      21
+    ]
+  },
+  "assets": {
+    "0": {
+      "css": [
+        {
+          "file": "0.beb5263729d2db16c046.css",
+          "hash": "31c2b5513ac107bd2836",
+          "publicPath": "/0.beb5263729d2db16c046.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "0.135a1212c3921fbda09c.js",
+          "hash": "31c2b5513ac107bd2836",
+          "publicPath": "/0.135a1212c3921fbda09c.js"
+        }
+      ]
+    },
+    "1": {
+      "css": [
+        {
+          "file": "component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css",
+          "hash": "cb93041d0e4cbc62fb51",
+          "publicPath": "/component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "component---site-src-pages-index-jsc-4-f-f99.9c368cd77feab99ceff1.js",
+          "hash": "cb93041d0e4cbc62fb51",
+          "publicPath": "/component---site-src-pages-index-jsc-4-f-f99.9c368cd77feab99ceff1.js"
+        }
+      ]
+    },
+    "2": {
+      "css": [
+        {
+          "file": "component---theme-doc-item-178-a40.de2648345892298aff25.css",
+          "hash": "7b537b25a053a01d5c97",
+          "publicPath": "/component---theme-doc-item-178-a40.de2648345892298aff25.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "component---theme-doc-item-178-a40.dcc325fd6c789bd070dd.js",
+          "hash": "7b537b25a053a01d5c97",
+          "publicPath": "/component---theme-doc-item-178-a40.dcc325fd6c789bd070dd.js"
+        }
+      ]
+    },
+    "3": {
+      "js": [
+        {
+          "file": "content---docs-data-sourcescb-3-d95.9b0928f861994987227a.js",
+          "hash": "42b88666492981e923de",
+          "publicPath": "/content---docs-data-sourcescb-3-d95.9b0928f861994987227a.js"
+        }
+      ]
+    },
+    "4": {
+      "js": [
+        {
+          "file": "content---docs-installation-3-b-8-7c6.3146542816bec846af91.js",
+          "hash": "c8813b2b2308fcbb57c7",
+          "publicPath": "/content---docs-installation-3-b-8-7c6.3146542816bec846af91.js"
+        }
+      ]
+    },
+    "5": {
+      "js": [
+        {
+          "file": "content---docs-ipynb-examplef-77-cb5.ffb1067b88f3b50ed794.js",
+          "hash": "89b4f9d87b9978b3618c",
+          "publicPath": "/content---docs-ipynb-examplef-77-cb5.ffb1067b88f3b50ed794.js"
+        }
+      ]
+    },
+    "6": {
+      "js": [
+        {
+          "file": "content---docs-metrics-1-db-f2c.c8986825cb796318cc4b.js",
+          "hash": "3ef74743d34c2ceab1aa",
+          "publicPath": "/content---docs-metrics-1-db-f2c.c8986825cb796318cc4b.js"
+        }
+      ]
+    },
+    "7": {
+      "js": [
+        {
+          "file": "content---docs-new-metric-8-a-9-9c2.a22e5fee63b0c362bb29.js",
+          "hash": "a42c47df20c3c01fbd2e",
+          "publicPath": "/content---docs-new-metric-8-a-9-9c2.a22e5fee63b0c362bb29.js"
+        }
+      ]
+    },
+    "8": {
+      "js": [
+        {
+          "file": "content---docs-overview-1-db-071.ecccf1d7fe844b6ba43f.js",
+          "hash": "54be0b758bcf82050ba9",
+          "publicPath": "/content---docs-overview-1-db-071.ecccf1d7fe844b6ba43f.js"
+        }
+      ]
+    },
+    "9": {
+      "js": [
+        {
+          "file": "content---docs-web-app-example-42-f-6de.8e6716d7be803f21323c.js",
+          "hash": "ccde77c3a89570cef766",
+          "publicPath": "/content---docs-web-app-example-42-f-6de.8e6716d7be803f21323c.js"
+        }
+      ]
+    },
+    "10": {
+      "js": [
+        {
+          "file": "docsMetadata---docs-1-da-721.e0b211fe0353e4094c4a.js",
+          "hash": "b20d3690d287817c9522",
+          "publicPath": "/docsMetadata---docs-1-da-721.e0b211fe0353e4094c4a.js"
+        }
+      ]
+    },
+    "11": {
+      "css": [
+        {
+          "file": "main.199ebc8369f25524f3f8.css",
+          "hash": "d5db581ebc1fc07374cb",
+          "publicPath": "/main.199ebc8369f25524f3f8.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "main.06f824a4644e82efc9d4.js",
+          "hash": "d5db581ebc1fc07374cb",
+          "publicPath": "/main.06f824a4644e82efc9d4.js"
+        }
+      ]
+    },
+    "12": {
+      "js": [
+        {
+          "file": "metadata---docs-data-sources-222-a05.9a3012892d32aa569ece.js",
+          "hash": "f43b77cf972d2dd083c0",
+          "publicPath": "/metadata---docs-data-sources-222-a05.9a3012892d32aa569ece.js"
+        }
+      ]
+    },
+    "13": {
+      "js": [
+        {
+          "file": "metadata---docs-installation-0-bc-056.ad99099880d54903f1e0.js",
+          "hash": "041f254964fb343bca16",
+          "publicPath": "/metadata---docs-installation-0-bc-056.ad99099880d54903f1e0.js"
+        }
+      ]
+    },
+    "14": {
+      "js": [
+        {
+          "file": "metadata---docs-ipynb-example-8-d-3-81d.f56a3ddd58aced4016b5.js",
+          "hash": "6a48c324fb5bd6e8fd1f",
+          "publicPath": "/metadata---docs-ipynb-example-8-d-3-81d.f56a3ddd58aced4016b5.js"
+        }
+      ]
+    },
+    "15": {
+      "js": [
+        {
+          "file": "metadata---docs-metricsb-52-48a.b1ffdfc7c411b602707d.js",
+          "hash": "5f1ba81553be8ffcad5c",
+          "publicPath": "/metadata---docs-metricsb-52-48a.b1ffdfc7c411b602707d.js"
+        }
+      ]
+    },
+    "16": {
+      "js": [
+        {
+          "file": "metadata---docs-new-metric-9-b-1-e1e.049486c8cd03fe06ad69.js",
+          "hash": "04d6e4b443ac07a38c2a",
+          "publicPath": "/metadata---docs-new-metric-9-b-1-e1e.049486c8cd03fe06ad69.js"
+        }
+      ]
+    },
+    "17": {
+      "js": [
+        {
+          "file": "metadata---docs-overview-7-c-6-bb7.9887da0ce9321a14976b.js",
+          "hash": "30b66c8a928f29157d3e",
+          "publicPath": "/metadata---docs-overview-7-c-6-bb7.9887da0ce9321a14976b.js"
+        }
+      ]
+    },
+    "18": {
+      "js": [
+        {
+          "file": "metadata---docs-web-app-example-117-a21.ba789b47b4ed3109389d.js",
+          "hash": "7a78427a8a3955740417",
+          "publicPath": "/metadata---docs-web-app-example-117-a21.ba789b47b4ed3109389d.js"
+        }
+      ]
+    },
+    "19": {
+      "js": [
+        {
+          "file": "runtime~main.6b23e5bfb7c53109e8e2.js",
+          "hash": "426a2b5a0cf5ccb18239",
+          "publicPath": "/runtime~main.6b23e5bfb7c53109e8e2.js"
+        }
+      ]
+    },
+    "20": {
+      "css": [
+        {
+          "file": "20.72bc971e458032ed68e5.css",
+          "hash": "84140b6ad69b823887eb",
+          "publicPath": "/20.72bc971e458032ed68e5.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "20.c36adb65066141193a09.js",
+          "hash": "84140b6ad69b823887eb",
+          "publicPath": "/20.c36adb65066141193a09.js"
+        }
+      ]
+    },
+    "21": {
+      "js": [
+        {
+          "file": "21.535121d1f63d452d37f3.js",
+          "hash": "6b321359d06a48c0f2b3",
+          "publicPath": "/21.535121d1f63d452d37f3.js"
+        }
+      ]
+    }
+  }
+}
