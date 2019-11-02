@@ -23,7 +23,7 @@ with open('LICENSE') as f:
 setup(
     name='vizseq',
     version=__version__,
-    description='Visual Analysis Toolkit for Text Generation',
+    description='Visual Analysis Toolkit for Text Generation Tasks',
     url='https://github.com/facebookresearch/vizseq',
     classifiers=[
         'Intended Audience :: Science/Research',
@@ -33,7 +33,7 @@ setup(
     ],
     long_description=readme,
     long_description_content_type='text/markdown',
-    license=license_content,
+    license='CC BY-NC 4.0',
     setup_requires=[
         'setuptools>=18.0',
     ],
@@ -56,6 +56,7 @@ setup(
         'bert-score',
     ],
     packages=find_packages(exclude=['examples', 'tests']),
+    package_data={'vizseq': ['_templates/*.html']},
     test_suite='tests',
     zip_safe=False,
 )

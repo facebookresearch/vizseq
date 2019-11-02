@@ -38,10 +38,6 @@ class VizSeqLogger(object):
         self._logger.setLevel(logging.DEBUG)
         self._logger.propagate = False
         self._logger.addHandler(console_handler)
-        self.console_mode = False
-
-    def set_console_mode(self, enable=True):
-        self.console_mode = enable
 
     def info(self, msg, *args, **kwargs):
         self._logger.info(msg, *args, **kwargs)

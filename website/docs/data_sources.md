@@ -4,7 +4,13 @@ title: Data Sources
 sidebar_label: Data Sources
 ---
 
+## Input Types
+- Source:
+- Reference:
+- Hypothesis:
+- Tags: per-example tags for example grouping. 
 
+## Data Types
 VizSeq gets data from Python variables (Jupyter Notebook only) or local files. Specifically, VizSeq web app expects data
 to be organized in the following folder structure:
 
@@ -25,21 +31,22 @@ where
 - `tag_*.txt`: optional, sentence-level tags, one sentence per line
 
 
-## Supported File Formats
+## File Formats
 
-#### Zip File
-- zip
+#### Text
+- txt
+- txt in .zip
 
 #### Image
-- jpg
-- png
-- gif
-- bmp
+- [.jpg](https://en.wikipedia.org/wiki/JPEG)
+- [.png](https://en.wikipedia.org/wiki/Portable_Network_Graphics)
+- [.gif](https://en.wikipedia.org/wiki/GIF)
+- [.bmp](https://en.wikipedia.org/wiki/BMP_file_format)
 
 #### Audio
-- mp3
-- wav
+- [.mp3](https://en.wikipedia.org/wiki/MP3)
+- [.wav](https://en.wikipedia.org/wiki/WAV)
 
 #### Video
-- mp4
-- webm
+- [.mp4](https://en.wikipedia.org/wiki/MPEG-4_Part_14)
+- [.webm](https://en.wikipedia.org/wiki/WebM)

@@ -9,6 +9,6 @@ module.exports = {
   docs: {
     "Getting Started": ['overview', 'installation', 'ipynb_example', 'web_app_example'],
     "Features": ['data_sources', 'metrics'],
-    "Development": ['new_metric'],
+    "Extending VizSeq": ['new_metric'],
   },
 };

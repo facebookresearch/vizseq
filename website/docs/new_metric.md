@@ -4,8 +4,9 @@ title: Adding New Metrics
 sidebar_label: Adding New Metrics
 ---
 
-VizSeq has an open API for adding user-defined metrics. And we welcome you to contribute to enriching VizSeq's collection of scorers!
+VizSeq has an open API for adding user-defined metrics. You are welcomed to contribute new scorers to enlarge VizSeq's metric coverage!
 
+### Implementing A New Scorer Class
 To start with, first add `new_metric.py` to `vizseq/scorers`, in which a new scorer class is inherited from `VizSeqScorer` and a `score` method is defined.
 And then register the new scorer class with an id and a name using `vizseq.scorers.register_scorer`:
 
@@ -41,9 +42,11 @@ class NewMetricScorer(VizSeqScorer):
         )
 ```
 
-Then we need to get the new scorer class covered by tests. To achieve that, Add a unit test `test_new_metric.py` to `tests/scorers` and run:
+### Testing the New Scorer Class
+
+All the scorer classes need to be covered by tests. To achieve that, Add a unit test `test_new_metric.py` to `tests/scorers` and run:
 
 ```bash
-python -m unittest tests.scorers.test_new_metric
+$ python -m unittest tests.scorers.test_new_metric
 ```
 

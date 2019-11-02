@@ -32,7 +32,7 @@ const features = [
     ),
   },
   {
-    title: <>Performance</>,
+    title: <>Scalability</>,
     description: (
       <>
         Multi-process acceleration of metrics and statistics computation. Auto-sampling and caching mechanism for large-scale datasets.
@@ -61,7 +61,7 @@ function Home() {
   const {siteConfig = {}} = context;
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
@@ -70,7 +70,7 @@ function Home() {
           <div className={styles.buttons}>
             <Link
               className={classnames(
-                'button button--outline button--secondary button--lg',
+                'button button--success button--lg',
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/overview')}>
