@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[17],{151:function(e){e.exports=JSON.parse('{"id":"overview","title":"Overview","sidebar_label":"Overview","description":"import useBaseUrl from \'@docusaurus/useBaseUrl\';","source":"@site/docs/overview.md","permalink":"/docs/overview","sidebar":"docs","next":{"title":"Installation","permalink":"/docs/installation"}}')}}]);
