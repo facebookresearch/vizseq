@@ -18,12 +18,12 @@ const features = [
     title: <>Easy to Use</>,
     description: (
         <>
-            Supporting a wide range of text/image/audio/video-to-text generation tasks. Covering a full collection of common metrics. Analyzing data from various sources. Providing visualization in both Jupyter Notebook and built-in Web App.
+            Supporting a wide range of {"{text, image, audio, video}"}-to-text generation tasks. Covering a full collection of common metrics. Analyzing data from various sources. Providing visualization in both Jupyter Notebook and built-in Web App.
         </>
     ),
   },
   {
-    title: <>Improving Productivity</>,
+    title: <>Productive</>,
     description: (
       <>
         Highly-integrated UI with samples, scores and statistics in one place. Interactive data filtering with keyword searching, example sorting and grouping. Exportable tables and figures for one-click plug-in to slides, papers, documents or spreadsheets.
@@ -32,7 +32,7 @@ const features = [
     ),
   },
   {
-    title: <>Performance</>,
+    title: <>Scalable</>,
     description: (
       <>
         Multi-process acceleration of metrics and statistics computation. Auto-sampling and caching mechanism for large-scale datasets.
@@ -61,7 +61,7 @@ function Home() {
   const {siteConfig = {}} = context;
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
@@ -70,7 +70,7 @@ function Home() {
           <div className={styles.buttons}>
             <Link
               className={classnames(
-                'button button--outline button--secondary button--lg',
+                'button button--success button--lg',
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/overview')}>

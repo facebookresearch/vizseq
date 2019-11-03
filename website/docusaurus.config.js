@@ -8,10 +8,10 @@
 module.exports = {
   title: 'VizSeq',
   tagline: 'A visual analysis toolkit for text generation tasks',
-  url: 'https://vizseq.ai',
-  baseUrl: '/',
+  url: 'https://facebookresearch.github.io',
+  baseUrl: '/vizseq/',
   favicon: 'img/favicon.png',
-  organizationName: 'facebook',
+  organizationName: 'facebookresearch',
   projectName: 'vizseq',
   themeConfig: {
     navbar: {
@@ -21,18 +21,20 @@ module.exports = {
         src: 'img/logo.png',
       },
       links: [
-        {to: 'docs/overview', label: 'Docs', position: 'right'},
-        {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub', position: 'right'},
+        {to: 'docs/overview', label: 'Docs', position: 'left'},
+        {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub', position: 'left'},
       ],
     },
     footer: {
       style: 'dark',
       links: [
         {
-          title: '',
+          title: 'Docs',
           items: [
-            {label: 'Docs', to: 'docs/overview'},
-              {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub'},
+            {label: 'Overview', to: 'docs/overview'},
+            {label: 'Jupyter Notebook Example', to: 'docs/ipynb_example'},
+            {label: 'Web App Example', to: 'docs/web_app_example'},
+            {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub'},
           ],
         },
       ],

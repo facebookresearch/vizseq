@@ -11,15 +11,13 @@ import os
 import sys
 from pathlib import Path
 import math
-from typing import (List, Optional, Set, Dict, Callable, NamedTuple, Any, Tuple,
-                    Type)
+from typing import List, Optional, Set, Dict, Callable, NamedTuple, Tuple, Type
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from multiprocessing import cpu_count
 
 import numpy as np
 from tqdm import tqdm
 
-from vizseq._utils.logger import logger
 from vizseq._utils.optional import map_optional
 
 EXCLUDED_PREFIXES = ('.', '_')
@@ -91,14 +89,15 @@ class VizSeqScorer(object):
         return unique_elements
 
     def _update_n_workers(self, n_samples: Optional[int] = None) -> None:
+        max_n_workers = cpu_count() - 1
         if self.n_workers is None:
             if n_samples is not None:
                 self.n_workers = int(
                     math.ceil(n_samples / self.SAMPLES_PER_WORKER)
                 )
             else:
-                self.n_workers = cpu_count()
-        self.n_workers = max(1, min(self.n_workers, cpu_count()))
+                self.n_workers = 2
+        self.n_workers = max(1, min(self.n_workers, max_n_workers))
 
     @staticmethod
     def _batch(hypo: List[str], ref: List[List[str]], n_batches: int):
@@ -114,16 +113,14 @@ class VizSeqScorer(object):
     @classmethod
     @abstractmethod
     def score(
-            cls,
-            hypothesis: List[str],
-            references: List[List[str]],
-            tags: Optional[List[List[str]]] = None,
+            cls, hypothesis: List[str], references: List[List[str]],
+            tags: Optional[List[List[str]]] = None
     ) -> VizSeqScore:
         raise NotImplementedError
 
     def _score_sentences_multiprocess(
             self, hypothesis: List[str], references: List[List[str]],
-            sent_score_func: Optional[SENT_SCORE_FN_TYPE] = None,
+            sent_score_func: Optional[SENT_SCORE_FN_TYPE] = None
     ) -> List[float]:
         self._update_n_workers(len(hypothesis))
         if self.n_workers == 1:
@@ -227,7 +224,3 @@ for m in scorer_filenames:
     module_name = f'vizseq.scorers.{os.path.splitext(os.path.basename(m))[0]}'
     if module_name not in sys.modules:
         importlib.import_module(module_name)
-
-
-if logger.console_mode:
-    logger.info('Scorers: {}'.format(','.join(sorted(get_scorer_names()))))

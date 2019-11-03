@@ -37,7 +37,7 @@ def view_examples(
         sources: PathOrPathsOrDictOfStrList,
         references: PathOrPathsOrDictOfStrList,
         hypothesis: Optional[PathOrPathsOrDictOfStrList] = None,
-        metrics: List[str] = (),
+        metrics: Optional[List[str]] = None,
         query: str = '',
         page_sz: int = DEFAULT_PAGE_SIZE,
         page_no: int = DEFAULT_PAGE_NO,
@@ -48,7 +48,7 @@ def view_examples(
     _ref = VizSeqDataSources(references)
     _hypo = VizSeqDataSources(hypothesis)
     if _hypo.n_sources == 0:
-        metrics = []
+        metrics = None
     assert len(_src) == len(_ref)
     assert _hypo.n_sources == 0 or len(_ref) == len(_hypo)
 
@@ -58,7 +58,6 @@ def view_examples(
         sorting=sorting.value, need_lang_tags=_need_g_translate
     )
 
-    # google translate
     google_translation = []
     if _need_g_translate:
         for i, s in enumerate(view.cur_src_text):
@@ -143,10 +142,10 @@ def view_scores(
 ):
     _ref = VizSeqDataSources(references)
     _hypo = VizSeqDataSources(hypothesis)
-    _tags, tag_set = None, {}
+    _tags, tag_set = None, []
     if tags is not None:
         _tags = VizSeqDataSources(tags, text_merged=True)
-        tag_set = _tags.unique()
+        tag_set = sorted(_tags.unique())
         _tags = _tags.text
     models = _hypo.names
     all_metrics = get_scorer_ids()
@@ -171,16 +170,15 @@ def view_scores(
     group_scores = {
         s: {
             t: {
-                m: scores[s][m][t].group_scores for m in models
+                m: scores[s][m].group_scores[t] for m in models
             } for t in tag_set
         } for s in _metrics
     }
 
     metrics_and_names = [[s, get_scorer_name(s)] for s in _metrics]
     html = env.get_template('ipynb_scores.html').render(
-        metrics_and_names=metrics_and_names, models=models,
+        metrics_and_names=metrics_and_names, models=models, tag_set=tag_set,
         corpus_scores=corpus_scores, group_scores=group_scores,
-        tag_set=list(tag_set),
         corpus_and_group_score_latex=VizSeqWebView.latex_corpus_group_scores(
             corpus_scores, group_scores
         ),
