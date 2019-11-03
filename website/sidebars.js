@@ -7,7 +7,7 @@
 
 module.exports = {
   docs: {
-    "Getting Started": ['overview', 'installation', 'ipynb_example', 'web_app_example'],
+    "Getting Started": ['installation', 'overview', 'ipynb_example', 'web_app_example'],
     "Features": ['data', 'metrics', 'ipynb_api'],
     "Extending VizSeq": ['new_metric'],
   },

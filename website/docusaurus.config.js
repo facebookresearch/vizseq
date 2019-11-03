@@ -31,6 +31,7 @@ module.exports = {
         {
           title: 'Docs',
           items: [
+            {label: 'Installation', to: 'docs/installation'},
             {label: 'Overview', to: 'docs/overview'},
             {label: 'Jupyter Notebook Example', to: 'docs/ipynb_example'},
             {label: 'Web App Example', to: 'docs/web_app_example'},
