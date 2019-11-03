@@ -5,8 +5,8 @@
   "origins": {
     "0": [
       1,
-      20,
-      21,
+      24,
+      25,
       0
     ],
     "@site/src/pages/index.js": [
@@ -16,66 +16,78 @@
     "@theme/DocItem": [
       2
     ],
-    "@site/docs/data_sources.md": [
+    "@site/docs/data.md": [
       3
     ],
     "@site/docs/installation.md": [
       4
     ],
-    "@site/docs/ipynb_example.md": [
+    "@site/docs/ipynb_api.md": [
       5
     ],
-    "@site/docs/metrics.md": [
+    "@site/docs/ipynb_example.md": [
       6
     ],
-    "@site/docs/new_metric.md": [
+    "@site/docs/metrics.md": [
       7
     ],
-    "@site/docs/overview.md": [
+    "@site/docs/new_metric.md": [
       8
     ],
-    "@site/docs/web_app_example.md": [
+    "@site/docs/overview.md": [
       9
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-241.json": [
+    "@site/docs/tags.md": [
       10
     ],
-    "main": [
-      19,
+    "@site/docs/web_app_example.md": [
       11
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-data-sources-7e0.json": [
+    "@docusaurus-plugin-content-docs/vizseq-docs-241.json": [
       12
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-installation-056.json": [
+    "main": [
+      23,
       13
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-ipynb-example-13e.json": [
+    "@docusaurus-plugin-content-docs/vizseq-docs-data-7ec.json": [
       14
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-metrics-d65.json": [
+    "@docusaurus-plugin-content-docs/vizseq-docs-installation-056.json": [
       15
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-new-metric-b81.json": [
+    "@docusaurus-plugin-content-docs/vizseq-docs-ipynb-api-ed1.json": [
       16
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-overview-b6d.json": [
+    "@docusaurus-plugin-content-docs/vizseq-docs-ipynb-example-13e.json": [
       17
     ],
-    "@docusaurus-plugin-content-docs/vizseq-docs-web-app-example-d8d.json": [
+    "@docusaurus-plugin-content-docs/vizseq-docs-metrics-d65.json": [
       18
     ],
-    "runtime~main": [
-      11,
+    "@docusaurus-plugin-content-docs/vizseq-docs-new-metric-b81.json": [
       19
+    ],
+    "@docusaurus-plugin-content-docs/vizseq-docs-overview-b6d.json": [
+      20
+    ],
+    "@docusaurus-plugin-content-docs/vizseq-docs-tags-629.json": [
+      21
+    ],
+    "@docusaurus-plugin-content-docs/vizseq-docs-web-app-example-d8d.json": [
+      22
+    ],
+    "runtime~main": [
+      13,
+      23
     ],
     "@theme/DocPage": [
       0,
-      20
+      24
     ],
     "@theme/NotFound": [
       0,
-      21
+      25
     ]
   },
   "assets": {
@@ -83,15 +95,15 @@
       "css": [
         {
           "file": "0.beb5263729d2db16c046.css",
-          "hash": "31c2b5513ac107bd2836",
+          "hash": "de1158e22596836ea1c2",
           "publicPath": "/vizseq/0.beb5263729d2db16c046.css"
         }
       ],
       "js": [
         {
-          "file": "0.135a1212c3921fbda09c.js",
-          "hash": "31c2b5513ac107bd2836",
-          "publicPath": "/vizseq/0.135a1212c3921fbda09c.js"
+          "file": "0.71884fbf55fca0cfe429.js",
+          "hash": "de1158e22596836ea1c2",
+          "publicPath": "/vizseq/0.71884fbf55fca0cfe429.js"
         }
       ]
     },
@@ -99,15 +111,15 @@
       "css": [
         {
           "file": "component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css",
-          "hash": "35a2649ab03f4d7fd083",
+          "hash": "b87b69ca0bd0afb7c422",
           "publicPath": "/vizseq/component---site-src-pages-index-jsc-4-f-f99.9f99729bff7f082bd679.css"
         }
       ],
       "js": [
         {
-          "file": "component---site-src-pages-index-jsc-4-f-f99.3e5787a4d348590d9beb.js",
-          "hash": "35a2649ab03f4d7fd083",
-          "publicPath": "/vizseq/component---site-src-pages-index-jsc-4-f-f99.3e5787a4d348590d9beb.js"
+          "file": "component---site-src-pages-index-jsc-4-f-f99.ad0e92a71e0bc9cd5842.js",
+          "hash": "b87b69ca0bd0afb7c422",
+          "publicPath": "/vizseq/component---site-src-pages-index-jsc-4-f-f99.ad0e92a71e0bc9cd5842.js"
         }
       ]
     },
@@ -115,200 +127,236 @@
       "css": [
         {
           "file": "component---theme-doc-item-178-a40.de2648345892298aff25.css",
-          "hash": "7b537b25a053a01d5c97",
+          "hash": "76aef25f53da25388d63",
           "publicPath": "/vizseq/component---theme-doc-item-178-a40.de2648345892298aff25.css"
         }
       ],
       "js": [
         {
-          "file": "component---theme-doc-item-178-a40.dcc325fd6c789bd070dd.js",
-          "hash": "7b537b25a053a01d5c97",
-          "publicPath": "/vizseq/component---theme-doc-item-178-a40.dcc325fd6c789bd070dd.js"
+          "file": "component---theme-doc-item-178-a40.7ac1efcc67631c2d239a.js",
+          "hash": "76aef25f53da25388d63",
+          "publicPath": "/vizseq/component---theme-doc-item-178-a40.7ac1efcc67631c2d239a.js"
         }
       ]
     },
     "3": {
       "js": [
         {
-          "file": "content---vizseq-docs-data-sourcescb-3-c7b.fc640a7be3e07658943e.js",
-          "hash": "559c5fde46c0643f8f45",
-          "publicPath": "/vizseq/content---vizseq-docs-data-sourcescb-3-c7b.fc640a7be3e07658943e.js"
+          "file": "content---vizseq-docs-data-761-743.01ce7a00bdf5d1880647.js",
+          "hash": "1f546320c798b0d342c3",
+          "publicPath": "/vizseq/content---vizseq-docs-data-761-743.01ce7a00bdf5d1880647.js"
         }
       ]
     },
     "4": {
       "js": [
         {
-          "file": "content---vizseq-docs-installation-3-b-8-875.612009052851fa37a882.js",
-          "hash": "b85cac69511d4207b8e7",
-          "publicPath": "/vizseq/content---vizseq-docs-installation-3-b-8-875.612009052851fa37a882.js"
+          "file": "content---vizseq-docs-installation-3-b-8-875.9c5e4a6ebf05e7e832ce.js",
+          "hash": "11389b5664bb80fcbe34",
+          "publicPath": "/vizseq/content---vizseq-docs-installation-3-b-8-875.9c5e4a6ebf05e7e832ce.js"
         }
       ]
     },
     "5": {
       "js": [
         {
-          "file": "content---vizseq-docs-ipynb-examplef-77-5e3.102c782dbd71873a95ba.js",
-          "hash": "b76b813586d64be0b6ce",
-          "publicPath": "/vizseq/content---vizseq-docs-ipynb-examplef-77-5e3.102c782dbd71873a95ba.js"
+          "file": "content---vizseq-docs-ipynb-api-437-027.5848d3fa46e976057ac2.js",
+          "hash": "7f8b3160b796219055d6",
+          "publicPath": "/vizseq/content---vizseq-docs-ipynb-api-437-027.5848d3fa46e976057ac2.js"
         }
       ]
     },
     "6": {
       "js": [
         {
-          "file": "content---vizseq-docs-metrics-1-db-fe4.6ed14a8022d996eb20dc.js",
-          "hash": "25ceac08978a146eab1f",
-          "publicPath": "/vizseq/content---vizseq-docs-metrics-1-db-fe4.6ed14a8022d996eb20dc.js"
+          "file": "content---vizseq-docs-ipynb-examplef-77-5e3.7f99ac2dc49e313c154f.js",
+          "hash": "f7821e04f8b97af56ede",
+          "publicPath": "/vizseq/content---vizseq-docs-ipynb-examplef-77-5e3.7f99ac2dc49e313c154f.js"
         }
       ]
     },
     "7": {
       "js": [
         {
-          "file": "content---vizseq-docs-new-metric-8-a-9-87c.2c94363ef954a4895d74.js",
-          "hash": "478aa7988f728781a3ec",
-          "publicPath": "/vizseq/content---vizseq-docs-new-metric-8-a-9-87c.2c94363ef954a4895d74.js"
+          "file": "content---vizseq-docs-metrics-1-db-fe4.ca0ed3f144d6afdea0dc.js",
+          "hash": "4e1dfd0d9a3b6cd7ed7b",
+          "publicPath": "/vizseq/content---vizseq-docs-metrics-1-db-fe4.ca0ed3f144d6afdea0dc.js"
         }
       ]
     },
     "8": {
       "js": [
         {
-          "file": "content---vizseq-docs-overview-1-db-6e2.348d2f5429e13eacedc3.js",
-          "hash": "585490796e3e9260ff7f",
-          "publicPath": "/vizseq/content---vizseq-docs-overview-1-db-6e2.348d2f5429e13eacedc3.js"
+          "file": "content---vizseq-docs-new-metric-8-a-9-87c.15fd5069b3d35bd890f9.js",
+          "hash": "5c1b56732cb52c878400",
+          "publicPath": "/vizseq/content---vizseq-docs-new-metric-8-a-9-87c.15fd5069b3d35bd890f9.js"
         }
       ]
     },
     "9": {
       "js": [
         {
-          "file": "content---vizseq-docs-web-app-example-42-f-2ca.4f30e144448dcd67fa97.js",
-          "hash": "90ecf353e8e1d37c82f5",
-          "publicPath": "/vizseq/content---vizseq-docs-web-app-example-42-f-2ca.4f30e144448dcd67fa97.js"
+          "file": "content---vizseq-docs-overview-1-db-6e2.ca3164c49007ff2df626.js",
+          "hash": "407f8a521533f94820be",
+          "publicPath": "/vizseq/content---vizseq-docs-overview-1-db-6e2.ca3164c49007ff2df626.js"
         }
       ]
     },
     "10": {
       "js": [
         {
-          "file": "docsMetadata---vizseq-docs-62-f-554.9716a702e40028ecb2aa.js",
-          "hash": "aaecc05734ffacf58f4c",
-          "publicPath": "/vizseq/docsMetadata---vizseq-docs-62-f-554.9716a702e40028ecb2aa.js"
+          "file": "content---vizseq-docs-tags-938-139.957a8bebc4ebd54c40ff.js",
+          "hash": "ad2b0610ec87eb1c0b04",
+          "publicPath": "/vizseq/content---vizseq-docs-tags-938-139.957a8bebc4ebd54c40ff.js"
         }
       ]
     },
     "11": {
-      "css": [
-        {
-          "file": "main.076a4b60bdd18e8b2127.css",
-          "hash": "81ea0663453e7e321917",
-          "publicPath": "/vizseq/main.076a4b60bdd18e8b2127.css"
-        }
-      ],
       "js": [
         {
-          "file": "main.0e4b214706a4fd4e029c.js",
-          "hash": "81ea0663453e7e321917",
-          "publicPath": "/vizseq/main.0e4b214706a4fd4e029c.js"
+          "file": "content---vizseq-docs-web-app-example-42-f-2ca.c1808a8c40d8042b1735.js",
+          "hash": "10ca90d5cc8b76470b3f",
+          "publicPath": "/vizseq/content---vizseq-docs-web-app-example-42-f-2ca.c1808a8c40d8042b1735.js"
         }
       ]
     },
     "12": {
       "js": [
         {
-          "file": "metadata---vizseq-docs-data-sourcesbd-3-934.26de2a19fba74408e4fc.js",
-          "hash": "9eb3c3071c4946c9132b",
-          "publicPath": "/vizseq/metadata---vizseq-docs-data-sourcesbd-3-934.26de2a19fba74408e4fc.js"
+          "file": "docsMetadata---vizseq-docs-62-f-554.38f3effe43576b04156c.js",
+          "hash": "2f6fe740c20ee217ed2f",
+          "publicPath": "/vizseq/docsMetadata---vizseq-docs-62-f-554.38f3effe43576b04156c.js"
         }
       ]
     },
     "13": {
+      "css": [
+        {
+          "file": "main.076a4b60bdd18e8b2127.css",
+          "hash": "fd9238c1738e37f93261",
+          "publicPath": "/vizseq/main.076a4b60bdd18e8b2127.css"
+        }
+      ],
       "js": [
         {
-          "file": "metadata---vizseq-docs-installation-405-b19.834fe22a504b4afee827.js",
-          "hash": "f4292b5b6ddbd81c7b8d",
-          "publicPath": "/vizseq/metadata---vizseq-docs-installation-405-b19.834fe22a504b4afee827.js"
+          "file": "main.ffe8cf6790b099f20297.js",
+          "hash": "fd9238c1738e37f93261",
+          "publicPath": "/vizseq/main.ffe8cf6790b099f20297.js"
         }
       ]
     },
     "14": {
       "js": [
         {
-          "file": "metadata---vizseq-docs-ipynb-example-0-dd-d79.e03f0e60c967243753bd.js",
-          "hash": "bf358d1ea3b62259e34a",
-          "publicPath": "/vizseq/metadata---vizseq-docs-ipynb-example-0-dd-d79.e03f0e60c967243753bd.js"
+          "file": "metadata---vizseq-docs-data-1-e-6-60f.c8d8951704b66d14f789.js",
+          "hash": "bfc104d6bd8edc54e64a",
+          "publicPath": "/vizseq/metadata---vizseq-docs-data-1-e-6-60f.c8d8951704b66d14f789.js"
         }
       ]
     },
     "15": {
       "js": [
         {
-          "file": "metadata---vizseq-docs-metrics-9-ec-e66.78ed5abf7072e057da1a.js",
-          "hash": "84078007d2cd3ad09717",
-          "publicPath": "/vizseq/metadata---vizseq-docs-metrics-9-ec-e66.78ed5abf7072e057da1a.js"
+          "file": "metadata---vizseq-docs-installation-405-b19.514819e46fbafa3aebfe.js",
+          "hash": "dc19232c2acb24f57375",
+          "publicPath": "/vizseq/metadata---vizseq-docs-installation-405-b19.514819e46fbafa3aebfe.js"
         }
       ]
     },
     "16": {
       "js": [
         {
-          "file": "metadata---vizseq-docs-new-metricb-0-a-8c9.68736e5c8fb50b0abca7.js",
-          "hash": "2a07680d959b0cb90aa9",
-          "publicPath": "/vizseq/metadata---vizseq-docs-new-metricb-0-a-8c9.68736e5c8fb50b0abca7.js"
+          "file": "metadata---vizseq-docs-ipynb-apif-6-e-6e4.e6cee56de4292f8b0681.js",
+          "hash": "0715b588aac54c73757a",
+          "publicPath": "/vizseq/metadata---vizseq-docs-ipynb-apif-6-e-6e4.e6cee56de4292f8b0681.js"
         }
       ]
     },
     "17": {
       "js": [
         {
-          "file": "metadata---vizseq-docs-overview-09-f-f22.8086298baadb6df1e8ce.js",
-          "hash": "49fca670a91c20ddc9b4",
-          "publicPath": "/vizseq/metadata---vizseq-docs-overview-09-f-f22.8086298baadb6df1e8ce.js"
+          "file": "metadata---vizseq-docs-ipynb-example-0-dd-d79.48d355600378e9bb97ba.js",
+          "hash": "939bea4010059515a93a",
+          "publicPath": "/vizseq/metadata---vizseq-docs-ipynb-example-0-dd-d79.48d355600378e9bb97ba.js"
         }
       ]
     },
     "18": {
       "js": [
         {
-          "file": "metadata---vizseq-docs-web-app-example-815-356.65c79e87dd2730449c86.js",
-          "hash": "a3435d95248237948133",
-          "publicPath": "/vizseq/metadata---vizseq-docs-web-app-example-815-356.65c79e87dd2730449c86.js"
+          "file": "metadata---vizseq-docs-metrics-9-ec-e66.c6f0b15d65ce0a60c0fb.js",
+          "hash": "48201e060d6496072b71",
+          "publicPath": "/vizseq/metadata---vizseq-docs-metrics-9-ec-e66.c6f0b15d65ce0a60c0fb.js"
         }
       ]
     },
     "19": {
       "js": [
         {
-          "file": "runtime~main.c714d070510629e6d028.js",
-          "hash": "24f5ad78dea9b571ac3f",
-          "publicPath": "/vizseq/runtime~main.c714d070510629e6d028.js"
+          "file": "metadata---vizseq-docs-new-metricb-0-a-8c9.0f09aeeb7dced1c32f2a.js",
+          "hash": "cdcb9334045cf86af212",
+          "publicPath": "/vizseq/metadata---vizseq-docs-new-metricb-0-a-8c9.0f09aeeb7dced1c32f2a.js"
         }
       ]
     },
     "20": {
-      "css": [
-        {
-          "file": "20.72bc971e458032ed68e5.css",
-          "hash": "84140b6ad69b823887eb",
-          "publicPath": "/vizseq/20.72bc971e458032ed68e5.css"
-        }
-      ],
       "js": [
         {
-          "file": "20.c36adb65066141193a09.js",
-          "hash": "84140b6ad69b823887eb",
-          "publicPath": "/vizseq/20.c36adb65066141193a09.js"
+          "file": "metadata---vizseq-docs-overview-09-f-f22.f2f8380b8759d6b12ae4.js",
+          "hash": "7d04127266159262dad4",
+          "publicPath": "/vizseq/metadata---vizseq-docs-overview-09-f-f22.f2f8380b8759d6b12ae4.js"
         }
       ]
     },
     "21": {
       "js": [
         {
-          "file": "21.535121d1f63d452d37f3.js",
-          "hash": "6b321359d06a48c0f2b3",
-          "publicPath": "/vizseq/21.535121d1f63d452d37f3.js"
+          "file": "metadata---vizseq-docs-tagsf-85-bd6.899fb621c160f1543088.js",
+          "hash": "8706ec22a40913dbd4a4",
+          "publicPath": "/vizseq/metadata---vizseq-docs-tagsf-85-bd6.899fb621c160f1543088.js"
+        }
+      ]
+    },
+    "22": {
+      "js": [
+        {
+          "file": "metadata---vizseq-docs-web-app-example-815-356.937b2b1d7391293f9b8e.js",
+          "hash": "b0937845cecb1618b1ae",
+          "publicPath": "/vizseq/metadata---vizseq-docs-web-app-example-815-356.937b2b1d7391293f9b8e.js"
+        }
+      ]
+    },
+    "23": {
+      "js": [
+        {
+          "file": "runtime~main.054c0e1add95a9d81d01.js",
+          "hash": "280d99f02eb128aa510a",
+          "publicPath": "/vizseq/runtime~main.054c0e1add95a9d81d01.js"
+        }
+      ]
+    },
+    "24": {
+      "css": [
+        {
+          "file": "24.72bc971e458032ed68e5.css",
+          "hash": "4d95774aaafedf7eb096",
+          "publicPath": "/vizseq/24.72bc971e458032ed68e5.css"
+        }
+      ],
+      "js": [
+        {
+          "file": "24.f7f534a29e1d91e62155.js",
+          "hash": "4d95774aaafedf7eb096",
+          "publicPath": "/vizseq/24.f7f534a29e1d91e62155.js"
+        }
+      ]
+    },
+    "25": {
+      "js": [
+        {
+          "file": "25.393c14a39b0d33d9b23a.js",
+          "hash": "51eb0ec31334fbb28064",
+          "publicPath": "/vizseq/25.393c14a39b0d33d9b23a.js"
         }
       ]
     }
