@@ -29,10 +29,12 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: '',
+          title: 'Docs',
           items: [
-            {label: 'Docs', to: 'docs/overview'},
-              {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub'},
+            {label: 'Overview', to: 'docs/overview'},
+            {label: 'Jupyter Notebook Example', to: 'docs/ipynb_example'},
+            {label: 'Web App Example', to: 'docs/web_app_example'},
+            {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub'},
           ],
         },
       ],

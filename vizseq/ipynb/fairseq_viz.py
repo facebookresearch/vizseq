@@ -6,7 +6,7 @@
 #
 
 import os
-from typing import List
+from typing import List, Optional
 
 from vizseq.ipynb.core import (view_examples as _view_examples,
                                view_stats as _view_stats,
@@ -42,7 +42,7 @@ def _get_data(generation_log_path: str):
 # TODO: visualize alignment by attention
 def view_examples(
         generation_log_path: str,
-        metrics: List[str] = (),
+        metrics: Optional[List[str]] = None,
         query: str = '',
         page_sz: int = DEFAULT_PAGE_SIZE,
         page_no: int = DEFAULT_PAGE_NO,

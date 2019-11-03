@@ -1,7 +1,7 @@
 ---
-id: data_sources
-title: Data Sources
-sidebar_label: Data Sources
+id: data
+title: Data
+sidebar_label: Data
 ---
 
 ## Input Types

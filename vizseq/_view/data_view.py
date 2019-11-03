@@ -64,12 +64,13 @@ class VizSeqDataPageView(object):
     def get(
             cls, src: VizSeqDataSources, ref: VizSeqDataSources,
             hypo: VizSeqDataSources, page_sz: int, page_no: int,
-            metrics: List[str] = (), query: str = '',
+            metrics: Optional[List[str]] = None, query: str = '',
             sorting: int = 0, sorting_metric: str = '',
             need_lang_tags: bool = False,
     ) -> VizSeqPageData:
         assert page_no > 0 and page_sz > 0
         page_sz = min(page_sz, MAX_PAGE_SZ)
+        metrics = [] if metrics is None else metrics
         models = hypo.text_names
         # query
         cur_idx = list(range(len(src)))
