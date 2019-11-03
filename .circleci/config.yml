@@ -17,9 +17,9 @@ jobs:
           no_output_timeout: 60m
           command: |
             export NOX_PYTHON_VERSIONS=3.6
-            ~/miniconda3/bin/conda create -n hydra36 python=3.6 -q -y
-            ~/miniconda3/bin/conda run -n hydra36 pip install nox
-            ~/miniconda3/bin/conda run -n hydra36 python3 -m nox
+            ~/miniconda3/bin/conda create -n vizseq 36 python=3.6 -q -y
+            ~/miniconda3/bin/conda run -n vizseq 36 pip install nox
+            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m nox
 
   py37_mac:
     macos:
@@ -37,9 +37,9 @@ jobs:
           no_output_timeout: 60m
           command: |
             export NOX_PYTHON_VERSIONS=3.7
-            ~/miniconda3/bin/conda create -n hydra36 python=3.6 -q -y
-            ~/miniconda3/bin/conda run -n hydra36 pip install nox
-            ~/miniconda3/bin/conda run -n hydra36 python3 -m nox
+            ~/miniconda3/bin/conda create -n vizseq 36 python=3.6 -q -y
+            ~/miniconda3/bin/conda run -n vizseq 36 pip install nox
+            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m nox
 
   py36_linux:
     docker:
@@ -82,14 +82,14 @@ jobs:
       - run:
           name: Preparing conda environment
           command: |
-            conda create -n hydra python=3.6 -q -y
-            conda run -n hydra pip install nox
+            conda create -n vizseq  python=3.6 -q -y
+            conda run -n vizseq  pip install nox
       - run:
-          name: Testing Hydra
+          name: Testing vizseq
           command: |
             $env:NOX_PYTHON_VERSIONS=3.6
             $env:PYTHONIOENCODING="utf_8"
-            conda activate hydra
+            conda activate vizseq
             nox
             exit $LASTEXITCODE
 
@@ -105,14 +105,14 @@ jobs:
       - run:
           name: Preparing conda environment
           command: |
-            conda create -n hydra python=3.7 -q -y
-            conda run -n hydra pip install nox
+            conda create -n vizseq  python=3.7 -q -y
+            conda run -n vizseq  pip install nox
       - run:
           name: Testing VizSeq
           command: |
             $env:NOX_PYTHON_VERSIONS=3.7
             $env:PYTHONIOENCODING="utf_8"
-            conda activate hydra
+            conda activate vizseq
             nox
             exit $LASTEXITCODE
 
