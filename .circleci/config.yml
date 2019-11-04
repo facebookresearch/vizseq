@@ -11,13 +11,12 @@ jobs:
           command: |
             curl -o Miniconda3-latest-MacOSX-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
             bash ./Miniconda3-latest-MacOSX-x86_64.sh -b
-            ~/miniconda3/bin/conda init bash
       - run:
           name: "Testing VizSeq"
           no_output_timeout: 60m
           command: |
-            ~/miniconda3/bin/conda create -n vizseq 36 python=3.6 -q -y
-            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m tests.test_all
+            ~/miniconda3/bin/pip install -e .
+            ~/miniconda3/bin/python -m tests.test_all
 
   py37_mac:
     macos:
