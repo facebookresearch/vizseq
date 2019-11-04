@@ -24,7 +24,7 @@ class BERTScoreScorer(VizSeqScorer):
         logging.getLogger("pytorch_pretrained_bert").setLevel(logging.WARNING)
 
         sent_scores = bert_score.score(
-            hypothesis, references[0], bert="bert-base-multilingual-cased",
+            hypothesis, references[0],"bert-base-multilingual-cased",
             no_idf=True, verbose=self.verbose
         )[2].tolist()
 
