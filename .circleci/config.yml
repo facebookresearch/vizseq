@@ -11,13 +11,19 @@ jobs:
           command: |
             curl -o Miniconda3-latest-MacOSX-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
             bash ./Miniconda3-latest-MacOSX-x86_64.sh -b
+            ~/miniconda3/bin/conda init bash
       - run:
-          name: "Testing VizSeq"
-          no_output_timeout: 60m
+          name: "Installing VizSeq"
           command: |
-            ~/miniconda3/bin/pip install -e .
+            ~/miniconda3/bin/conda create -n vizseq36 python=3.6 -q -y
+            ~/miniconda3/bin/conda run -n vizseq36 pip install -e .
             bash get_example_data.sh
-            ~/miniconda3/bin/python -m tests.test_all
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq36 python -m tests.test_n_gram_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq36 python -m tests.test_embedding_based_scorers
 
   py37_mac:
     macos:
@@ -31,12 +37,17 @@ jobs:
             bash ./Miniconda3-latest-MacOSX-x86_64.sh -b
             ~/miniconda3/bin/conda init bash
       - run:
-          name: "Testing VizSeq"
-          no_output_timeout: 60m
+          name: "Installing VizSeq"
           command: |
             ~/miniconda3/bin/conda create -n vizseq37 python=3.7 -q -y
-            ~/miniconda3/bin/conda run -n vizseq37 pip install -e ~/project
-            ~/miniconda3/bin/conda run -n vizseq37 python -m tests.test_all
+            ~/miniconda3/bin/conda run -n vizseq37 pip install -e .
+            bash get_example_data.sh
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq37 python -m tests.test_n_gram_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq37 python -m tests.test_embedding_based_scorers
 
   py36_linux:
     docker:
@@ -44,9 +55,15 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
+      - run: sudo apt-get install libsndfile1
       - run: sudo pip install -e .
       - run: bash get_example_data.sh
-      - run: python -m tests.test_all
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_n_gram_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_embedding_based_scorers
 
   py37_linux:
     docker:
@@ -54,52 +71,15 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
+      - run: sudo apt-get install libsndfile1
       - run: sudo pip install -e .
       - run: bash get_example_data.sh
-      - run: python -m tests.test_all
-
-  py36_win:
-    executor: win/default
-    steps:
-      - checkout
       - run:
-          name: Installing Conda
-          command: |
-            choco install miniconda3 -y --version=4.6.14
-            C:\tools\miniconda3\Scripts\conda.exe init powershell
+          no_output_timeout: 60m
+          command: python -m tests.test_n_gram_based_scorers
       - run:
-          name: Preparing conda environment
-          command: |
-            conda create -n vizseq python=3.6 -q -y
-      - run:
-          name: Testing vizseq
-          command: |
-            $env:PYTHONIOENCODING="utf_8"
-            conda activate vizseq
-            pip install -e .
-            python -m tests.test_all
-            exit $LASTEXITCODE
-
-  py37_win:
-    executor: win/default
-    steps:
-      - checkout
-      - run:
-          name: Installing Conda
-          command: |
-            choco install miniconda3 -y --version=4.6.14
-            C:\tools\miniconda3\Scripts\conda.exe init powershell
-      - run:
-          name: Preparing conda environment
-          command: |
-            conda create -n vizseq python=3.7 -q -y
-      - run:
-          name: Testing VizSeq
-          command: |
-            $env:PYTHONIOENCODING="utf_8"
-            conda activate vizseq
-            python3 -m tests.test_all
-            exit $LASTEXITCODE
+          no_output_timeout: 60m
+          command: python -m tests.test_embedding_based_scorers
 
 workflows:
   version: 2
@@ -109,8 +89,3 @@ workflows:
       - py37_linux
       - py36_mac
       - py37_mac
-      - py36_win
-      - py37_win
-
-orbs:
-  win: circleci/windows@1.0.0

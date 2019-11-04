@@ -4,7 +4,7 @@ title: Installation
 sidebar_label: Installation
 ---
 
-VizSeq requires **Python 3.6+** and runs on **Unix/Linux**, **macOS/OS X** and **Windows**.
+VizSeq requires **Python 3.6+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as well in the future.
 
 You can install VizSeq from PyPI repository:
 ```bash
