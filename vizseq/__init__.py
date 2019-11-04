@@ -5,8 +5,10 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-name = 'vizseq'
-__version__ = '0.1.3'
+import os.path as op
+
+with open(op.join('vizseq', 'VERSION')) as f:
+    __version__ = f.read()
 
 from vizseq.ipynb import *
 from vizseq.ipynb import fairseq_viz as fairseq
