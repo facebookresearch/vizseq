@@ -33,8 +33,9 @@ jobs:
           name: "Testing VizSeq"
           no_output_timeout: 60m
           command: |
-            ~/miniconda3/bin/conda create -n vizseq 36 python=3.6 -q -y
-            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m tests.test_all
+            ~/miniconda3/bin/conda create -n vizseq37 python=3.7 -q -y
+            ~/miniconda3/bin/conda run -n vizseq37 pip install -e ~/project
+            ~/miniconda3/bin/conda run -n vizseq37 python -m tests.test_all
 
   py36_linux:
     docker:
