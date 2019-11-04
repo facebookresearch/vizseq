@@ -44,7 +44,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
-      - run: pip install -e .
+      - run: sudo pip install -e .
       - run: bash get_example_data.sh
       - run: python -m tests.test_all
 
@@ -54,7 +54,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
-      - run: pip install -e .
+      - run: sudo pip install -e .
       - run: bash get_example_data.sh
       - run: python -m tests.test_all
 
