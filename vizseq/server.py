@@ -11,7 +11,6 @@ import argparse
 from typing import List
 
 from vizseq._utils.logger import logger
-logger.set_console_mode(enable=True)
 
 from vizseq._view import VizSeqWebView, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NO
 from vizseq._data.zip_file import VizSeqZipFile
