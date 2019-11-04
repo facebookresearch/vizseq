@@ -1,8 +1,10 @@
 #!/usr/bin/bash
 # Copyright (c) Facebook, Inc. and its affiliates.
 
+TASK=${1:-translation_wmt14_en_de_test}
+
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-FILENAME=example_data.zip
-wget https://dl.fbaipublicfiles.com/vizseq/${FILENAME} -O "${ROOT}/examples/${FILENAME}"
-unzip "${ROOT}/examples/${FILENAME}"
-rm "${ROOT}/examples/${FILENAME}"
+FILENAME=${TASK}.zip
+curl "https://dl.fbaipublicfiles.com/vizseq/examples/data/${FILENAME}" --output "${ROOT}/examples/data/${FILENAME}"
+unzip "${ROOT}/examples/data/${FILENAME}" -d "${ROOT}/examples/data"
+rm "${ROOT}/examples/data/${FILENAME}"

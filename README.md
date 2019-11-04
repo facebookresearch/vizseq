@@ -1,4 +1,5 @@
 [![PyPI](https://img.shields.io/pypi/v/vizseq)](https://pypi.org/project/vizseq/)
+[![CircleCI](https://img.shields.io/circleci/build/github/facebookresearch/vizseq)](https://circleci.com/gh/facebookresearch/vizseq)
 ![PyPI - License](https://img.shields.io/pypi/l/vizseq)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/vizseq)
 
@@ -32,7 +33,7 @@
 
 
 ## Installation
-VizSeq requires **Python 3.6+** and runs on **Unix/Linux**, **macOS/OS X** and **Windows**.
+VizSeq requires **Python 3.6+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as well in the future.
 
 You can install VizSeq from PyPI repository:
 ```bash
@@ -58,6 +59,8 @@ $ pip install -e .
 ### Web App Example
 Download example data:
 ```bash
+$ git clone https://github.com/facebookresearch/vizseq
+$ cd vizseq
 $ bash get_example_data.sh
 ```
 Launch the web server:

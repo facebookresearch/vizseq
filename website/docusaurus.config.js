@@ -14,6 +14,9 @@ module.exports = {
   organizationName: 'facebookresearch',
   projectName: 'vizseq',
   themeConfig: {
+    googleAnalytics: {
+      trackingID: 'UA-151434920-1',
+    },
     navbar: {
       title: '',
       logo: {

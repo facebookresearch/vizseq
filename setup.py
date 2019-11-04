@@ -8,8 +8,6 @@
 from setuptools import setup, find_packages
 import sys
 
-from vizseq import __version__
-
 
 if sys.version_info < (3,):
     sys.exit('Sorry, Python 3 is required for vizseq.')
@@ -20,9 +18,12 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license_content = f.read()
 
+with open('vizseq/VERSION') as f:
+    version = f.read()
+
 setup(
     name='vizseq',
-    version=__version__,
+    version=version,
     description='Visual Analysis Toolkit for Text Generation Tasks',
     url='https://github.com/facebookresearch/vizseq',
     classifiers=[
@@ -56,7 +57,7 @@ setup(
         'bert-score',
     ],
     packages=find_packages(exclude=['examples', 'tests']),
-    package_data={'vizseq': ['_templates/*.html']},
+    package_data={'vizseq': ['_templates/*.html', 'VERSION']},
     test_suite='tests',
     zip_safe=False,
 )

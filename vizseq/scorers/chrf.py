@@ -18,7 +18,9 @@ def _get_sent_chrf(
         hypothesis: List[str], references: List[List[str]],
         extra_args: Optional[Dict[str, str]] = None
 ):
-    return [sb.sentence_chrf(h, r) for h, r in zip(hypothesis, references[0])]
+    return [
+        sb.sentence_chrf(h, r).score for h, r in zip(hypothesis, references[0])
+    ]
 
 
 @register_scorer('chrf', 'chrF')
@@ -27,7 +29,7 @@ class ChrFScorer(VizSeqScorer):
             self, hypothesis: List[str], references: List[List[str]]
     ) -> float:
         if self.n_workers == 1:
-            corpus_score = sb.corpus_chrf(hypothesis, references[0])
+            corpus_score = sb.corpus_chrf(hypothesis, references[0]).score
         else:
             batches = list(
                 self._batch(hypothesis, references, n_batches=self.n_workers)
@@ -48,7 +50,8 @@ class ChrFScorer(VizSeqScorer):
                     for i in range(sb.CHRF_ORDER * 3):
                         corpus_statistics[i] += stats[i]
             avg_precision, avg_recall = sb._avg_precision_and_recall(
-                corpus_statistics, sb.CHRF_ORDER)
+                corpus_statistics, sb.CHRF_ORDER
+            )
             corpus_score = sb._chrf(avg_precision, avg_recall)
         return corpus_score
 

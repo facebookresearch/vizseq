@@ -85,7 +85,7 @@ class VizSeqScorerTestCase(unittest.TestCase):
 
     def _test_embedding_based(
             self, scorer_type: Type[VizSeqScorer],
-            extra_args: Dict[str, str] = ()
+            extra_args: Optional[Dict[str, str]] = None
     ):
         scores_sp = scorer_type(
             corpus_level=True, sent_level=True, extra_args=extra_args

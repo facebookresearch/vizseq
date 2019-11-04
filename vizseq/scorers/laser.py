@@ -5,22 +5,45 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-import numpy as np
 from typing import List, Optional, Dict
 
+import numpy as np
+
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
-from vizseq._utils.optional import get_optional_dict
+
+setup_flag = False
 
 
-# TODO: lang id
+def set_up():
+    global setup_flag
+    if setup_flag:
+        return
+    try:
+        import laserembeddings
+        laserembeddings.Laser().embed_sentences(['This is a test.'], lang='en')
+    except FileNotFoundError:
+        import runpy
+        import sys
+        argv = [v for v in sys.argv]
+        sys.argv = [sys.argv[0], 'download-models']
+        runpy.run_module('laserembeddings', run_name='__main__')
+        sys.argv = argv
+        setup_flag = True
+
+
 def _get_sent_laser(
         hypothesis: List[str], references: List[List[str]],
         extra_args: Optional[Dict[str, str]] = None
 ) -> List[float]:
-    lang = get_optional_dict(extra_args, 'laser_trg_lang', 'en')
+    set_up()
 
-    from laserembeddings import Laser
-    laser = Laser()
+    import laserembeddings
+    import langid
+    import logging
+    logging.getLogger('langid').setLevel(logging.WARNING)
+    lang = langid.classify(references[0][0])[0]
+
+    laser = laserembeddings.Laser()
     hypo_emb = laser.embed_sentences(hypothesis, lang=lang)
     ref_emb = laser.embed_sentences(references[0], lang=lang)
 

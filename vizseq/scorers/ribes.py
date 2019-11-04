@@ -7,7 +7,7 @@
 
 from typing import List, Optional, Dict
 
-from nltk.translate.ribes_score import sentence_ribes
+from nltk.translate.ribes_score import sentence_ribes as sent_ribes
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
 
@@ -16,8 +16,15 @@ def _get_sent_ribes(
         hypothesis: List[str], references: List[List[str]],
         extra_args: Optional[Dict[str, str]] = None,
 ) -> List[float]:
-    joined_references = list(zip(*references))
-    return [sentence_ribes(r, h) for r, h in zip(joined_references, hypothesis)]
+    joined_ref = list(zip(*references))
+    scores = []
+    for r, h in zip(joined_ref, hypothesis):
+        try:
+            cur = sent_ribes([rr.split() for rr in r], h.split())
+            scores.append(cur)
+        except ZeroDivisionError:
+            scores.append(0.)
+    return scores
 
 
 @register_scorer('ribes', 'RIBES')

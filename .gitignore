@@ -29,7 +29,7 @@ wheels/
 .ipynb_checkpoints
 
 # Example data
-examples/data
+examples/data/*/*
 
 # Sphinx documentation
 docs/_build/

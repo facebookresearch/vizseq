@@ -8,8 +8,12 @@
 from typing import List, Optional, Dict
 
 from nltk.translate.meteor_score import meteor_score
+import nltk
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
+
+
+nltk.download('wordnet', quiet=True)
 
 
 def _get_sent_meteor(
