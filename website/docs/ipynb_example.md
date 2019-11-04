@@ -7,6 +7,8 @@ sidebar_label: Jupyter Notebook Example
 ## Example Data
 To get the data for the following examples:
 ```bash
+$ git clone https://github.com/facebookresearch/vizseq
+$ cd vizseq
 $ bash get_example_data.sh
 ```
 The data will be available in `examples/data`.

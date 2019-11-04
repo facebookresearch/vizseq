@@ -16,10 +16,8 @@ jobs:
           name: "Testing VizSeq"
           no_output_timeout: 60m
           command: |
-            export NOX_PYTHON_VERSIONS=3.6
             ~/miniconda3/bin/conda create -n vizseq 36 python=3.6 -q -y
-            ~/miniconda3/bin/conda run -n vizseq 36 pip install nox
-            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m nox
+            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m tests.test_all
 
   py37_mac:
     macos:
@@ -36,10 +34,8 @@ jobs:
           name: "Testing VizSeq"
           no_output_timeout: 60m
           command: |
-            export NOX_PYTHON_VERSIONS=3.7
             ~/miniconda3/bin/conda create -n vizseq 36 python=3.6 -q -y
-            ~/miniconda3/bin/conda run -n vizseq 36 pip install nox
-            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m nox
+            ~/miniconda3/bin/conda run -n vizseq 36 python3 -m tests.test_all
 
   py36_linux:
     docker:
@@ -47,9 +43,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
-      - run: echo 'export NOX_PYTHON_VERSIONS=3.6' >> $BASH_ENV
-      - run: sudo pip install nox
-      - run: nox
+      - run: python -m tests.test_all
 
   py37_linux:
     docker:
@@ -57,18 +51,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
-      - run: echo 'export NOX_PYTHON_VERSIONS=3.7' >> $BASH_ENV
-      - run: sudo pip install nox
-      - run: nox
-
-  # Misc
-  coverage:
-    docker:
-      - image: circleci/python:3.6
-    steps:
-      - checkout
-      - run: sudo pip install nox
-      - run: nox -s coverage
+      - run: python -m tests.test_all
 
   py36_win:
     executor: win/default
@@ -82,15 +65,13 @@ jobs:
       - run:
           name: Preparing conda environment
           command: |
-            conda create -n vizseq  python=3.6 -q -y
-            conda run -n vizseq  pip install nox
+            conda create -n vizseq python=3.6 -q -y
       - run:
           name: Testing vizseq
           command: |
-            $env:NOX_PYTHON_VERSIONS=3.6
             $env:PYTHONIOENCODING="utf_8"
             conda activate vizseq
-            nox
+            python3 -m tests.test_all
             exit $LASTEXITCODE
 
   py37_win:
@@ -106,14 +87,12 @@ jobs:
           name: Preparing conda environment
           command: |
             conda create -n vizseq  python=3.7 -q -y
-            conda run -n vizseq  pip install nox
       - run:
           name: Testing VizSeq
           command: |
-            $env:NOX_PYTHON_VERSIONS=3.7
             $env:PYTHONIOENCODING="utf_8"
             conda activate vizseq
-            nox
+            python3 -m tests.test_all
             exit $LASTEXITCODE
 
 workflows:

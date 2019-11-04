@@ -6,7 +6,7 @@
 #
 
 name = 'vizseq'
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 from vizseq.ipynb import *
 from vizseq.ipynb import fairseq_viz as fairseq

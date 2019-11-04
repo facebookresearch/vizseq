@@ -58,6 +58,8 @@ $ pip install -e .
 ### Web App Example
 Download example data:
 ```bash
+$ git clone https://github.com/facebookresearch/vizseq
+$ cd vizseq
 $ bash get_example_data.sh
 ```
 Launch the web server:

@@ -6,6 +6,8 @@ sidebar_label: Web App Example
 
 Example data is provided to test the VizSeq Web App, which can be acquired by:
 ```bash
+$ git clone https://github.com/facebookresearch/vizseq
+$ cd vizseq
 $ bash get_example_data.sh
 ```
 The data will be available in `examples/data`, including the use cases for (multimodal) machine translation,
