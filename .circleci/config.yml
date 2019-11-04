@@ -15,7 +15,7 @@ jobs:
           name: "Testing VizSeq"
           no_output_timeout: 60m
           command: |
-            ~/miniconda3/bin/pip install -e .
+            ~/miniconda3/bin/pip install -e ~/project
             ~/miniconda3/bin/python -m tests.test_all
 
   py37_mac:
