@@ -8,8 +8,12 @@
 from typing import List, Optional, Dict
 
 import rouge as _rouge
+import nltk
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
+
+
+nltk.download('punkt', quiet=True)
 
 
 STATS_TYPE = 'f'

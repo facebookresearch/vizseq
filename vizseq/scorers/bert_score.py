@@ -20,12 +20,16 @@ class BERTScoreScorer(VizSeqScorer):
         corpus_score, sent_scores, group_scores = None, None, None
 
         import bert_score as bs
+        import langid
         import logging
-        logging.getLogger("pytorch_pretrained_bert").setLevel(logging.WARNING)
+        logging.getLogger('pytorch_pretrained_bert').setLevel(logging.WARNING)
+        logging.getLogger('langid').setLevel(logging.WARNING)
+
+        lang = langid.classify(references[0][0])[0]
 
         sent_scores = bs.score(
-            hypothesis, references[0], bert="bert-base-multilingual-cased",
-            no_idf=True, verbose=self.verbose
+            hypothesis, references[0], nthreads=self.n_workers, lang=lang,
+            verbose=self.verbose
         )[2].tolist()
 
         if self.corpus_level:
