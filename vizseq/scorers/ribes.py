@@ -17,7 +17,10 @@ def _get_sent_ribes(
         extra_args: Optional[Dict[str, str]] = None,
 ) -> List[float]:
     joined_references = list(zip(*references))
-    return [sentence_ribes(r, h) for r, h in zip(joined_references, hypothesis)]
+    return [
+        sentence_ribes([rr.split() for rr in r], h.split())
+        for r, h in zip(joined_references, hypothesis)
+    ]
 
 
 @register_scorer('ribes', 'RIBES')
