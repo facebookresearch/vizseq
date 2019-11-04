@@ -15,8 +15,8 @@ jobs:
           name: "Testing VizSeq"
           no_output_timeout: 60m
           command: |
-            cd ~/project
             ~/miniconda3/bin/pip install -e .
+            bash get_example_data.sh
             ~/miniconda3/bin/python -m tests.test_all
 
   py37_mac:
@@ -44,6 +44,8 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
+      - run: pip install -e .
+      - run: bash get_example_data.sh
       - run: python -m tests.test_all
 
   py37_linux:
@@ -52,6 +54,8 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get install -y expect
+      - run: pip install -e .
+      - run: bash get_example_data.sh
       - run: python -m tests.test_all
 
   py36_win:
@@ -72,7 +76,8 @@ jobs:
           command: |
             $env:PYTHONIOENCODING="utf_8"
             conda activate vizseq
-            python3 -m tests.test_all
+            pip install -e .
+            python -m tests.test_all
             exit $LASTEXITCODE
 
   py37_win:
@@ -87,7 +92,7 @@ jobs:
       - run:
           name: Preparing conda environment
           command: |
-            conda create -n vizseq  python=3.7 -q -y
+            conda create -n vizseq python=3.7 -q -y
       - run:
           name: Testing VizSeq
           command: |
