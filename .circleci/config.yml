@@ -63,7 +63,7 @@ jobs:
           command: python -m tests.test_n_gram_based_scorers
       - run:
           no_output_timeout: 60m
-          command: python -m tests.test_embedding_based_scorers
+          command: sudo python -m tests.test_embedding_based_scorers
 
   py37_linux:
     docker:
@@ -79,7 +79,7 @@ jobs:
           command: python -m tests.test_n_gram_based_scorers
       - run:
           no_output_timeout: 60m
-          command: python -m tests.test_embedding_based_scorers
+          command: sudo python -m tests.test_embedding_based_scorers
 
 workflows:
   version: 2
