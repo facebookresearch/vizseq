@@ -73,7 +73,7 @@ http://localhost:9001
 ```
 
 ## License
-VizSeq is [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) licensed. See the LICENSE file for details.
+VizSeq is licensed under [MIT](https://github.com/facebookresearch/vizseq/blob/master/LICENSE). See the [LICENSE](https://github.com/facebookresearch/vizseq/blob/master/LICENSE) file for details.
 
 ## Citation
 Please cite as

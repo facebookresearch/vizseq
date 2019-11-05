@@ -17,7 +17,7 @@ $ cd vizseq
 $ pip install -e .
 ```
 
-### Citation
+## Citation
 If you find VizSeq useful in your research, please cite as
 ```
 @inproceedings{wang2019vizseq,
@@ -28,3 +28,6 @@ If you find VizSeq useful in your research, please cite as
 }
 ```
 
+## License
+
+VizSeq is licensed under [MIT](https://github.com/facebookresearch/vizseq/blob/master/LICENSE).
