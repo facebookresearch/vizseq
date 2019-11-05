@@ -34,7 +34,7 @@ setup(
     ],
     long_description=readme,
     long_description_content_type='text/markdown',
-    license='CC BY-NC 4.0',
+    license='MIT',
     setup_requires=[
         'setuptools>=18.0',
     ],
