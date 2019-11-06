@@ -61,16 +61,25 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
         return models.split(',') if len(models) > 0 else []
 
     def get_page_sz_arg(self) -> int:
-        return int(self.get_query_argument('p_sz', str(DEFAULT_PAGE_SIZE)))
+        p_sz = self.get_query_argument('p_sz', '')
+        if len(p_sz) == 0:
+            p_sz = str(DEFAULT_PAGE_SIZE)
+        return int(p_sz)
 
     def get_page_no_arg(self) -> int:
-        return int(self.get_query_argument('p_no', str(DEFAULT_PAGE_NO)))
+        p_no = self.get_query_argument('p_no', '')
+        if len(p_no) == 0:
+            p_no = str(DEFAULT_PAGE_NO)
+        return int(p_no)
 
     def get_query_arg(self) -> str:
         return self.get_query_argument('q', '')
 
     def get_sorting_arg(self) -> int:
-        return int(self.get_query_argument('s', '0'))
+        sorting = self.get_query_argument('s', '')
+        if len(sorting) == 0:
+            sorting = '0'
+        return int(sorting)
 
     def get_sorting_metric_arg(self) -> str:
         return self.get_query_argument('s_metric', '')

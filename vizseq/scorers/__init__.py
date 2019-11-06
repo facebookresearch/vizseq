@@ -60,8 +60,9 @@ class VizSeqScore(NamedTuple):
 
 def _batch(a_list: list, n_batches: int):
     batch_size = len(a_list) // n_batches + int(len(a_list) % n_batches > 0)
-    for i in range(0, len(a_list), batch_size):
-        yield a_list[i: min(i + batch_size, len(a_list))]
+    if batch_size > 0:
+        for i in range(0, len(a_list), batch_size):
+            yield a_list[i: min(i + batch_size, len(a_list))]
 
 
 class VizSeqScorer(object):

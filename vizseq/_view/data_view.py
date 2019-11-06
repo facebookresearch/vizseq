@@ -76,6 +76,8 @@ class VizSeqDataPageView(object):
         cur_idx = list(range(len(src)))
         if src.has_text:
             cur_idx = VizSeqFilter.filter(src.text, query)
+        elif ref.has_text:
+            cur_idx = VizSeqFilter.filter(ref.text, query)
         n_samples = len(cur_idx)
 
         # sorting
