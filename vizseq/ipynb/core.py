@@ -92,6 +92,7 @@ def view_n_grams(data: PathOrPathsOrDictOfStrList, k: int = 64):
     return HTML(html)
 
 
+# TODO: add tag count
 def view_stats(
         sources: PathOrPathsOrDictOfStrList,
         references: PathOrPathsOrDictOfStrList,

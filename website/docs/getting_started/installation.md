@@ -27,7 +27,3 @@ If you find VizSeq useful in your research, please cite as
   year = {2019},
 }
 ```
-
-## License
-
-VizSeq is licensed under [MIT](https://github.com/facebookresearch/vizseq/blob/master/LICENSE).

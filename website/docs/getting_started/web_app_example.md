@@ -4,6 +4,8 @@ title: Web App Example
 sidebar_label: Web App Example
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 Example data is provided to test the VizSeq Web App, which can be acquired by:
 ```bash
 $ git clone https://github.com/facebookresearch/vizseq
@@ -21,4 +23,6 @@ And then, navigate to the following URL in your web browser:
 ```
 http://localhost:9001
 ```
+<p align="center"><img src={useBaseUrl('img/view_tasks.png')} alt="View Tasks" /></p>
+
 To view your data instead, just point `--data-root` to the corresponding data root path.

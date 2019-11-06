@@ -6,6 +6,8 @@
 # <img src="logo.png" alt="VizSeq" width="160">
 [VizSeq: A Visual Analysis Toolkit for Text Generation Tasks.](https://arxiv.org/pdf/1909.05424.pdf)
 
+[[Documentation]](https://facebookresearch.github.io/vizseq)
+
 ## Overview
 
 <p align="center">
@@ -48,7 +50,7 @@ $ pip install -e .
 ```
 
 ## Getting Started
-[Full documentation](https://facebookresearch.github.io/vizseq)
+[[Full documentation]](https://facebookresearch.github.io/vizseq)
 
 ### Jupyter Notebook Examples
 - [Multimodal Machine Translation](examples/multimodal_machine_translation.ipynb)
