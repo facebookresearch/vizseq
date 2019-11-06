@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[21],{157:function(s){s.exports=JSON.parse('{"id":"tags","title":"Tags","sidebar_label":"Tags","description":"Sentence tags to group examples.","source":"@site/docs/tags.md","permalink":"/vizseq/docs/tags"}')}}]);
