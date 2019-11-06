@@ -58,5 +58,5 @@ class VizSeqByMetricSorter(object):
         :return:
         """
         avg_scores = [np.mean(list(s.values())) for s in scores]
-        sorted_indices = np.argsort([avg_scores[i] for i in indices])
+        sorted_indices = np.argsort(avg_scores)
         return [indices[i] for i in sorted_indices]
