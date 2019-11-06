@@ -34,10 +34,10 @@ module.exports = {
         {
           title: 'Docs',
           items: [
-            {label: 'Installation', to: 'docs/installation'},
             {label: 'Overview', to: 'docs/overview'},
-            {label: 'Jupyter Notebook Example', to: 'docs/ipynb_example'},
-            {label: 'Web App Example', to: 'docs/web_app_example'},
+            {label: 'Installation', to: 'docs/getting_started/installation'},
+            {label: 'Jupyter Notebook Example', to: 'docs/getting_started/ipynb_example'},
+            {label: 'Web App Example', to: 'docs/getting_started/web_app_example'},
             {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub'},
           ],
         },

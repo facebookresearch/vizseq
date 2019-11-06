@@ -4,6 +4,8 @@ title: Jupyter Notebook Example
 sidebar_label: Jupyter Notebook Example
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 ## Example Data
 To get the data for the following examples:
 ```bash
@@ -56,14 +58,23 @@ To view dataset statistics:
 ```python
 vizseq.view_stats(src, ref)
 ```
+
+<p align="center"><img src={useBaseUrl('img/view_stats.png')} alt="View Statistics" /></p>
+
 To view source-side n-grams:
 ```python
 vizseq.view_n_grams(src)
 ```
+
+<p align="center"><img src={useBaseUrl('img/view_n_grams.png')} alt="View N Grams" /></p>
+
 To view corpus-level scores (BLEU and METEOR):
 ```python
 vizseq.view_scores(ref, hypo, ['bleu', 'meteor'])
 ```
+
+<p align="center"><img src={useBaseUrl('img/view_scores.png')} alt="View Scores" /></p>
+
 To check the IDs of available scorers in VizSeq:
 ```python
 vizseq.available_scorers()
@@ -76,8 +87,10 @@ Available scorers: bert_score, bleu, bp, chrf, cider, gleu, laser, meteor, nist,
 We can view examples in pages with sorting:
 ```python
 import vizseq.VizSeqSortingType
-vizseq.view_examples(src, ref, hypo, ['bleu'], page_sz=10, page_no=1, sorting=VizSeqSortingType.src_len)
+vizseq.view_examples(src, ref, hypo, ['bleu'], page_sz=2, page_no=12, sorting=VizSeqSortingType.src_len)
 ```
+
+<p align="center"><img src={useBaseUrl('img/view_examples.png')} alt="View Examples" /></p>
 
 ## Google Translate Integration
 VizSeq integrates Google Translate using Google Cloud API, to use which you need a Google Cloud credential and let VizSeq know the credential JSON file path:
@@ -106,7 +119,9 @@ vizseq_fs.view_scores(log_path, ['bleu', 'meteor'])
 vizseq_fs.view_n_grams(log_path)
 ```
 
+<p align="center"><img src={useBaseUrl('img/fairseq_view_examples.png')} alt="Fairseq View" /></p>
+
 ## More Examples
-- [Multimodal Machine Translation](examples/multimodal_machine_translation.ipynb)
-- [Multilingual Machine Translation](examples/multilingual_machine_translation.ipynb)
-- [Speech Translation](examples/speech_translation.ipynb)
+- [Multimodal Machine Translation](https://github.com/facebookresearch/vizseq/blob/master/examples/multimodal_machine_translation.ipynb)
+- [Multilingual Machine Translation](https://github.com/facebookresearch/vizseq/blob/master/examples/multilingual_machine_translation.ipynb)
+- [Speech Translation](https://github.com/facebookresearch/vizseq/blob/master/examples/speech_translation.ipynb)

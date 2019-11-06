@@ -4,45 +4,77 @@ title: Jupyter Notebook APIs
 sidebar_label: Jupyter Notebook APIs
 ---
 
-## `view_stats()`
+## Core (``vizseq.*`` or `vizseq.ipynb.*`)
+### `view_stats()`
+Showing the dataset statistics, including examples count, tokens count, sentence length distribution, etc.
 #### Arguments
-##### `sources`: Union[str, List[str], Dict[str, List[str]]]
-Source-side data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details.
-##### `references`: Union[str, List[str], Dict[str, List[str]]]
-Target-side data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details.
-##### `tags`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None
+- **`sources`: Union[str, List[str], Dict[str, List[str]]]**:
+Source-side data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details.
+- **`references`: Union[str, List[str], Dict[str, List[str]]]**:
+Target-side data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details.
+- **`tags`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**: Per-example tags for example grouping. Default to `None`.
 
-## available_scorers()
-Show the IDs of available scorers in VizSeq.
 
-## `view_scores()`
+### `available_scorers()`
+Showing the IDs of built-in scorers, which can be used in [`view_scores()`](#view_scores) and [`view_examples()`](#vizseqview_examples).
+
+### `view_scores()`
 #### Arguments
-##### `references`: Union[str, List[str], Dict[str, List[str]]]
-Target-side data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details.
-##### `hypothesis`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None
-Model prediction data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details. Default to `None`.
-##### `metrics`: List[str]
-##### `tags`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None
+- **`references`: Union[str, List[str], Dict[str, List[str]]]**:
+Target-side data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details.
+- **`hypothesis`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**:
+Model prediction data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details. Default to `None`.
+- **`metrics`: List[str]**: List of scorer IDs. Use [`available_scorers()`](#available_scorers) to check all the available ones.
+- **`tags`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**: Per-example tags for example grouping. Default to `None`.
 
-## `view_examples()`
+### `view_examples()`
+Showing examples with model predictions in pages with specified metrics, keyword, sorting, etc.
 #### Arguments
-##### `sources`: Union[str, List[str], Dict[str, List[str]]]
-Source-side data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details.
-##### `references`: Union[str, List[str], Dict[str, List[str]]]
-Target-side data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details.
-##### `hypothesis`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None
-Model prediction data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details. Default to `None`.
-##### `metrics`: Optional[List[str]] = None
-##### `query`: str = ''
-##### `page_sz`: int = 10
-##### `page_no`: int = 1
-##### `sorting`: VizSeqSortingType = VizSeqSortingType.original
-##### `need_g_translate`: bool = False
+- **`sources`: Union[str, List[str], Dict[str, List[str]]]**:
+Source-side data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details.
+- **`references`: Union[str, List[str], Dict[str, List[str]]]**:
+Target-side data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details.
+- **`hypothesis`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**:
+Model prediction data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details. Default to `None`.
+- **`metrics`: Optional[List[str]] = None**: List of scorer IDs. Default to `None`. Use [`available_scorers()`](#available_scorers) to check all the available ones.
+- **`query`: str = ''**: The keyword(s) for example filtering. Default to `''`.
+- **`page_sz`: int = 10**: Page size. Default to `10`.
+- **`page_no`: int = 1**: Page number. Default to `1`.
+- **`sorting`: VizSeqSortingType = VizSeqSortingType.original**
+- **`need_g_translate`: bool = False**:
 To show Google Translate results or not. Default to `False`. 
 
-## `view_n_grams()`
+### `view_n_grams()`
+Showing the n-grams (n=1,2,3,4) in the input data (sources, references, etc.).
 #### Arguments
-##### `data`: Union[str, List[str], Dict[str, List[str]]]
-The data source. Can be a path, paths or lists of sentences. Refer to [Data](data) section for more details.
-##### `k`: int = 64
+- **`data`: Union[str, List[str], Dict[str, List[str]]]**:
+The data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details.
+- **`k`: int = 64**:
+Number of n-grams to be shown. Default to `64`.
+
+## Fairseq (`vizseq.ipynb.fairseq_viz.*`)
+VizSeq can directly import and analyze model predictions generated by [`fairseq-generate`](https://github.com/pytorch/fairseq/blob/master/generate.py) and [`fairseq-interactive`](https://github.com/pytorch/fairseq/blob/master/interactive.py).
+The APIs are almost the same.
+### `view_stats()`
+#### Arguments
+- **`log_path`: str**: The path to `fairseq-generate` or `fairseq-interactive` log file.
+### `view_scores()`
+#### Arguments
+- **`log_path`: str**: The path to `fairseq-generate` or `fairseq-interactive` log file.
+- **`metrics`: List[str]**: List of scorer IDs. Use [`available_scorers()`](#available_scorers) to check all the available ones.
+### `view_examples()`
+#### Arguments
+- **`log_path`: str**: The path to `fairseq-generate` or `fairseq-interactive` log file.
+- **`metrics`: Optional[List[str]] = None**: List of scorer IDs. Default to `None`. Use [`available_scorers()`](#available_scorers) to check all the available ones.
+- **`query`: str = ''**: The keyword(s) for example filtering. Default to `''`.
+- **`page_sz`: int = 10**: Page size. Default to `10`.
+- **`page_no`: int = 1**: Page number. Default to `1`.
+- **`sorting`: VizSeqSortingType = VizSeqSortingType.original**
+- **`need_g_translate`: bool = False**:
+To show Google Translate results or not. Default to `False`.
+
+### `view_n_grams()`
+#### Arguments
+- **`log_path`: str**: The path to `fairseq-generate` or `fairseq-interactive` log file.
+- **`k`: int = 64**:
 Number of n-grams to be shown. Default to `64`.
