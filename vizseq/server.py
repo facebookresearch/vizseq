@@ -157,12 +157,12 @@ class UploadHandler(VizSeqBaseRequestHandler):
     def post(self):
         file1 = self.request.files['file1'][0]
         zip_file_path = os.path.join(args.data_root, file1['filename'])
-        with open(zip_file_path) as f:
+        with open(zip_file_path, 'wb') as f:
             f.write(file1['body'])
         VizSeqZipFile.unzip(
             args.data_root, file1['filename'], remove_after_unpacking=True
         )
-        self.finish('file uploaded.')
+        self.redirect('/', status=303)
 
 
 class ConfigHandler(VizSeqBaseRequestHandler):
