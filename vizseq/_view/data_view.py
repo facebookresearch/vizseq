@@ -54,7 +54,9 @@ class VizSeqPageData(NamedTuple):
 
 class VizSeqDataPageView(object):
     @classmethod
-    def get_enum(cls, data: Iterable) -> List:
+    def get_enum(cls, data: Optional[Iterable]) -> List:
+        if data is None:
+            return []
         return [
             [i] + list(e) if isinstance(e, (list, tuple)) else [i, e]
             for i, e in enumerate(data)
