@@ -6,8 +6,10 @@
 #
 
 import os.path as op
+from pathlib import Path
 
-with open(op.join('vizseq', 'VERSION')) as f:
+FILE_ROOT = Path(__file__).parent
+with open(op.join(FILE_ROOT, 'VERSION')) as f:
     __version__ = f.read()
 
 from vizseq.ipynb import *
