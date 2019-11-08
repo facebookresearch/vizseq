@@ -15,7 +15,7 @@ from nltk.translate.ribes_score import word_rank_alignment
 
 class VizSeqBaseTextAligner(object):
     NEG_IDX = -1
-    ALIGNMENT_TYPE_TO_STYLE = {}
+    ALIGNMENT_TYPE_TO_STYLE = {0: ''}
 
     @classmethod
     def _align(
@@ -54,7 +54,11 @@ class VizSeqBaseTextAligner(object):
                 f'onmouseover="javascript:highlight_span(this, &quot;{trg_span_id}&quot;)"',
                 f'onmouseout="javascript:dehighlight_span(this, &quot;{trg_span_id}&quot;)"'
             ])
-        span_style = cls.ALIGNMENT_TYPE_TO_STYLE[span_type]
+        try:
+            span_style = cls.ALIGNMENT_TYPE_TO_STYLE[span_type]
+        except KeyError:
+            span_style = ""
+
         if len(span_style) > 0:
             attributes.append(f'style="{span_style}"')
         return '<span ' + ' '.join(attributes) + ' >' + token + '</span>'
@@ -65,6 +69,12 @@ class VizSeqBaseTextAligner(object):
             alignments: Dict[str, List[Tuple[int, Enum]]], span_id_prefix: str,
             example_id: int, trg_span_id_prefix: str
     ) -> Dict[str, List[str]]:
+
+        if len(alignments) == 0:
+            return {k: [cls._get_span_html(tokens[k][i], span_id_prefix,
+                        0, k, example_id, i, trg_span_id_prefix, -1)
+                        for i in range(len(tokens[k]))] for k in tokens}
+
         return {
             k: [
                 cls._get_span_html(
@@ -83,6 +93,7 @@ class VizSeqSrcRefAlignmentType(Enum):
 
 
 class VizSeqRefHypoAlignmentType(Enum):
+    none = 0
     confirmed = 1
     unconfirmed = 2
     improving = 3
@@ -110,6 +121,7 @@ class VizseqSrcRefTextAligner(VizSeqBaseTextAligner):
 
 class VizseqRefHypoTextAligner(VizSeqBaseTextAligner):
     ALIGNMENT_TYPE_TO_STYLE = {
+        VizSeqRefHypoAlignmentType.none: '',
         VizSeqRefHypoAlignmentType.confirmed: 'color:#1A5276;font-weight:bold',
         VizSeqRefHypoAlignmentType.improving: 'color:#5499C7;font-weight:bold',
         VizSeqRefHypoAlignmentType.worsening: 'color:#B03A2E;font-weight:bold',

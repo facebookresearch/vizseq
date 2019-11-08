@@ -69,7 +69,8 @@ class VizSeqDataPageView(object):
             metrics: Optional[List[str]] = None, query: str = '',
             sorting: int = 0, sorting_metric: str = '',
             need_lang_tags: bool = False,
-    ) -> VizSeqPageData:
+            no_alignment: bool = False
+        ) -> VizSeqPageData:
         assert page_no > 0 and page_sz > 0
         page_sz = min(page_sz, MAX_PAGE_SZ)
         metrics = [] if metrics is None else metrics
@@ -141,9 +142,13 @@ class VizSeqDataPageView(object):
         viz_ref = cur_ref
         if cur_src_text is not None:
             viz_ref = VizSeqRefVisualizer.visualize(
-                cur_src_text, cur_ref, src.main_text_idx
+                cur_src_text, cur_ref, src.main_text_idx,
+                no_alignment=no_alignment
             )
-        viz_hypo = VizSeqHypoVisualizer.visualize(cur_ref[0], cur_hypo, 0)
+        viz_hypo = VizSeqHypoVisualizer.visualize(
+                cur_ref[0], cur_hypo, 0,
+                no_alignment=no_alignment
+            )
         viz_sent_scores = [
             {
                 s: VizSeqDictVisualizer.visualize(

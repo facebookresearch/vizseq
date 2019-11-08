@@ -56,14 +56,16 @@ class VizSeqSrcVisualizer(object):
 class VizSeqRefVisualizer(object):
     @classmethod
     def visualize(
-            cls, src: List[str], ref: List[List[str]], src_idx: int
+            cls, src: List[str], ref: List[List[str]], src_idx: int,
+            no_alignment: bool = False
     ) -> List[List[str]]:
         src_ref = [src] + ref
         rendered = [[] for _ in range(len(ref))]
         for i, (s, *r_list) in enumerate(zip(*src_ref)):
             src_tokens = s.split()
             ref_tokens = {str(ii): r.split() for ii, r in enumerate(r_list)}
-            alignments = VizseqSrcRefTextAligner.align(src_tokens, ref_tokens)
+            alignments = VizseqSrcRefTextAligner.align(src_tokens, ref_tokens) \
+                    if not no_alignment else {}
             visualized = VizseqSrcRefTextAligner.to_span_html(
                 ref_tokens, alignments, 'ref', i, f'src_{src_idx}'
             )
@@ -76,14 +78,16 @@ class VizSeqRefVisualizer(object):
 class VizSeqHypoVisualizer(object):
     @classmethod
     def visualize(
-            cls, ref: List[str], hypo: Dict[str, List[str]], ref_idx: int
+            cls, ref: List[str], hypo: Dict[str, List[str]], ref_idx: int,
+            no_alignment: bool = False
     ) -> Dict[str, List[str]]:
         hypo_ids = sorted(hypo.keys())
         rendered = {k: [] for k in hypo_ids}
         for i, r in enumerate(ref):
             ref_tokens = r.split()
             hypo_tokens = {h_id: hypo[h_id][i].split() for h_id in hypo_ids}
-            alignments = VizseqRefHypoTextAligner.align(ref_tokens, hypo_tokens)
+            alignments = VizseqRefHypoTextAligner.align(ref_tokens, hypo_tokens) \
+                    if not no_alignment else {}
             visualized = VizseqRefHypoTextAligner.to_span_html(
                 hypo_tokens, alignments, 'hypo', i, f'ref_{ref_idx}'
             )
