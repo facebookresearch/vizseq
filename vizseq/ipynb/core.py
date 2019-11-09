@@ -42,8 +42,7 @@ def view_examples(
         page_sz: int = DEFAULT_PAGE_SIZE,
         page_no: int = DEFAULT_PAGE_NO,
         sorting: VizSeqSortingType = VizSeqSortingType.original,
-        need_g_translate: bool = False,
-        no_alignment: bool = False
+        need_g_translate: bool = False
 ):
     _src = VizSeqDataSources(sources)
     _ref = VizSeqDataSources(references)
@@ -56,8 +55,7 @@ def view_examples(
     _need_g_translate = need_g_translate and _src.has_text
     view = VizSeqDataPageView.get(
         _src, _ref, _hypo, page_sz, page_no, metrics=metrics, query=query,
-        sorting=sorting.value, need_lang_tags=_need_g_translate,
-        no_alignment=no_alignment
+        sorting=sorting.value, need_lang_tags=_need_g_translate
     )
 
     google_translation = []

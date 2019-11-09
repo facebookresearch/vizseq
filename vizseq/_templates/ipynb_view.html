@@ -33,9 +33,9 @@
             {% for j, src_name, src_type in enum_src_names_and_types %}
             {% set cur_src = src[j][i] %}
             <tr style="background-color:#FDF2E9" id="srcRow{{ j }}{{ i }}">
-                <th width="10%" scope="row" class="text-left">Source {{ src_name }}</th>
+                <th scope="row">Source {{ src_name }}</th>
                 {% if src_type == 'text' %}
-                <td class="text-left">{{ cur_src }}</td>
+                <td>{{ cur_src }}</td>
                 {% elif src_type == 'image' %}
                 <td><img src="{{ cur_src }}"></td>
                 {% elif src_type == 'audio' %}
@@ -52,7 +52,7 @@
 
             <tr style="background-color:#EAF2F8">
             {% if google_translation|length > 0 %}
-                <th class="text-nowrap" scope="row" class="text-left">Google Translate</th><td class="text-left">{{ google_translation[i] }}</td>
+                <th class="text-nowrap" scope="row">Google Translate</th><td>{{ google_translation[i] }}</td>
             {% endif %}
             </tr>
 
@@ -60,13 +60,13 @@
             {% set cur_ref = ref[j][i] %}
             {% if cur_ref|length > 0 %}
             <tr style="background-color:#FEF9E7">
-                <th scope="row" class="text-left">Reference {{ ref_name }}</th><td class="text-left">{{ cur_ref }}</td>
+                <th scope="row">Reference {{ ref_name }}</th><td>{{ cur_ref }}</td>
             </tr>
             {% endif %}
             {% endfor %}
 
             {% for _, m in enum_models %}
-            <tr><th scope="row" class="text-left">{{ m }}</th><td class="text-left">{{ hypo[m][i] }}</td></tr>
+            <tr><th scope="row">{{ m }}</th><td>{{ hypo[m][i] }}</td></tr>
             {% endfor %}
             </tbody>
         </table>
