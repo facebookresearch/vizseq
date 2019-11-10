@@ -9,7 +9,7 @@ module.exports = {
   docs: {
     "Overview": ['overview'],
     "Getting Started": ['getting_started/installation', 'getting_started/ipynb_example', 'getting_started/web_app_example'],
-    "Features": ['data', 'metrics', 'tags', 'ipynb_api'],
+    "Features": ['features/data', 'features/metrics', 'features/tags', 'features/ipynb_api', 'features/g_translate'],
     "Extending VizSeq": ['new_metric'],
   },
 };

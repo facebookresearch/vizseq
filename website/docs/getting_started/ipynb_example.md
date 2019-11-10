@@ -17,15 +17,13 @@ The data will be available in `examples/data`.
 
 ## Data Sources
 VizSeq accepts data from various types of sources: plain text file paths, ZIP file paths and Python dictionaries.
-(See also the [data sources](data_sources) page for more details.)
+(See also the [data inputs](../features/data) section for more details.)
 
 Here is an example for plain text file paths as inputs:
 ```python
 from glob import glob
 root = 'examples/data/translation_wmt14_en_de_test'
-src = glob(f'{root}/src_*.txt')
-ref = glob(f'{root}/ref_*.txt')
-hypo = glob(f'{root}/pred_*.txt')
+src, ref, hypo = glob(f'{root}/src_*.txt'), glob(f'{root}/ref_*.txt'), glob(f'{root}/pred_*.txt')
 ```
 An example for Python dictionaries as inputs:
 ```python
@@ -48,7 +46,7 @@ hypo = reader(glob(f'{root}/pred_*.txt'))
 ```
 
 ## Viewing Examples and Statistics 
-Please see the [Jupyter Notebook API doc](ipynb_api) for full references.
+Please see the [Jupyter Notebook APIs](features/ipynb_api) section for full references.
 
 First, load the `vizseq` package:
 ```python

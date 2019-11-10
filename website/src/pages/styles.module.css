@@ -40,3 +40,11 @@
   height: 200px;
   width: 200px;
 }
+
+.quickstart {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  background-color: #F4F6F6;
+  padding: 2rem;
+}
