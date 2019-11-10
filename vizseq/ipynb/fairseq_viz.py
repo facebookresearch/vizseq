@@ -47,11 +47,14 @@ def view_examples(
         page_sz: int = DEFAULT_PAGE_SIZE,
         page_no: int = DEFAULT_PAGE_NO,
         sorting: VizSeqSortingType = VizSeqSortingType.original,
-        need_g_translate: bool = False):
+        need_g_translate: bool = False,
+        disable_alignment: bool = False
+):
     sources, references, hypothesis = _get_data(generation_log_path)
     return _view_examples(
         sources, references, hypothesis, metrics, query, page_sz=page_sz,
-        page_no=page_no, sorting=sorting, need_g_translate=need_g_translate
+        page_no=page_no, sorting=sorting, need_g_translate=need_g_translate,
+        disable_alignment=disable_alignment
     )
 
 

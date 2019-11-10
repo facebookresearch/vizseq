@@ -68,7 +68,7 @@ class VizSeqDataPageView(object):
             hypo: VizSeqDataSources, page_sz: int, page_no: int,
             metrics: Optional[List[str]] = None, query: str = '',
             sorting: int = 0, sorting_metric: str = '',
-            need_lang_tags: bool = False,
+            need_lang_tags: bool = False, disable_alignment: bool = False,
     ) -> VizSeqPageData:
         assert page_no > 0 and page_sz > 0
         page_sz = min(page_sz, MAX_PAGE_SZ)
@@ -137,13 +137,17 @@ class VizSeqDataPageView(object):
         }
 
         # rendering
-        viz_src = VizSeqSrcVisualizer.visualize(cur_src, src.text_indices)
+        viz_src = cur_src
+        if not disable_alignment:
+            viz_src = VizSeqSrcVisualizer.visualize(cur_src, src.text_indices)
         viz_ref = cur_ref
-        if cur_src_text is not None:
+        if not disable_alignment and cur_src_text is not None:
             viz_ref = VizSeqRefVisualizer.visualize(
                 cur_src_text, cur_ref, src.main_text_idx
             )
-        viz_hypo = VizSeqHypoVisualizer.visualize(cur_ref[0], cur_hypo, 0)
+        viz_hypo = cur_hypo
+        if not disable_alignment:
+            viz_hypo = VizSeqHypoVisualizer.visualize(cur_ref[0], cur_hypo, 0)
         viz_sent_scores = [
             {
                 s: VizSeqDictVisualizer.visualize(
