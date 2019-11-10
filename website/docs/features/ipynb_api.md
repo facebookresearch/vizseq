@@ -42,7 +42,9 @@ Model prediction data source. Can be a path, paths or lists of sentences. Refer 
 - **`page_no`: int = 1**: Page number. Default to `1`.
 - **`sorting`: VizSeqSortingType = VizSeqSortingType.original**
 - **`need_g_translate`: bool = False**:
-To show Google Translate results or not. Default to `False`. 
+To show Google Translate results or not. Default to `False`.
+- **`disable_alignment`: bool = False**:
+Not to show source-reference and reference-hypothesis alignments for rendering speedup. Default to `False`.
 
 ### `view_n_grams()`
 Showing the n-grams (n=1,2,3,4) in the input data (sources, references, etc.).
@@ -72,6 +74,8 @@ The APIs are almost the same.
 - **`sorting`: VizSeqSortingType = VizSeqSortingType.original**
 - **`need_g_translate`: bool = False**:
 To show Google Translate results or not. Default to `False`.
+- **`disable_alignment`: bool = False**:
+Not to show source-reference and reference-hypothesis alignments for rendering speedup. Default to `False`.
 
 ### `view_n_grams()`
 #### Arguments
