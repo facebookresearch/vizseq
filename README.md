@@ -53,6 +53,7 @@ $ pip install -e .
 [[Full documentation]](https://facebookresearch.github.io/vizseq)
 
 ### Jupyter Notebook Examples
+- [Basic example](https://facebookresearch.github.io/vizseq/docs/getting_started/ipynb_example)
 - [Multimodal Machine Translation](examples/multimodal_machine_translation.ipynb)
 - [Multilingual Machine Translation](examples/multilingual_machine_translation.ipynb)
 - [Speech Translation](examples/speech_translation.ipynb)
