@@ -16,10 +16,18 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: <>Easy to Use</>,
+    title: <>Multi-Modal</>,
     description: (
         <>
-            Supporting a wide range of {"{text, image, audio, video}"}-to-text generation tasks. Covering a full collection of common metrics. Analyzing data from various sources. Providing visualization in both Jupyter Notebook and built-in Web App.
+            Covering a wide range of {"{text, image, audio, video}"}-to-text generation tasks. Supporting multiple sources and references.
+        </>
+    ),
+  },
+  {
+    title: <>Usable</>,
+    description: (
+        <>
+            Built with a full collection of common metrics. Analyzing data in various formats. Providing visualization in both Jupyter Notebook and web App interfaces.
         </>
     ),
   },
@@ -27,7 +35,7 @@ const features = [
     title: <>Productive</>,
     description: (
       <>
-        Highly-integrated UI with samples, scores and statistics in one place. Interactive data filtering with keyword searching, example sorting and grouping. Exportable tables and figures for one-click plug-in to slides, papers, documents or spreadsheets.
+        Highly-integrated UI with samples and statistics in one place. Interactive data filtering with keyword searching, example sorting and grouping. One-click export of tables and figures to slides, papers     or spreadsheets.
 
       </>
     ),
@@ -36,7 +44,7 @@ const features = [
     title: <>Scalable</>,
     description: (
       <>
-        Multi-process acceleration of metrics and statistics computation. Auto-sampling and caching mechanism for large-scale datasets.
+        Multi-process acceleration of metrics and statistics computation. Auto-sampling and caching mechanism for performance on large-scale datasets.
       </>
     ),
   },
@@ -57,7 +65,7 @@ vizseq.view_examples(src, ref, hypo, ['bleu', 'meteor'], query='book', page_sz=1
 function Feature({imageUrl, title, description}) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
-    <div className={classnames('col col--4', styles.feature)}>
+    <div className={classnames('col col-3', styles.feature)}>
       {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
@@ -75,7 +83,7 @@ function Home() {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      description="ViSeq: A Visual Analysis Toolkit for Text Generation Tasks.">
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
@@ -88,6 +96,15 @@ function Home() {
               )}
               to="#quickstartSection">
               Get Started
+            </Link>
+            &emsp;
+            <Link
+              className={classnames(
+                'button button--secondary button--lg',
+                styles.getStarted,
+              )}
+              to="docs/overview">
+              Learn More
             </Link>
           </div>
         </div>
@@ -114,10 +131,10 @@ function Home() {
                 <h9>First, set up data inputs:</h9>
                 <CodeBlock className="python">{ipynbDataInputCode}</CodeBlock>
                 <br/>
-                <h9>Then:</h9>
+                <h9>Then use the <Link to={useBaseUrl('docs/features/ipynb_api')}>APIs</Link> to view samples, scores and statistics:</h9>
                 <CodeBlock className="python">{ipynbViewingCode}</CodeBlock>
                 <br/>
-                <h4>Or use VizSeq Web App:</h4>
+                <h4>Or use VizSeq web App:</h4>
                 <CodeBlock className="bash">$ python -m vizseq.server --port 9001 --data-root examples/data</CodeBlock>
                 <br/>
                 <h9>In your web browser, navigate to:</h9>

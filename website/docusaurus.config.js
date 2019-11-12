@@ -24,8 +24,9 @@ module.exports = {
         src: 'img/logo.png',
       },
       links: [
-        {to: 'docs/overview', label: 'Docs', position: 'left'},
-        {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub', position: 'left'},
+        {to: '/#quickstartSection', label: 'Quickstart', position: 'right'},
+        {to: 'docs/overview', label: 'Docs', position: 'right'},
+        {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub', position: 'right'},
       ],
     },
     footer: {

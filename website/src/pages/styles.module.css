@@ -32,7 +32,7 @@
 .features {
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+  padding: 5rem 0;
   width: 100%;
 }
 
@@ -45,6 +45,6 @@
   align-items: center;
   display: flex;
   width: 100%;
-  background-color: #F4F6F6;
+  background-color: #CCD1D1;
   padding: 2rem;
 }
