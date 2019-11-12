@@ -26,10 +26,10 @@ def _get_sent_rouge(
     assert rouge_type in {'rouge-1', 'rouge-2', 'rouge-l'}
     _rouge_type = 'rouge-l' if rouge_type == 'rouge-l' else 'rouge-n'
     _max_n = 1 if rouge_type == 'rouge-1' else 2
+    joint_references = [list(r) for r in zip(*references)]
     scores = _rouge.Rouge(
         metrics=[_rouge_type], max_n=_max_n, apply_avg=False
-    ).get_scores(hypothesis, references[0])
-    # TODO: multiple references
+    ).get_scores(hypothesis, joint_references)
     return [s[STATS_TYPE][0] for s in scores[rouge_type]]
 
 

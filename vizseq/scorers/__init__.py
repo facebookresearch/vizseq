@@ -97,7 +97,7 @@ class VizSeqScorer(object):
                     math.ceil(n_samples / self.SAMPLES_PER_WORKER)
                 )
             else:
-                self.n_workers = 2
+                self.n_workers = 1
         self.n_workers = max(1, min(self.n_workers, max_n_workers))
 
     @staticmethod
@@ -105,11 +105,11 @@ class VizSeqScorer(object):
         n_samples = len(hypo)
         assert all(len(r) == n_samples for r in ref)
         hypo_and_ref = [hypo] + ref
-        tupled = list(zip(*hypo_and_ref))
-        batched = _batch(tupled, n_batches=n_batches)
+        merged = list(zip(*hypo_and_ref))
+        batched = _batch(merged, n_batches=n_batches)
         for b in batched:
             part_hypo, *part_ref = zip(*b)
-            yield part_hypo, part_ref
+            yield list(part_hypo), [list(r) for r in part_ref]
 
     @classmethod
     @abstractmethod
