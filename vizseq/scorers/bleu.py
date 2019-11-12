@@ -23,8 +23,8 @@ def _get_sent_bleu(
     data = [hypothesis] + references
     return [
         sb.corpus_bleu(
-            [h], [r], smooth_method='floor', use_effective_order=True,
-            force=True, tokenize=tokenizer
+            [h], [[rr] for rr in r], smooth_method='floor',
+            use_effective_order=True, force=True, tokenize=tokenizer
         ).score
         for h, *r in zip(*data)
     ]
