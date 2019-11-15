@@ -30,4 +30,4 @@ Here is the list of VizSeq built-in metrics. They are all accelerated with multi
 
 
 ### User-defined Metrics
-VizSeq opens the API for user-defined metrics. Refer to the [adding new metrics](new_metric) section for more details.
+VizSeq opens the API for user-defined metrics. Refer to the [adding new metrics](../new_metric) section for more details.
