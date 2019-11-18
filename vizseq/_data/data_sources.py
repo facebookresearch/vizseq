@@ -195,7 +195,7 @@ class VizSeqListSource(VizSeqDataSourceBase):
 class VizSeqTextFileSource(VizSeqDataSourceBase):
     def __init__(self, path: str):
         assert os.path.exists(path)
-        with open(path) as f:
+        with open(path, encoding = "utf-8") as f:
             self.data = [l.strip() for l in f]
 
 
