@@ -41,11 +41,15 @@ def _get_sent_laser(
     import langid
     import logging
     logging.getLogger('langid').setLevel(logging.WARNING)
-    lang = langid.classify(references[0][0])[0]
+
+    n_samples = len(hypothesis)
+    mid_idx = n_samples // 2
+    hypo_lang = langid.classify(hypothesis[mid_idx])[0]
+    ref_lang = langid.classify(references[0][mid_idx])[0]
 
     laser = laserembeddings.Laser()
-    hypo_emb = laser.embed_sentences(hypothesis, lang=lang)
-    ref_emb = laser.embed_sentences(references[0], lang=lang)
+    hypo_emb = laser.embed_sentences(hypothesis, lang=hypo_lang)
+    ref_emb = laser.embed_sentences(references[0], lang=ref_lang)
 
     inner_product = np.sum(hypo_emb * ref_emb, axis=1)
     hypo_l2 = np.linalg.norm(hypo_emb, axis=1)
