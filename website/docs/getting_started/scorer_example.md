@@ -4,10 +4,10 @@ title: Scorer Example
 sidebar_label: Scorer Example
 ---
 
-VizSeq scorers provide corpus-level, sentence-level and group-level (defined by sentence tags) scores. They are
-implemented with multiprocessing.
+VizSeq scorers provide corpus-level, sentence-level and group-level (groups defined by the sentence tags) scores. They are
+implemented with multi-processing.
 
-Here is an example for BLEU:
+Here is an example for using BLEU scorer:
 ```python
 from vizseq.scorers.bleu import BLEUScorer
 
@@ -29,3 +29,5 @@ Corpus-level BLEU: 67.945
 Sentence-level BLEU: [75.984, 61.479]
 Group BLEU: {'Test Group 2': 75.984, 'Test Group 1': 75.984}
 ```
+
+Please see the [Scorer APIs](../features/scorer_api) section for full references.
