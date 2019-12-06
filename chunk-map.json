@@ -1,81 +1,93 @@
 {
   "main": [
     "/vizseq/main.076a4b60bdd18e8b2127.css",
-    "/vizseq/main.c402f644327d3e54fb3f.js"
+    "/vizseq/main.e83e7b6e1107bcf8bcdc.js"
   ],
   "component---site-src-pages-index-jsc-4-f-f99": [
     "/vizseq/component---site-src-pages-index-jsc-4-f-f99.694b497bc3d8079b8c3b.css",
-    "/vizseq/component---site-src-pages-index-jsc-4-f-f99.bf1b15836e59a0c2b5b1.js"
+    "/vizseq/component---site-src-pages-index-jsc-4-f-f99.6148adb2ed31b134bdff.js"
   ],
   "component---theme-doc-page-1-be-9be": [
     "/vizseq/component---theme-doc-page-1-be-9be.ac9351e3fa30b156a630.css",
-    "/vizseq/component---theme-doc-page-1-be-9be.9073dba9626a15688b5b.js"
+    "/vizseq/component---theme-doc-page-1-be-9be.d131a13b823407c19340.js"
   ],
   "docsMetadata---vizseq-docs-62-f-554": [
-    "/vizseq/docsMetadata---vizseq-docs-62-f-554.bccef6a948923e228151.js"
+    "/vizseq/docsMetadata---vizseq-docs-62-f-554.a84bf93dd882b72798bc.js"
   ],
   "component---theme-doc-item-178-a40": [
     "/vizseq/component---theme-doc-item-178-a40.de2648345892298aff25.css",
-    "/vizseq/component---theme-doc-item-178-a40.1769a84618ea3329a505.js"
+    "/vizseq/component---theme-doc-item-178-a40.c542f815128cfed79e50.js"
   ],
   "content---vizseq-docs-features-data-5-a-4-014": [
-    "/vizseq/content---vizseq-docs-features-data-5-a-4-014.bd65552096d6bc29d7ea.js"
+    "/vizseq/content---vizseq-docs-features-data-5-a-4-014.90de6fee0c3518c7fa35.js"
   ],
   "metadata---vizseq-docs-features-data-06-b-318": [
-    "/vizseq/metadata---vizseq-docs-features-data-06-b-318.e2607ba24aa227225531.js"
-  ],
-  "content---vizseq-docs-new-metric-8-a-9-87c": [
-    "/vizseq/content---vizseq-docs-new-metric-8-a-9-87c.e2d985f058004e9587b9.js"
-  ],
-  "metadata---vizseq-docs-new-metricb-0-a-8c9": [
-    "/vizseq/metadata---vizseq-docs-new-metricb-0-a-8c9.84d8f331deeabbedbba8.js"
+    "/vizseq/metadata---vizseq-docs-features-data-06-b-318.4c1d81a492df4a9c2dc9.js"
   ],
   "content---vizseq-docs-features-g-translate-2-ef-b62": [
-    "/vizseq/content---vizseq-docs-features-g-translate-2-ef-b62.42855287c2069a5c5b64.js"
+    "/vizseq/content---vizseq-docs-features-g-translate-2-ef-b62.e1b73e4f81dcea22250f.js"
   ],
   "metadata---vizseq-docs-features-g-translatebbf-855": [
-    "/vizseq/metadata---vizseq-docs-features-g-translatebbf-855.4c699df9670e8f892a30.js"
-  ],
-  "content---vizseq-docs-overview-1-db-6e2": [
-    "/vizseq/content---vizseq-docs-overview-1-db-6e2.0067eb067b079c754a6c.js"
-  ],
-  "metadata---vizseq-docs-overview-09-f-f22": [
-    "/vizseq/metadata---vizseq-docs-overview-09-f-f22.a146a2894c2f2dd33686.js"
+    "/vizseq/metadata---vizseq-docs-features-g-translatebbf-855.8fbfb82ea51fbba0fea6.js"
   ],
   "content---vizseq-docs-features-ipynb-api-1-c-6-e10": [
-    "/vizseq/content---vizseq-docs-features-ipynb-api-1-c-6-e10.d614e45ae871b0dfcad7.js"
+    "/vizseq/content---vizseq-docs-features-ipynb-api-1-c-6-e10.61e59b475bbbba56ff8d.js"
   ],
   "metadata---vizseq-docs-features-ipynb-api-3-be-4ee": [
-    "/vizseq/metadata---vizseq-docs-features-ipynb-api-3-be-4ee.3b9adf44e7b41c80ec9a.js"
+    "/vizseq/metadata---vizseq-docs-features-ipynb-api-3-be-4ee.9335af4bb532edd30acd.js"
   ],
-  "content---vizseq-docs-getting-started-ipynb-example-98-b-826": [
-    "/vizseq/content---vizseq-docs-getting-started-ipynb-example-98-b-826.9c3a693e09afa4aeee74.js"
+  "content---vizseq-docs-new-metric-8-a-9-87c": [
+    "/vizseq/content---vizseq-docs-new-metric-8-a-9-87c.34d55c1e6129e876cecc.js"
   ],
-  "metadata---vizseq-docs-getting-started-ipynb-exampleeab-69a": [
-    "/vizseq/metadata---vizseq-docs-getting-started-ipynb-exampleeab-69a.6d201d61606c7845409a.js"
+  "metadata---vizseq-docs-new-metricb-0-a-8c9": [
+    "/vizseq/metadata---vizseq-docs-new-metricb-0-a-8c9.2fdb75133459792afa1b.js"
   ],
   "content---vizseq-docs-features-metricsc-23-c5c": [
-    "/vizseq/content---vizseq-docs-features-metricsc-23-c5c.30f94bb947783b133f33.js"
+    "/vizseq/content---vizseq-docs-features-metricsc-23-c5c.a17021488d7494f0bcd5.js"
   ],
   "metadata---vizseq-docs-features-metricsb-66-32d": [
-    "/vizseq/metadata---vizseq-docs-features-metricsb-66-32d.5b48a3d4e380be0a5324.js"
+    "/vizseq/metadata---vizseq-docs-features-metricsb-66-32d.e390594c1b87b004529f.js"
   ],
-  "content---vizseq-docs-getting-started-installationf-27-f41": [
-    "/vizseq/content---vizseq-docs-getting-started-installationf-27-f41.6fe6ddbff442638773b4.js"
+  "content---vizseq-docs-getting-started-ipynb-example-98-b-826": [
+    "/vizseq/content---vizseq-docs-getting-started-ipynb-example-98-b-826.bfab2b49ebd9659a32da.js"
   ],
-  "metadata---vizseq-docs-getting-started-installationd-67-06f": [
-    "/vizseq/metadata---vizseq-docs-getting-started-installationd-67-06f.210dae9e3c1f7a44cae0.js"
+  "metadata---vizseq-docs-getting-started-ipynb-exampleeab-69a": [
+    "/vizseq/metadata---vizseq-docs-getting-started-ipynb-exampleeab-69a.9f0ef2eb90b97f64b7fa.js"
   ],
   "content---vizseq-docs-features-tags-15-f-79b": [
-    "/vizseq/content---vizseq-docs-features-tags-15-f-79b.7b25a8787145f60c0946.js"
+    "/vizseq/content---vizseq-docs-features-tags-15-f-79b.45aa5ccd44818552b2e2.js"
   ],
   "metadata---vizseq-docs-features-tags-6-e-5-b8d": [
-    "/vizseq/metadata---vizseq-docs-features-tags-6-e-5-b8d.a0cca73c90113a028e5e.js"
+    "/vizseq/metadata---vizseq-docs-features-tags-6-e-5-b8d.48ec0dd33c945a984e62.js"
+  ],
+  "content---vizseq-docs-overview-1-db-6e2": [
+    "/vizseq/content---vizseq-docs-overview-1-db-6e2.0cce812f47f0c1d56ae0.js"
+  ],
+  "metadata---vizseq-docs-overview-09-f-f22": [
+    "/vizseq/metadata---vizseq-docs-overview-09-f-f22.5d7da2e08000f2362bf8.js"
+  ],
+  "content---vizseq-docs-features-scorer-api-41-a-c13": [
+    "/vizseq/content---vizseq-docs-features-scorer-api-41-a-c13.e150bfc95e08b8367b8f.js"
+  ],
+  "metadata---vizseq-docs-features-scorer-api-5-de-919": [
+    "/vizseq/metadata---vizseq-docs-features-scorer-api-5-de-919.0f22587b3eb5e6ab4e3f.js"
+  ],
+  "content---vizseq-docs-getting-started-installationf-27-f41": [
+    "/vizseq/content---vizseq-docs-getting-started-installationf-27-f41.c8965f29de4dbfbbd97e.js"
+  ],
+  "metadata---vizseq-docs-getting-started-installationd-67-06f": [
+    "/vizseq/metadata---vizseq-docs-getting-started-installationd-67-06f.8c24a95afd546029e138.js"
   ],
   "content---vizseq-docs-getting-started-web-app-example-404-bb1": [
-    "/vizseq/content---vizseq-docs-getting-started-web-app-example-404-bb1.3a96b889ab12652470e7.js"
+    "/vizseq/content---vizseq-docs-getting-started-web-app-example-404-bb1.d4b7c1512e989279aace.js"
   ],
   "metadata---vizseq-docs-getting-started-web-app-examplecb-8-fc8": [
-    "/vizseq/metadata---vizseq-docs-getting-started-web-app-examplecb-8-fc8.adfdaebda250af0d51ea.js"
+    "/vizseq/metadata---vizseq-docs-getting-started-web-app-examplecb-8-fc8.056f80a98ed5c61a4939.js"
+  ],
+  "content---vizseq-docs-getting-started-scorer-example-350-0c4": [
+    "/vizseq/content---vizseq-docs-getting-started-scorer-example-350-0c4.b7e3604538746a6c421c.js"
+  ],
+  "metadata---vizseq-docs-getting-started-scorer-example-628-1d3": [
+    "/vizseq/metadata---vizseq-docs-getting-started-scorer-example-628-1d3.c17436680cee66658a1c.js"
   ]
 }
