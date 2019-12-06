@@ -1,7 +1,7 @@
-[![PyPI](https://img.shields.io/pypi/v/vizseq)](https://pypi.org/project/vizseq/)
-[![CircleCI](https://img.shields.io/circleci/build/github/facebookresearch/vizseq)](https://circleci.com/gh/facebookresearch/vizseq)
-![PyPI - License](https://img.shields.io/pypi/l/vizseq)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/vizseq)
+[![PyPI](https://img.shields.io/pypi/v/vizseq?style=flat-square)](https://pypi.org/project/vizseq/)
+[![CircleCI](https://img.shields.io/circleci/build/github/facebookresearch/vizseq?style=flat-square)](https://circleci.com/gh/facebookresearch/vizseq)
+![PyPI - License](https://img.shields.io/pypi/l/vizseq?style=flat-square)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/vizseq?style=flat-square)
 
 # <img src="logo.png" alt="VizSeq" width="160">
 [VizSeq: A Visual Analysis Toolkit for Text Generation Tasks.](https://arxiv.org/pdf/1909.05424.pdf)
