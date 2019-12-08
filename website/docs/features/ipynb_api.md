@@ -7,6 +7,7 @@ sidebar_label: Jupyter Notebook APIs
 ## Core (``vizseq.*`` or `vizseq.ipynb.*`)
 ### `view_stats()`
 Showing the dataset statistics, including examples count, tokens count, sentence length distribution, etc.
+It contains Matplotlib figures and you need to add `%matplotlib inline` before use.
 #### Arguments
 - **`sources`: Union[str, List[str], Dict[str, List[str]]]**:
 Source-side data source. Can be a path, paths or lists of sentences. Refer to the [data](data) section for more details.
