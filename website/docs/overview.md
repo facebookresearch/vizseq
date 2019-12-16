@@ -10,8 +10,9 @@ VizSeq is a visual analysis toolkit for text generation tasks like machine trans
 speech translation and video description. 
 
 It takes multi-modal sources, text references as well as text model predictions as inputs, and analyzes them visually
-in [Jupyter Notebook](getting_started/ipynb_example) or in a built-in [Web App](getting_started/web_app_example). It also provides a collection of multi-process scorers as a normal
-Python package.
+in <a href={useBaseUrl('docs/getting_started/ipynb_example')}>Jupyter Notebook</a> or in a
+built-in <a href={useBaseUrl('docs/getting_started/web_app_example')}>Web App</a>. It also provides a collection of
+multi-process scorers as a normal Python package.
 
 
 
@@ -19,11 +20,12 @@ Python package.
   <img src={useBaseUrl('img/overview.png')} alt="VizSeq Overview" width="480" class="center" />
 </p>
 
-Please also see our [paper](https://arxiv.org/pdf/1909.05424.pdf) for more details. To install VizSeq, check out the [instructions](getting_started/installation) here.
+Please also see our <a href="https://arxiv.org/pdf/1909.05424.pdf" target="_blank">paper</a> for more details. To
+install VizSeq, check out the <a href={useBaseUrl('docs/getting_started/installation')}>instructions</a> here.
 
 ## Task Coverage
-VizSeq accepts various source types, including text, image, audio, video or any combination of them. This covers a wide range of text
-generation tasks, examples of which are listed below:
+VizSeq accepts various source types, including text, image, audio, video or any combination of them. This covers a wide
+range of text generation tasks, examples of which are listed below:
 
 | Source | Example Tasks |
 | :--- | :--- |
@@ -43,4 +45,4 @@ generation tasks, examples of which are listed below:
 
 ## License
 
-VizSeq is licensed under [MIT](https://github.com/facebookresearch/vizseq/blob/master/LICENSE).
+VizSeq is licensed under <a href="https://github.com/facebookresearch/vizseq/blob/master/LICENSE" target="_blank">MIT</a>.

@@ -4,8 +4,10 @@ title: Scorer Example
 sidebar_label: Scorer Example
 ---
 
-VizSeq scorers provide corpus-level, sentence-level and group-level (groups defined by the sentence tags) scores. They are
-implemented with multi-processing.
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+VizSeq scorers provide corpus-level, sentence-level and group-level (groups defined by the sentence tags) scores. They
+are implemented with multi-processing.
 
 Here is an example for using BLEU scorer:
 ```python
@@ -30,4 +32,4 @@ Sentence-level BLEU: [75.984, 61.479]
 Group BLEU: {'Test Group 2': 75.984, 'Test Group 1': 75.984}
 ```
 
-Please see the [Scorer APIs](../features/scorer_api) section for full references.
+Please see the <a href={useBaseUrl('docs/features/scorer_api')}>Scorer APIs</a> section for full references.

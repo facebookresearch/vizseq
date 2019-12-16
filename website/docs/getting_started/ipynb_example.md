@@ -17,7 +17,7 @@ The data will be available in `examples/data`.
 
 ## Data Sources
 VizSeq accepts data from various types of sources: plain text file paths, ZIP file paths and Python dictionaries.
-(See also the [data inputs](../features/data) section for more details.)
+(See also the <a href={useBaseUrl('docs/features/data')}>data inputs</a> section for more details.)
 
 Here is an example for plain text file paths as inputs:
 ```python
@@ -46,7 +46,7 @@ hypo = reader(glob(f'{root}/pred_*.txt'))
 ```
 
 ## Viewing Examples and Statistics 
-Please see the [Jupyter Notebook APIs](features/ipynb_api) section for full references.
+Please see the <a href={useBaseUrl('docs/features/ipynb_api')}>Jupyter Notebook APIs</a> section for full references.
 
 First, load the `vizseq` package:
 ```python
@@ -92,7 +92,8 @@ vizseq.view_examples(src, ref, hypo, ['bleu'], page_sz=2, page_no=12, sorting=Vi
 <p align="center"><img src={useBaseUrl('img/view_examples.png')} alt="View Examples" /></p>
 
 ## Google Translate Integration
-VizSeq integrates Google Translate using Google Cloud API, to use which you need a Google Cloud credential and let VizSeq know the credential JSON file path:
+VizSeq integrates Google Translate using Google Cloud API, to use which you need a Google Cloud credential and let
+VizSeq know the credential JSON file path:
 ```python
 vizseq.set_google_credential_path('path to google credential json file')
 ```
@@ -101,9 +102,9 @@ Then in example viewing API, simply switch the `need_g_translate` argument on:
 vizseq.view_examples(src, ref, hypo, ['bleu'], need_g_translate=True)
 ```
 
-## [Fairseq Integration](fairseq_example)
+## <a href={useBaseUrl('docs/getting_started/fairseq_example')}>Fairseq Integration</a>
 
 ## More Examples
-- [Multimodal Machine Translation](https://github.com/facebookresearch/vizseq/blob/master/examples/multimodal_machine_translation.ipynb)
-- [Multilingual Machine Translation](https://github.com/facebookresearch/vizseq/blob/master/examples/multilingual_machine_translation.ipynb)
-- [Speech Translation](https://github.com/facebookresearch/vizseq/blob/master/examples/speech_translation.ipynb)
+- <a href="https://github.com/facebookresearch/vizseq/blob/master/examples/multimodal_machine_translation.ipynb" target="_blank">Multimodal Machine Translation</a>
+- <a href="https://github.com/facebookresearch/vizseq/blob/master/examples/multilingual_machine_translation.ipynb" target="_blank">Multilingual Machine Translation</a>
+- <a href="https://github.com/facebookresearch/vizseq/blob/master/examples/speech_translation.ipynb" target="_blank">Speech Translation</a>
