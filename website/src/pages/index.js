@@ -27,7 +27,7 @@ const features = [
     title: <>Usable</>,
     description: (
         <>
-            Built with a full collection of common metrics. Analyzing data in various formats. Providing visualization in both Jupyter Notebook and web App interfaces.
+            Built with a full collection of common metrics. Analyzing data in various formats. Providing visualization in both Jupyter Notebook and Web App interfaces.
         </>
     ),
   },
@@ -35,7 +35,7 @@ const features = [
     title: <>Productive</>,
     description: (
       <>
-        Highly-integrated UI with samples and statistics in one place. Interactive data filtering with keyword searching, example sorting and grouping. One-click export of tables and figures to slides, papers     or spreadsheets.
+        Highly-integrated UI with samples and statistics in one place. Interactive data filtering with keyword searching, sorting and grouping. One-click export of tables and figures to slides, papers or spreadsheets.
 
       </>
     ),
@@ -50,16 +50,27 @@ const features = [
   },
 ];
 
-const ipynbDataInputCode = `from glob import glob
+const ipynbCode = `
+# Set up data inputs
+from glob import glob
 root = 'examples/data/translation_wmt14_en_de_test'
 src, ref, hypo = glob(f'{root}/src_*.txt'), glob(f'{root}/ref_*.txt'), glob(f'{root}/pred_*.txt')
-`;
-
-const ipynbViewingCode = `import vizseq
+# View samples, scores and statistics
+import vizseq
 vizseq.view_stats(src, ref)
 vizseq.view_n_grams(src)
 vizseq.view_scores(ref, hypo, ['bleu', 'meteor'])
 vizseq.view_examples(src, ref, hypo, ['bleu', 'meteor'], query='book', page_sz=10, page_no=1)
+`;
+
+const fairseqCode = `
+from vizseq.ipynb import fairseq_viz as vizseq_fs
+log_path = 'examples/data/wmt14_fr_en_test.fairseq_generate.log'
+# Similar APIs to normal Jupyter Notebook APIs
+vizseq_fs.view_stats(log_path)
+vizseq_fs.view_n_grams(log_path)
+vizseq_fs.view_scores(log_path, ['bleu', 'meteor'])
+vizseq_fs.view_examples(log_path, ['bleu', 'meteor'], query='book', page_sz=10, page_no=1)
 `;
 
 function Feature({imageUrl, title, description}) {
@@ -83,7 +94,7 @@ function Home() {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="ViSeq: A Visual Analysis Toolkit for Text Generation Tasks.">
+      description="VizSeq: A Visual Analysis Toolkit for Text Generation (Translation, Captioning, Summarization, etc.)">
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
@@ -127,14 +138,13 @@ function Home() {
                 <h4>Install VizSeq:</h4>
                 <CodeBlock className="bash">$ pip install vizseq</CodeBlock>
                 <br/>
-                <h4>Use VizSeq in Jupyter notebook:</h4>
-                <h9>First, set up data inputs:</h9>
-                <CodeBlock className="python">{ipynbDataInputCode}</CodeBlock>
+                <h4>Use VizSeq in Jupyter notebook (<Link to={useBaseUrl('docs/features/ipynb_api')}>APIs</Link>):</h4>
+                <CodeBlock className="python">{ipynbCode}</CodeBlock>
                 <br/>
-                <h9>Then use the <Link to={useBaseUrl('docs/features/ipynb_api')}>APIs</Link> to view samples, scores and statistics:</h9>
-                <CodeBlock className="python">{ipynbViewingCode}</CodeBlock>
+                <h4>Use VizSeq with Fairseq (<Link to={useBaseUrl('docs/features/fairseq_api')}>APIs</Link>):</h4>
+                <CodeBlock className="python">{fairseqCode}</CodeBlock>
                 <br/>
-                <h4>Or use VizSeq web App:</h4>
+                <h4>Use VizSeq Web App:</h4>
                 <CodeBlock className="bash">$ python -m vizseq.server --port 9001 --data-root examples/data</CodeBlock>
                 <br/>
                 <h9>In your web browser, navigate to:</h9>

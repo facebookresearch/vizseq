@@ -6,13 +6,14 @@ sidebar_label: Overview
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-VizSeq is a visual analysis toolkit for text generation tasks like machine translation, summarization, image captioning,
-speech translation and video description. 
-
-It takes multi-modal sources, text references as well as text model predictions as inputs, and analyzes them visually
-in <a href={useBaseUrl('docs/getting_started/ipynb_example')}>Jupyter Notebook</a> or in a
-built-in <a href={useBaseUrl('docs/getting_started/web_app_example')}>Web App</a>. It also provides a collection of
-multi-process scorers as a normal Python package.
+VizSeq is a Python toolkit for visual analysis on text generation tasks like machine translation, summarization,
+image captioning, speech translation and video description. It takes multi-modal sources,
+text references as well as text predictions as inputs, and analyzes them visually
+in <a href={useBaseUrl('docs/getting_started/ipynb_example')}>Jupyter Notebook</a> or a
+built-in <a href={useBaseUrl('docs/getting_started/web_app_example')}>Web App</a> (the former
+has <a href={useBaseUrl('docs/getting_started/fairseq_example')}>Fairseq integration</a>).
+VizSeq also provides a collection of <a href={useBaseUrl('docs/features/metrics')}>multi-process scorers</a> as a
+normal Python package.
 
 
 

@@ -4,13 +4,14 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/vizseq?style=flat-square)
 
 # <img src="logo.png" alt="VizSeq" width="160">
-VizSeq is a visual analysis toolkit for text generation tasks like machine translation, summarization, image captioning,
-speech translation and video description. It takes multi-modal sources, text references as well as text model
-predictions as inputs, and analyzes them visually
-in [Jupyter Notebook](https://facebookresearch.github.io/vizseq/docs/getting_started/ipynb_example) or in a
-built-in [Web App](https://facebookresearch.github.io/vizseq/docs/getting_started/web_app_example). It also provides a
-collection of multi-process [scorers](https://facebookresearch.github.io/vizseq/docs/features/metrics) as a normal
-Python package.
+VizSeq is a Python toolkit for visual analysis on text generation tasks like machine translation, summarization,
+image captioning, speech translation and video description. It takes multi-modal sources,
+text references as well as text predictions as inputs, and analyzes them visually
+in [Jupyter Notebook](https://facebookresearch.github.io/vizseq/docs/getting_started/ipynb_example) or a
+built-in [Web App](https://facebookresearch.github.io/vizseq/docs/getting_started/web_app_example)
+(the former has [Fairseq integration](https://facebookresearch.github.io/vizseq/docs/getting_started/fairseq_example)).
+VizSeq also provides a collection of [multi-process scorers](https://facebookresearch.github.io/vizseq/docs/features/metrics) as
+a normal Python package.
 
 [[Paper]](https://arxiv.org/pdf/1909.05424.pdf)
 [[Documentation]](https://facebookresearch.github.io/vizseq)
@@ -61,10 +62,11 @@ $ pip install -e .
 
 ### Jupyter Notebook Examples
 - [Basic example](https://facebookresearch.github.io/vizseq/docs/getting_started/ipynb_example)
-- [Fairseq integration](https://facebookresearch.github.io/vizseq/docs/getting_started/fairseq_example)
 - [Multimodal Machine Translation](examples/multimodal_machine_translation.ipynb)
 - [Multilingual Machine Translation](examples/multilingual_machine_translation.ipynb)
 - [Speech Translation](examples/speech_translation.ipynb)
+
+### [Fairseq integration](https://facebookresearch.github.io/vizseq/docs/getting_started/fairseq_example)
 
 ### [Web App Example](https://facebookresearch.github.io/vizseq/docs/getting_started/web_app_example)
 Download example data:
