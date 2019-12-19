@@ -8,6 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Parent Class: vizseq.scorer.VizSeqScorer
 All scorers are inherited from this class and implement the `score()` interface.
+See <a href={useBaseUrl('docs/features/metrics')}>here</a> for the list of built-in scorers.
 
 ### Constructor
 #### Arguments

@@ -7,6 +7,8 @@ sidebar_label: Built-In Metrics
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 Here is the list of VizSeq built-in metrics. They are all accelerated with multi-processing/multi-threading.
+To use VizSeq scorers, check out our <a href={useBaseUrl('docs/getting_started/scorer_example')}>example</a> and
+the <a href={useBaseUrl('docs/features/scorer_api')}>APIs</a>.
 
 ### N-gram-based
 

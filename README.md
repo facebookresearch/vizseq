@@ -4,14 +4,21 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/vizseq?style=flat-square)
 
 # <img src="logo.png" alt="VizSeq" width="160">
-[VizSeq: A Visual Analysis Toolkit for Text Generation Tasks.](https://arxiv.org/pdf/1909.05424.pdf)
+VizSeq is a visual analysis toolkit for text generation tasks like machine translation, summarization, image captioning,
+speech translation and video description. It takes multi-modal sources, text references as well as text model
+predictions as inputs, and analyzes them visually
+in [Jupyter Notebook](https://facebookresearch.github.io/vizseq/docs/getting_started/ipynb_example) or in a
+built-in [Web App](https://facebookresearch.github.io/vizseq/docs/getting_started/web_app_example). It also provides a
+collection of multi-process [scorers](https://facebookresearch.github.io/vizseq/docs/features/metrics) as a normal
+Python package.
 
+[[Paper]](https://arxiv.org/pdf/1909.05424.pdf)
 [[Documentation]](https://facebookresearch.github.io/vizseq)
-
-## Overview
+[[Blog]](https://ai.facebook.com/blog/vizseq-a-visual-analysis-toolkit-for-accelerating-text-generation-research)
 
 <p align="center">
-<img src="vizseq_overview.png" alt="VizSeq Overview" width="480">
+<img src="overview.png" alt="VizSeq Overview" width="480">
+<img src="teaser.gif" alt="VizSeq Teaser" width="480">
 </p>
 
 ### Task Coverage
@@ -33,8 +40,9 @@
 | Embedding-based | LASER ([Artetxe and Schwenk, 2018](https://arxiv.org/pdf/1812.10464.pdf)), BERTScore ([Zhang et al., 2019](https://arxiv.org/pdf/1904.09675.pdf)) |
 
 
+## Getting Started
 
-## Installation
+### Installation
 VizSeq requires **Python 3.6+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as well in the future.
 
 You can install VizSeq from PyPI repository:
@@ -49,17 +57,16 @@ $ cd vizseq
 $ pip install -e .
 ```
 
-## Getting Started
-[[Full documentation]](https://facebookresearch.github.io/vizseq)
+### [Documentation](https://facebookresearch.github.io/vizseq)
 
 ### Jupyter Notebook Examples
 - [Basic example](https://facebookresearch.github.io/vizseq/docs/getting_started/ipynb_example)
+- [Fairseq integration](https://facebookresearch.github.io/vizseq/docs/getting_started/fairseq_example)
 - [Multimodal Machine Translation](examples/multimodal_machine_translation.ipynb)
 - [Multilingual Machine Translation](examples/multilingual_machine_translation.ipynb)
 - [Speech Translation](examples/speech_translation.ipynb)
-- [fairseq integration](examples/fairseq_integration.ipynb)
 
-### Web App Example
+### [Web App Example](https://facebookresearch.github.io/vizseq/docs/getting_started/web_app_example)
 Download example data:
 ```bash
 $ git clone https://github.com/facebookresearch/vizseq
