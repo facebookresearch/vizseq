@@ -162,14 +162,14 @@ class VizSeqScorer(object):
 
         if self.corpus_level:
             corpus_score = np.mean(sent_scores)
-        if not self.sent_level:
-            sent_scores = None
         tag_set = self._unique(tags)
         if tag_set is not None:
             group_scores = {}
             for t in tag_set:
                 indices = [i for i, cur in enumerate(tags) if t in cur]
                 group_scores[t] = np.mean([sent_scores[i] for i in indices])
+        if not self.sent_level:
+            sent_scores = None
 
         return VizSeqScore.make(
                 corpus_score=corpus_score, sent_scores=sent_scores,
