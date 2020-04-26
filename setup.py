@@ -42,7 +42,7 @@ setup(
     ],
     install_requires=[
         'numpy',
-        'sacrebleu',
+        'sacrebleu==1.4.7',
         'torch',
         'tqdm',
         'nltk',
