@@ -19,6 +19,8 @@ class VizSeqIpynbCoreTestCase(VizSeqIpynbTestCase):
 
     def test_view_scores(self):
         _ = view_scores(self.references, self.hypothesis, ['bleu'])
+        _ = view_scores(self.references, self.hypothesis, ['rouge_1'],
+                        tags=self.tags)
 
     def test_view_n_grams(self):
         _ = view_n_grams(self.references)

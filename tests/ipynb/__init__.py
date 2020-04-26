@@ -20,6 +20,7 @@ class VizSeqIpynbTestCase(unittest.TestCase):
             self.references = {'ref': [l.strip() for l in f]}
         with open(f'{dataset_root}/pred_onlineA.0.txt') as f:
             self.hypothesis = {'hypo': [l.strip() for l in f]}
+        self.tags = {'tag': ['default' for _ in self.source]}
 
     def test_view_stats(self):
         pass
