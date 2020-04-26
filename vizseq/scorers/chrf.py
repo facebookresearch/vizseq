@@ -8,7 +8,7 @@
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from typing import List, Optional, Dict
 
-import sacrebleu as sb
+import sacrebleu.sacrebleu as sb
 from tqdm import tqdm
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
