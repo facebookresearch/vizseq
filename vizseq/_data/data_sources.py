@@ -39,6 +39,7 @@ NON_TXT_FILE_EXT_TO_DATA_TYPE = {
     '.svg': VizSeqDataType.image,
     '.mp3': VizSeqDataType.audio,
     '.wav': VizSeqDataType.audio,
+    '.flac': VizSeqDataType.audio,
     '.mp4': VizSeqDataType.video,
     '.webm': VizSeqDataType.video,
 }
@@ -51,6 +52,7 @@ NON_TXT_FILE_EXT_TO_MEDIA_TYPE = {
     '.svg': 'data:image/svg+xml',
     '.mp3': 'data:audio/mp3',
     '.wav': 'data:audio/wav',
+    '.flac': 'data:audio/flac',
     '.mp4': 'data:video/mp4',
     '.webm': 'data:video/webm',
 }
