@@ -42,10 +42,10 @@ setup(
     ],
     install_requires=[
         'numpy',
-        'sacrebleu==1.4.7',
+        'sacrebleu>=1.4.13',
         'torch',
         'tqdm',
-        'nltk',
+        'nltk>=3.5',
         'py-rouge',
         'langid',
         'google-cloud-translate',
