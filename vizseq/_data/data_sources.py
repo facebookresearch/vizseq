@@ -42,6 +42,7 @@ NON_TXT_FILE_EXT_TO_DATA_TYPE = {
     '.flac': VizSeqDataType.audio,
     '.mp4': VizSeqDataType.video,
     '.webm': VizSeqDataType.video,
+    '.m4a': VizSeqDataType.audio,
 }
 
 NON_TXT_FILE_EXT_TO_MEDIA_TYPE = {
@@ -55,6 +56,7 @@ NON_TXT_FILE_EXT_TO_MEDIA_TYPE = {
     '.flac': 'data:audio/flac',
     '.mp4': 'data:video/mp4',
     '.webm': 'data:video/webm',
+    '.m4a': 'data:audio/m4a',
 }
 
 RESERVED_FILE_PREFIXES = {'src_', 'ref_', 'pred_', 'tag_'}
