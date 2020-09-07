@@ -43,7 +43,7 @@ def view_examples(
         page_no: int = DEFAULT_PAGE_NO,
         sorting: VizSeqSortingType = VizSeqSortingType.original,
         need_g_translate: bool = False,
-        no_alignment: bool = False
+        disable_alignment: bool = False,
 ):
     _src = VizSeqDataSources(sources)
     _ref = VizSeqDataSources(references)
@@ -57,7 +57,7 @@ def view_examples(
     view = VizSeqDataPageView.get(
         _src, _ref, _hypo, page_sz, page_no, metrics=metrics, query=query,
         sorting=sorting.value, need_lang_tags=_need_g_translate,
-        no_alignment=no_alignment
+        disable_alignment=disable_alignment
     )
 
     google_translation = []
@@ -116,6 +116,7 @@ def view_stats(
 
     n_src_plots = len(_src.text_indices)
     n_plots = n_src_plots + _ref.n_sources
+    plt.ion()
     fig, ax = plt.subplots(nrows=1, ncols=n_plots, figsize=(7 * n_plots, 5))
     for i, idx in enumerate(_src.text_indices):
         cur_ax = ax if n_plots == 1 else ax[i]
@@ -131,7 +132,6 @@ def view_stats(
         _ = cur_ax.hist(cur_sent_lens, density=True, bins=25)
         _ = cur_ax.axvline(x=np.mean(cur_sent_lens), color='red', linewidth=3)
         cur_ax.set_title(f'Reference {name} Length')
-    plt.show()
 
 
 # TODO: display one by one instead of all together

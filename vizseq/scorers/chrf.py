@@ -7,20 +7,40 @@
 
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from typing import List, Optional, Dict
+import argparse
 
-import sacrebleu as sb
+from sacrebleu.metrics import CHRF
 from tqdm import tqdm
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
+
+
+def get_default_args(chrf_whitespace=False, chrf_order=6, chrf_beta=2):
+    args = argparse.Namespace()
+    args.chrf_whitespace = chrf_whitespace
+    args.chrf_order = chrf_order
+    args.chrf_beta = chrf_beta
+    return args
 
 
 def _get_sent_chrf(
         hypothesis: List[str], references: List[List[str]],
         extra_args: Optional[Dict[str, str]] = None
 ):
-    return [
-        sb.sentence_chrf(h, r).score for h, r in zip(hypothesis, references[0])
-    ]
+    scorer = CHRF(get_default_args())
+    data = [hypothesis] + references
+    return [scorer.sentence_score(h, r).score for h, *r in zip(*data)]
+
+
+def _get_corpus_statistics(hypothesis: List[str], references: List[List[str]]):
+    scorer = CHRF(get_default_args())
+    corpus_statistics = [0] * (scorer.order * 3)
+    data = [hypothesis] + references
+    for h, *r in zip(*data):
+        statistics = scorer.get_sentence_statistics(h, r)
+        for i in range(len(statistics)):
+            corpus_statistics[i] += statistics[i]
+    return corpus_statistics
 
 
 @register_scorer('chrf', 'chrF')
@@ -28,18 +48,17 @@ class ChrFScorer(VizSeqScorer):
     def score_corpus_multiprocess(
             self, hypothesis: List[str], references: List[List[str]]
     ) -> float:
+        scorer = CHRF(get_default_args())
         if self.n_workers == 1:
-            corpus_score = sb.corpus_chrf(hypothesis, references[0]).score
+            corpus_score = scorer.corpus_score(hypothesis, references).score
         else:
             batches = list(
                 self._batch(hypothesis, references, n_batches=self.n_workers)
             )
-            corpus_statistics = [0 for _ in range(sb.CHRF_ORDER * 3)]
+            corpus_stats = [0 for _ in range(CHRF.ORDER * 3)]
             with ProcessPoolExecutor(max_workers=self.n_workers) as executor:
                 futures = [
-                    executor.submit(
-                        sb.get_corpus_statistics, b[0], b[1][0]
-                    )
+                    executor.submit(_get_corpus_statistics, b[0], b[1])
                     for b in batches
                 ]
                 progress = as_completed(futures)
@@ -47,12 +66,10 @@ class ChrFScorer(VizSeqScorer):
                     progress = tqdm(progress)
                 for future in progress:
                     stats = future.result()
-                    for i in range(sb.CHRF_ORDER * 3):
-                        corpus_statistics[i] += stats[i]
-            avg_precision, avg_recall = sb._avg_precision_and_recall(
-                corpus_statistics, sb.CHRF_ORDER
-            )
-            corpus_score = sb._chrf(avg_precision, avg_recall)
+                    for i in range(CHRF.ORDER * 3):
+                        corpus_stats[i] += stats[i]
+            corpus_score = scorer.compute_chrf(corpus_stats, scorer.order,
+                                               scorer.beta).score
         return corpus_score
 
     def score(

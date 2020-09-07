@@ -7,7 +7,7 @@
 
 module.exports = {
   title: 'VizSeq',
-  tagline: 'A visual analysis toolkit for text generation tasks',
+  tagline: 'A Visual Analysis Toolkit for Text Generation (Translation, Captioning, Summarization, etc.)',
   url: 'https://facebookresearch.github.io',
   baseUrl: '/vizseq/',
   favicon: 'img/favicon.png',
@@ -24,8 +24,9 @@ module.exports = {
         src: 'img/logo.png',
       },
       links: [
-        {to: 'docs/overview', label: 'Docs', position: 'left'},
-        {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub', position: 'left'},
+        {to: '/#quickstartSection', label: 'Quickstart', position: 'right'},
+        {to: 'docs/overview', label: 'Docs', position: 'right'},
+        {href: 'https://github.com/facebookresearch/vizseq', label: 'VizSeq@GitHub', position: 'right'},
       ],
     },
     footer: {

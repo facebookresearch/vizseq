@@ -4,12 +4,16 @@ title: Built-In Metrics
 sidebar_label: Built-In Metrics
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 Here is the list of VizSeq built-in metrics. They are all accelerated with multi-processing/multi-threading.
+To use VizSeq scorers, check out our <a href={useBaseUrl('docs/getting_started/scorer_example')}>example</a> and
+the <a href={useBaseUrl('docs/features/scorer_api')}>APIs</a>.
 
 ### N-gram-based
 
 - BLEU ([Papineni et al., 2002](https://www.aclweb.org/anthology/P02-1040)): [sacreBLEU](https://github.com/mjpost/sacreBLEU) implementation
-- NIST ([Doddington, 2002](http://www.mt-archive.info/HLT-2002-Doddington.pdf)): [NLTK](https://github.com/nltk/nltk>) implementation
+- NIST ([Doddington, 2002](http://www.mt-archive.info/HLT-2002-Doddington.pdf)): [NLTK](https://github.com/nltk/nltk) implementation
 - METEOR ([Banerjee et al., 2005](https://www.aclweb.org/anthology/W05-0909)): [NLTK](https://github.com/nltk/nltk) implementation
 - TER ([Snover et al., 2006](http://mt-archive.info/AMTA-2006-Snover.pdf)): VizSeq implementation
 - RIBES ([Isozaki et al., 2010](https://www.aclweb.org/anthology/D10-1092)): [NLTK](https://github.com/nltk/nltk) implementation
@@ -30,4 +34,5 @@ Here is the list of VizSeq built-in metrics. They are all accelerated with multi
 
 
 ### User-defined Metrics
-VizSeq opens the API for user-defined metrics. Refer to the [adding new metrics](new_metric) section for more details.
+VizSeq opens the API for user-defined metrics. Refer to the <a href={useBaseUrl('docs/new_metric')}>adding new metrics</a> section
+for more details.

@@ -1,0 +1,73 @@
+---
+id: ipynb_api
+title: Jupyter Notebook APIs
+sidebar_label: Jupyter Notebook APIs
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+## ``vizseq.*`` or `vizseq.ipynb.*`
+### `view_stats()`
+Showing the dataset statistics, including examples count, tokens count, sentence length distribution, etc.
+It contains Matplotlib figures and you need to add `%matplotlib inline` before use.
+#### Arguments
+- **`sources`: Union[str, List[str], Dict[str, List[str]]]**:
+Source-side data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details.
+- **`references`: Union[str, List[str], Dict[str, List[str]]]**:
+Target-side data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details.
+- **`tags`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**: Per-example tags for example grouping.
+Default to `None`.
+
+
+### `available_scorers()`
+Showing the IDs of built-in scorers, which can be used in [`view_scores()`](#view_scores) and
+[`view_examples()`](#vizseqview_examples).
+
+### `view_scores()`
+#### Arguments
+- **`references`: Union[str, List[str], Dict[str, List[str]]]**:
+Target-side data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details.
+- **`hypothesis`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**:
+Model prediction data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details. Default to `None`.
+- **`metrics`: List[str]**: List of scorer IDs. Use [`available_scorers()`](#available_scorers) to check all the
+available ones.
+- **`tags`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**: Per-example tags for example grouping.
+Default to `None`.
+
+### `view_examples()`
+Showing examples with model predictions in pages with specified metrics, keyword, sorting, etc.
+#### Arguments
+- **`sources`: Union[str, List[str], Dict[str, List[str]]]**:
+Source-side data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details.
+- **`references`: Union[str, List[str], Dict[str, List[str]]]**:
+Target-side data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details.
+- **`hypothesis`: Optional[Union[str, List[str], Dict[str, List[str]]]] = None**:
+Model prediction data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details. Default to `None`.
+- **`metrics`: Optional[List[str]] = None**: List of scorer IDs. Default to `None`. Use
+[`available_scorers()`](#available_scorers) to check all the available ones.
+- **`query`: str = ''**: The keyword(s) for example filtering. Default to `''`.
+- **`page_sz`: int = 10**: Page size. Default to `10`.
+- **`page_no`: int = 1**: Page number. Default to `1`.
+- **`sorting`: VizSeqSortingType = VizSeqSortingType.original**
+- **`need_g_translate`: bool = False**:
+To show Google Translate results or not. Default to `False`.
+- **`disable_alignment`: bool = False**:
+Not to show source-reference and reference-hypothesis alignments for rendering speedup. Default to `False`.
+
+### `view_n_grams()`
+Showing the n-grams (n=1,2,3,4) in the input data (sources, references, etc.).
+#### Arguments
+- **`data`: Union[str, List[str], Dict[str, List[str]]]**:
+The data source. Can be a path, paths or lists of sentences. Refer to the <a href={useBaseUrl('docs/features/data')}>data</a> section
+for more details.
+- **`k`: int = 64**:
+Number of n-grams to be shown. Default to `64`.
+
+## <a href={useBaseUrl('docs/features/fairseq_api')}>Fairseq Integration APIs</a>

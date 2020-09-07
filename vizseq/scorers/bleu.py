@@ -7,51 +7,69 @@
 
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from typing import List, Optional, Dict
+import argparse
 
-import sacrebleu as sb
+from sacrebleu.metrics import BLEU
 from tqdm import tqdm
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
 from vizseq._utils.optional import get_optional_dict
 
 
+def get_default_args(force=True, lc=False, smooth_value=None,
+                     smooth_method='exp', tokenize='13a', num_refs=1):
+    args = argparse.Namespace()
+    args.force = force
+    args.lc = lc
+    args.smooth_value = smooth_value
+    args.smooth_method = smooth_method
+    args.tokenize = tokenize
+    args.num_refs = num_refs
+    return args
+
+
 def _get_sent_bleu(
         hypothesis: List[str], references: List[List[str]],
-        extra_args: Optional[Dict[str, str]] = None
+        extra_args: Optional[Dict[str, str]] = None, score='score'
 ) -> List[float]:
-    tokenizer = get_optional_dict(extra_args, 'bleu_tokenizer', 'none')
+    tokenizer = get_optional_dict(extra_args, 'tokenizer', 'none')
     data = [hypothesis] + references
-    return [
-        sb.corpus_bleu(
-            [h], [r], smooth_method='floor', use_effective_order=True,
-            force=True, tokenize=tokenizer
-        ).score
+    args = get_default_args(smooth_method='floor', tokenize=tokenizer,
+                            num_refs=len(references))
+    scorer = BLEU(args)
+    scores = [
+        scorer.corpus_score([h], [[rr] for rr in r], use_effective_order=True)
         for h, *r in zip(*data)
     ]
+    proj = {'score': lambda s: s.score, 'bp': lambda s: s.bp}.get(score)
+    return [proj(s) for s in scores]
 
 
 @register_scorer('bleu', 'BLEU')
 class BLEUScorer(VizSeqScorer):
     def score_corpus_multiprocess(
-            self, hypothesis: List[str], references: List[List[str]]
+            self, hypothesis: List[str], references: List[List[str]],
+            score='score'
     ) -> float:
-        tokenizer = get_optional_dict(self.extra_args, 'bleu_tokenizer', 'none')
+        tokenizer = get_optional_dict(self.extra_args, 'tokenizer', 'none')
+        args = get_default_args(tokenize=tokenizer, num_refs=len(references))
+        scorer = BLEU(args)
         if self.n_workers == 1:
-            corpus_score = sb.corpus_bleu(
-                hypothesis, references, force=True, tokenize=tokenizer
-            ).score
+            corpus_score = scorer.corpus_score(
+                hypothesis, references, use_effective_order=False
+            )
         else:
             batches = list(
                 self._batch(hypothesis, references, n_batches=self.n_workers)
             )
             ref_len, sys_len = 0, 0
-            correct = [0 for _ in range(sb.NGRAM_ORDER)]
-            total = [0 for _ in range(sb.NGRAM_ORDER)]
+            correct = [0 for _ in range(BLEU.NGRAM_ORDER)]
+            total = [0 for _ in range(BLEU.NGRAM_ORDER)]
             with ProcessPoolExecutor(max_workers=self.n_workers) as executor:
                 futures = [
                     executor.submit(
-                        sb.corpus_bleu, b[0], b[1], force=True,
-                        tokenize=tokenizer
+                        scorer.corpus_score, b[0], b[1],
+                        use_effective_order=False
                     )
                     for b in batches
                 ]
@@ -62,13 +80,14 @@ class BLEUScorer(VizSeqScorer):
                     s = future.result()
                     ref_len += s.ref_len
                     sys_len += s.sys_len
-                    for n in range(sb.NGRAM_ORDER):
+                    for n in range(BLEU.NGRAM_ORDER):
                         correct[n] += s.counts[n]
                         total[n] += s.totals[n]
-                corpus_score = sb.compute_bleu(
+                corpus_score = scorer.compute_bleu(
                     correct, total, sys_len, ref_len, smooth_method='exp'
-                ).score
-        return corpus_score
+                )
+        proj = {'score': lambda s: s.score, 'bp': lambda s: s.bp}.get(score)
+        return proj(corpus_score)
 
     def score(
             self, hypothesis: List[str], references: List[List[str]],

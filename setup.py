@@ -29,6 +29,8 @@ setup(
     classifiers=[
         'Intended Audience :: Science/Research',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
@@ -40,10 +42,10 @@ setup(
     ],
     install_requires=[
         'numpy',
-        'sacrebleu',
+        'sacrebleu>=1.4.13',
         'torch',
         'tqdm',
-        'nltk',
+        'nltk>=3.5',
         'py-rouge',
         'langid',
         'google-cloud-translate',

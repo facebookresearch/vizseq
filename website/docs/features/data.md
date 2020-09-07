@@ -13,7 +13,8 @@ sidebar_label: Data Inputs
 ## Data Sources
 VizSeq accepts data inputs in various ways.
 ### Python Variables
-VizSeq Jupyter notebook interface accepts Python list of lists of strings as inputs. The inner list is for multiple inputs of the same type, for example:
+VizSeq Jupyter notebook interface accepts Python list of lists of strings as inputs. The inner list is for multiple
+inputs of the same type, for example:
 ```python
 ref_1 = ['This is ref #1 for example #1.', 'This is ref #1 for example #2.']
 ref_2 = ['This is ref #2 for example #1.', 'This is ref #2 for example #2.']
@@ -40,7 +41,8 @@ For the web App interface, it expects data to be organized in the following fold
 where
 
 - `src_*.txt`: A text source, one sentence per line.
-- `src_*.zip`: A packed source, with a `source.txt` in it, which provides either the sentences or the image/audio/video filenames per line.
+- `src_*.zip`: A packed source, with a `source.txt` in it, which provides either the sentences or the image/audio/video
+filenames per line.
 - `ref_*.txt`: A text reference, one sentence per line.
 - `pred_*.txt`: A text model prediction, one sentence per line.
 - `tag_*.txt`: (Optional) Example tags, one phrase per line.

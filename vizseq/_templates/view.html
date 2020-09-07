@@ -62,7 +62,7 @@
         let callback = function(jsonResponse) {
             let trNode = document.createElement('tr');
             trNode.setAttribute('style', 'background-color:#EAF2F8');
-            trNode.innerHTML = '<th class="text-nowrap" scope="row">Google Translate</th><td>' +
+            trNode.innerHTML = '<th class="text-nowrap text-left" scope="row">Google Translate</th><td>' +
                 jsonResponse['translation'] + '</td>';
             document.getElementById(srcRowId).after(trNode);
             $('#' + selfId).remove();
@@ -262,9 +262,9 @@
                             {% set cur_src = src[j][i] %}
                             {% set cur_viz_src = viz_src[j][i] %}
                             <tr style="background-color:#FDF2E9" id="srcRow{{ j }}_{{ i }}">
-                                <th class="text-nowrap" scope="row">Source {{ src_name }}</th>
+                                <th width="20%" class="text-nowrap text-left" scope="row">Source {{ src_name }}</th>
                                 {% if src_type == 'text' %}
-                                <td>
+                                <td class="text-left">
                                     {{ cur_viz_src }}
                                     <a href="javascript:getGTranslate('gTranslate{{ j }}_{{ i }}', 'srcRow{{ j }}_{{ i }}', '{{ cur_src }}', '{{ trg_lang[i] }}');"
                                        title="Google Translate" id="gTranslate{{ j }}_{{ i }}">GTranslate</a>
@@ -283,13 +283,16 @@
                             {% set cur_ref = ref[j][i] %}
                             {% if cur_ref|length > 0 %}
                             <tr style="background-color:#FEF9E7">
-                                <th class="text-nowrap" scope="row">Reference {{ ref_name }}</th><td>{{ cur_ref }}</td>
+                                <th class="text-nowrap text-left" scope="row">Reference {{ ref_name }}</th>
+                                <td class="text-left">{{ cur_ref }}</td>
                             </tr>
                             {% endif %}
                             {% endfor %}
 
                             {% for m in models %}
-                            <tr><th scope="row">{{ m }}</th><td>{{ hypo[m][i] }}</td></tr>
+                            <tr>
+                                <th scope="row" class="text-left">{{ m }}</th><td class="text-left">{{ hypo[m][i] }}</td>
+                            </tr>
                             {% endfor %}
                             </tbody>
                         </table>

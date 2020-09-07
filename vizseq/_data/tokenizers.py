@@ -7,7 +7,8 @@
 
 from enum import Enum
 
-from sacrebleu import tokenize_13a, tokenize_v14_international, tokenize_zh
+from sacrebleu.tokenizers import (Tokenizer13a, TokenizerV14International,
+                                 TokenizerZh)
 
 
 class VizSeqTokenization(Enum):
@@ -28,11 +29,11 @@ class VizSeqTokenizer(object):
         if tokenization == VizSeqTokenization.none:
             return line
         elif tokenization == VizSeqTokenization.mteval_13a:
-            return tokenize_13a(line)
+            return Tokenizer13a()(line)
         elif tokenization == VizSeqTokenization.mteval_v14_international:
-            return tokenize_v14_international(line)
+            return TokenizerV14International()(line)
         elif tokenization == VizSeqTokenization.zh:
-            return tokenize_zh(line)
+            return TokenizerZh()(line)
         elif tokenization == VizSeqTokenization.char:
             return _tokenize_by_char(line)
         else:

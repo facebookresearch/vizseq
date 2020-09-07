@@ -24,6 +24,9 @@ jobs:
       - run:
           no_output_timeout: 60m
           command: ~/miniconda3/bin/conda run -n vizseq36 python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq36 python -m tests.test_ipynb
 
   py37_mac:
     macos:
@@ -48,6 +51,9 @@ jobs:
       - run:
           no_output_timeout: 60m
           command: ~/miniconda3/bin/conda run -n vizseq37 python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq37 python -m tests.test_ipynb
 
   py36_linux:
     docker:
@@ -64,6 +70,9 @@ jobs:
       - run:
           no_output_timeout: 60m
           command: sudo python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: sudo python -m tests.test_ipynb
 
   py37_linux:
     docker:
@@ -80,6 +89,9 @@ jobs:
       - run:
           no_output_timeout: 60m
           command: sudo python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: sudo python -m tests.test_ipynb
 
 workflows:
   version: 2
