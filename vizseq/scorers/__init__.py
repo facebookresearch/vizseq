@@ -103,7 +103,10 @@ class VizSeqScorer(object):
     @staticmethod
     def _batch(hypo: List[str], ref: List[List[str]], n_batches: int):
         n_samples = len(hypo)
-        assert all(len(r) == n_samples for r in ref)
+        if not all(len(r) == n_samples for r in ref):
+            raise ValueError(
+                f'All reference lists must have the same length as hypothesis ({n_samples})'
+            )
         hypo_and_ref = [hypo] + ref
         merged = list(zip(*hypo_and_ref))
         batched = _batch(merged, n_batches=n_batches)
@@ -196,7 +199,9 @@ def register_scorer(scorer_id: str, scorer_name: str):
 
 
 def get_scorer(scorer_id: str) -> Type[VizSeqScorer]:
-    assert scorer_id in _SCORER_REGISTRY.keys()
+    if scorer_id not in _SCORER_REGISTRY:
+        available = ', '.join(sorted(_SCORER_REGISTRY.keys()))
+        raise KeyError(f'Unknown scorer: {scorer_id}. Available scorers: {available}')
     return _SCORER_REGISTRY[scorer_id]
 
 

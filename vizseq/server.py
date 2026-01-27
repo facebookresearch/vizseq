@@ -228,7 +228,8 @@ class GTranslateHandler(VizSeqBaseRequestHandler):
     def get(self):
         sent = self.get_query_argument('s', None)
         lang = self.get_query_argument('l', None)
-        assert sent is not None and lang is not None
+        if sent is None or lang is None:
+            raise web.HTTPError(400, 'Missing required parameters: s (sentence) and l (language)')
         translation = VizSeqJson.dumps(
             {'translation': get_g_translate(sent, lang)}
         )

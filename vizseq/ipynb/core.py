@@ -50,8 +50,16 @@ def view_examples(
     _hypo = VizSeqDataSources(hypothesis)
     if _hypo.n_sources == 0:
         metrics = None
-    assert len(_src) == len(_ref)
-    assert _hypo.n_sources == 0 or len(_ref) == len(_hypo)
+    if len(_src) != len(_ref):
+        raise ValueError(
+            f'Source and reference must have the same length, '
+            f'got {len(_src)} and {len(_ref)}'
+        )
+    if _hypo.n_sources > 0 and len(_ref) != len(_hypo):
+        raise ValueError(
+            f'Reference and hypothesis must have the same length, '
+            f'got {len(_ref)} and {len(_hypo)}'
+        )
 
     _need_g_translate = need_g_translate and _src.has_text
     view = VizSeqDataPageView.get(

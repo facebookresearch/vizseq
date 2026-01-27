@@ -20,10 +20,19 @@ def set_g_cred_path(path: str):
 
 @lru_cache(maxsize=256)
 def get_g_translate(sent: str, lang: str) -> Optional[str]:
+    """Translate a sentence using Google Translate API.
+
+    Args:
+        sent: The sentence to translate.
+        lang: Target language code.
+
+    Returns:
+        Translated text, or None if translation fails.
+    """
     try:
         client = translate.Client()
         t = client.translate(sent, target_language=lang)['translatedText']
         return t
     except Exception as e:
         logger.warn(f'Google Translate error: {e}')
-        return ''
+        return None
