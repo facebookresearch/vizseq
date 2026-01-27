@@ -94,6 +94,60 @@ jobs:
           no_output_timeout: 60m
           command: ~/miniconda3/bin/conda run -n vizseq310 python -m tests.test_ipynb
 
+  py311_mac:
+    macos:
+      xcode: "14.2.0"
+    steps:
+      - checkout
+      - run:
+          name: "Installing Conda"
+          command: |
+            curl -o Miniconda3-latest-MacOSX-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+            bash ./Miniconda3-latest-MacOSX-x86_64.sh -b
+            ~/miniconda3/bin/conda init bash
+      - run:
+          name: "Installing VizSeq"
+          command: |
+            ~/miniconda3/bin/conda create -n vizseq311 python=3.11 -q -y
+            ~/miniconda3/bin/conda run -n vizseq311 pip install -e .
+            bash get_example_data.sh
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq311 python -m tests.test_n_gram_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq311 python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq311 python -m tests.test_ipynb
+
+  py312_mac:
+    macos:
+      xcode: "14.2.0"
+    steps:
+      - checkout
+      - run:
+          name: "Installing Conda"
+          command: |
+            curl -o Miniconda3-latest-MacOSX-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+            bash ./Miniconda3-latest-MacOSX-x86_64.sh -b
+            ~/miniconda3/bin/conda init bash
+      - run:
+          name: "Installing VizSeq"
+          command: |
+            ~/miniconda3/bin/conda create -n vizseq312 python=3.12 -q -y
+            ~/miniconda3/bin/conda run -n vizseq312 pip install -e .
+            bash get_example_data.sh
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq312 python -m tests.test_n_gram_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq312 python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: ~/miniconda3/bin/conda run -n vizseq312 python -m tests.test_ipynb
+
   py38_linux:
     docker:
       - image: cimg/python:3.8
@@ -148,6 +202,42 @@ jobs:
           no_output_timeout: 60m
           command: python -m tests.test_ipynb
 
+  py311_linux:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - run: sudo apt-get update && sudo apt-get install -y expect libsndfile1
+      - run: pip install -e .
+      - run: bash get_example_data.sh
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_n_gram_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_ipynb
+
+  py312_linux:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run: sudo apt-get update && sudo apt-get install -y expect libsndfile1
+      - run: pip install -e .
+      - run: bash get_example_data.sh
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_n_gram_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_embedding_based_scorers
+      - run:
+          no_output_timeout: 60m
+          command: python -m tests.test_ipynb
+
 workflows:
   version: 2
   build:
@@ -162,6 +252,12 @@ workflows:
       - py310_linux:
           requires:
             - lint
+      - py311_linux:
+          requires:
+            - lint
+      - py312_linux:
+          requires:
+            - lint
       - py38_mac:
           requires:
             - lint
@@ -169,5 +265,11 @@ workflows:
           requires:
             - lint
       - py310_mac:
+          requires:
+            - lint
+      - py311_mac:
+          requires:
+            - lint
+      - py312_mac:
           requires:
             - lint
