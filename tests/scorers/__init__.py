@@ -19,11 +19,11 @@ class VizSeqScorerTestCase(unittest.TestCase):
         if not os.path.isdir(dataset_root):
             raise NotADirectoryError(f'{dataset_root} does not exist.')
         with open(f'{dataset_root}/src_0.txt') as f:
-            self.source = [l.strip() for l in f]
+            self.source = [line.strip() for line in f]
         with open(f'{dataset_root}/ref_0.txt') as f:
-            self.references = [[l.strip() for l in f]]
+            self.references = [[line.strip() for line in f]]
         with open(f'{dataset_root}/pred_onlineA.0.txt') as f:
-            self.hypothesis = [l.strip() for l in f]
+            self.hypothesis = [line.strip() for line in f]
 
     def _verify_speed(
             self, time_sp: float, time_mp: float, min_speedup_ratio: float = 0.9
@@ -87,6 +87,6 @@ class VizSeqScorerTestCase(unittest.TestCase):
             self, scorer_type: Type[VizSeqScorer],
             extra_args: Optional[Dict[str, str]] = None
     ):
-        scores_sp = scorer_type(
+        scorer_type(
             corpus_level=True, sent_level=True, extra_args=extra_args
         ).score(self.hypothesis, self.references)

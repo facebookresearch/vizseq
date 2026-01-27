@@ -108,8 +108,8 @@ def view_stats(
     html = env.get_template('ipynb_stats.html').render(
         stats=stats.to_dict(formatting=True),
         enum_src_names_and_types=VizSeqDataPageView.get_enum(
-            zip(_src.names, [t.name.title() for t in _src.data_types]
-        )),
+            zip(_src.names, [t.name.title() for t in _src.data_types])
+        ),
         enum_ref_names=VizSeqDataPageView.get_enum(_ref.names)
     )
     display(HTML(html))
