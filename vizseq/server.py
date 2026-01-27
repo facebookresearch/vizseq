@@ -14,7 +14,7 @@ from typing import List
 from vizseq._utils.logger import logger
 
 from vizseq._view import VizSeqWebView, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NO
-from vizseq._data.zip_file import VizSeqZipFile
+from vizseq._data.zip_file import VizSeqZipFile, ZipExtractionError
 from vizseq._data import get_g_translate, VizSeqGlobalConfigManager
 from vizseq._visualizers import SPAN_HIGHTLIGHT_JS
 from vizseq._utils import VizSeqJson
@@ -202,9 +202,15 @@ class UploadHandler(VizSeqBaseRequestHandler):
         zip_file_path = os.path.join(args.data_root, filename)
         with open(zip_file_path, 'wb') as f:
             f.write(file1['body'])
-        VizSeqZipFile.unzip(
-            args.data_root, filename, remove_after_unpacking=True
-        )
+        try:
+            VizSeqZipFile.unzip(
+                args.data_root, filename, remove_after_unpacking=True
+            )
+        except ZipExtractionError as e:
+            # Clean up the uploaded file if extraction fails
+            if os.path.exists(zip_file_path):
+                os.remove(zip_file_path)
+            raise web.HTTPError(400, str(e))
         self.redirect('/', status=303)
 
 

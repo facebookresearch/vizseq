@@ -7,6 +7,7 @@
 
 from .data_sources import (VizSeqDataSources, PathOrPathsOrDictOfStrList,
                            SOUNDFILE_FILE_EXTS)
+from .zip_file import VizSeqZipFile, ZipExtractionError
 from .n_grams import VizSeqNGrams
 from .stats import VizSeqStats
 from .lang_tagger import VizSeqLanguageTagger
