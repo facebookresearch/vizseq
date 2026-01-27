@@ -13,6 +13,36 @@ jobs:
           name: "Run flake8"
           command: flake8 vizseq tests
 
+  security:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - run:
+          name: "Install security tools"
+          command: pip install bandit safety
+      - run:
+          name: "Run bandit security scan"
+          command: bandit -r vizseq -ll -ii
+      - run:
+          name: "Check dependencies for vulnerabilities"
+          command: pip install -e . && safety check
+
+  coverage:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - run: sudo apt-get update && sudo apt-get install -y expect libsndfile1
+      - run: pip install -e . pytest pytest-cov
+      - run: bash get_example_data.sh
+      - run:
+          name: "Run tests with coverage"
+          command: pytest tests/ --cov=vizseq --cov-report=xml --cov-report=term-missing
+      - store_artifacts:
+          path: coverage.xml
+          destination: coverage-report
+
   py38_mac:
     macos:
       xcode: "14.2.0"
@@ -243,6 +273,10 @@ workflows:
   build:
     jobs:
       - lint
+      - security
+      - coverage:
+          requires:
+            - lint
       - py38_linux:
           requires:
             - lint
