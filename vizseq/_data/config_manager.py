@@ -92,12 +92,11 @@ class VizSeqTaskConfigManager(VizSeqBaseConfigManager):
     def tokenization(self):
         return self.get('tokenization', DEFAULT_TOKENIZATION)
 
-    def set_tokenization(self, tokenizaton: str) -> None:
+    def set_tokenization(self, tokenization: str) -> None:
         all_tokenizations = set(t.name for t in VizSeqTokenization)
-        for t in tokenizaton:
-            if t not in all_tokenizations:
-                raise ValueError(f'{t} is not a valid tokenization.')
-        return self.update('tokenization', tokenizaton)
+        if tokenization not in all_tokenizations:
+            raise ValueError(f'{tokenization} is not a valid tokenization.')
+        return self.update('tokenization', tokenization)
 
 
 class VizSeqGlobalConfigManager(VizSeqBaseConfigManager):

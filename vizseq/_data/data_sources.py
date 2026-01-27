@@ -89,9 +89,11 @@ def _get_data_source_names(
         names = []
         for p in _paths:
             name = get_name_from_path(p)
-            assert name is not None
+            if name is None:
+                raise ValueError(f'Could not extract name from path: {p}')
             names.append(name)
-        assert len(names) == len(set(names))
+        if len(names) != len(set(names)):
+            raise ValueError('Duplicate names found in data source paths')
         return names
     else:
         return [str(i) for i, _ in enumerate(_paths)]
@@ -112,7 +114,10 @@ def get_file_type_from_list(paths: List[str]) -> VizSeqDataType:
     file_types = list(
         set(NON_TXT_FILE_EXT_TO_DATA_TYPE.get(e, None) for e in file_extensions)
     )
-    assert len(file_types) == 1 and file_types[0] is not None
+    if len(file_types) != 1 or file_types[0] is None:
+        raise ValueError(
+            f'Expected exactly one valid file type, got extensions: {file_extensions}'
+        )
     return file_types[0]
 
 
@@ -147,13 +152,15 @@ class VizSeqDataSourceBase(object):
         return self.data
 
     def cached(self, ids: List[int]) -> List[str]:
-        assert all(0 <= i < len(self) for i in ids)
+        if not all(0 <= i < len(self) for i in ids):
+            raise ValueError(f'Invalid ids: must be in range [0, {len(self)})')
         result = [self.data[i] for i in ids]
         if self.data_type != VizSeqDataType.text:
             for k, i in enumerate(ids):
                 file_ext = _get_file_ext(self.data[i])
                 media_type = NON_TXT_FILE_EXT_TO_MEDIA_TYPE.get(file_ext, None)
-                assert media_type is not None
+                if media_type is None:
+                    raise ValueError(f'Unsupported file extension: {file_ext}')
                 result[k] = _get_base64_from_path(self.data[i], media_type)
         return result
 
@@ -192,20 +199,25 @@ class VizSeqDataSourceBase(object):
 
 class VizSeqListSource(VizSeqDataSourceBase):
     def __init__(self, str_list: List[str]):
-        assert all(isinstance(s, str) for s in str_list)
+        if not all(isinstance(s, str) for s in str_list):
+            raise TypeError('All elements in str_list must be strings')
         self.data = str_list
 
 
 class VizSeqTextFileSource(VizSeqDataSourceBase):
     def __init__(self, path: str):
-        assert os.path.exists(path)
+        if not os.path.exists(path):
+            raise FileNotFoundError(f'File not found: {path}')
         with open(path) as f:
             self.data = [line.strip() for line in f]
 
 
 class VizSeqZipFileSource(VizSeqDataSourceBase):
     def __init__(self, path: str):
-        assert os.path.exists(path) and path.endswith(ZIP_EXT)
+        if not os.path.exists(path):
+            raise FileNotFoundError(f'ZIP file not found: {path}')
+        if not path.endswith(ZIP_EXT):
+            raise ValueError(f'Expected .zip file, got: {path}')
         self.path = path
         self.data = None
 
@@ -214,7 +226,10 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
 
             if len(name_list) == 1:
                 self._data_type = VizSeqDataType.text
-                assert name_list[0].endswith(TXT_EXT)
+                if not name_list[0].endswith(TXT_EXT):
+                    raise ValueError(
+                        f'Single-file ZIP must contain a .txt file, got: {name_list[0]}'
+                    )
                 with zip_f.open(name_list[0]) as f:
                     self.data = [line.decode('utf-8').strip() for line in f]
             else:
@@ -222,19 +237,27 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
                 for name in name_list:
                     if name.endswith(TXT_EXT):
                         # only one txt file for metadata
-                        assert metadata_txt_name is None
+                        if metadata_txt_name is not None:
+                            raise ValueError(
+                                'ZIP file must contain exactly one .txt metadata file'
+                            )
                         metadata_txt_name = name
                 with zip_f.open(metadata_txt_name) as f:
                     self.data = [line.decode('utf-8').strip() for line in f]
                 self._data_type = get_file_type_from_list(self.data)
-                assert all(fn in name_list for fn in self.data)
+                missing = [fn for fn in self.data if fn not in name_list]
+                if missing:
+                    raise ValueError(
+                        f'Files listed in metadata not found in ZIP: {missing[:5]}'
+                    )
 
     @property
     def data_type(self) -> VizSeqDataType:
         return self._data_type
 
     def cached(self, ids: List[int]) -> List[str]:
-        assert all(0 <= i < len(self) for i in ids)
+        if not all(0 <= i < len(self) for i in ids):
+            raise ValueError(f'Invalid ids: must be in range [0, {len(self)})')
         if self.data_type == VizSeqDataType.text:
             return [self.data[i] for i in ids]
         else:
@@ -245,7 +268,8 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
                     media_type = NON_TXT_FILE_EXT_TO_MEDIA_TYPE.get(
                         file_ext, None
                     )
-                    assert media_type is not None
+                    if media_type is None:
+                        raise ValueError(f'Unsupported file extension: {file_ext}')
                     with zip_f.open(self.data[i], 'r') as f:
                         result.append(_get_base64_from_fp(f, media_type))
             return result
@@ -284,7 +308,7 @@ class VizSeqDataSource(object):
         elif isinstance(path_or_list, list):
             self.data_source = VizSeqListSource(path_or_list)
         else:
-            raise Exception('Unknown data source')
+            raise ValueError(f'Unknown data source type: {type(path_or_list)}')
 
     def __len__(self) -> int:
         return len(self.data_source)
@@ -341,7 +365,8 @@ class VizSeqDataSources(object):
                     VizSeqDataSource(self.names[0], path_or_paths_or_dict)
                 ]
         elif isinstance(path_or_paths_or_dict, list):
-            assert all(isinstance(p, str) for p in path_or_paths_or_dict)
+            if not all(isinstance(p, str) for p in path_or_paths_or_dict):
+                raise TypeError('All paths in list must be strings')
             self.names = _get_data_source_names(path_or_paths_or_dict)
             self.data = [
                 VizSeqDataSource(n, p)
@@ -357,7 +382,10 @@ class VizSeqDataSources(object):
             raise ValueError('Unknown type of data source')
 
         self.n_examples = len(self.data[0]) if len(self.data) > 0 else 0
-        assert all(len(d) == self.n_examples for d in self.data)
+        if not all(len(d) == self.n_examples for d in self.data):
+            raise ValueError(
+                f'All data sources must have the same length ({self.n_examples})'
+            )
 
     def __len__(self) -> int:
         return self.n_examples
@@ -404,7 +432,8 @@ class VizSeqDataSources(object):
         return self.data[idx].text
 
     def cached(self, ids: List[int]) -> List[List[str]]:
-        assert all(0 <= i < len(self) for i in ids)
+        if not all(0 <= i < len(self) for i in ids):
+            raise ValueError(f'Invalid ids: must be in range [0, {len(self)})')
         return [d.cached(ids) for d in self.data]
 
     @property
