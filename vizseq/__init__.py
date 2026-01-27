@@ -12,5 +12,5 @@ FILE_ROOT = Path(__file__).parent
 with open(op.join(FILE_ROOT, 'VERSION')) as f:
     __version__ = f.read()
 
-from vizseq.ipynb import *
-from vizseq.ipynb import fairseq_viz as fairseq
+from vizseq.ipynb import *  # noqa: F401, F403, E402
+from vizseq.ipynb import fairseq_viz as fairseq  # noqa: E402

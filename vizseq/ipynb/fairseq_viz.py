@@ -25,8 +25,8 @@ def _get_data(log_path_or_paths: Union[str, List[str]]):
         assert op.isfile(log_path)
         cur_src, cur_ref, cur_hypo = {}, {}, {}
         with open(log_path) as f:
-            for l in f:
-                line = l.strip()
+            for raw_line in f:
+                line = raw_line.strip()
                 if line.startswith('H-'):
                     _id, _, sent = line.split('\t', 2)
                     cur_hypo[_id[2:]] = sent

@@ -15,11 +15,11 @@ class VizSeqIpynbTestCase(unittest.TestCase):
         if not os.path.isdir(dataset_root):
             raise NotADirectoryError(f'{dataset_root} does not exist.')
         with open(f'{dataset_root}/src_0.txt') as f:
-            self.source = {'src': [l.strip() for l in f]}
+            self.source = {'src': [line.strip() for line in f]}
         with open(f'{dataset_root}/ref_0.txt') as f:
-            self.references = {'ref': [l.strip() for l in f]}
+            self.references = {'ref': [line.strip() for line in f]}
         with open(f'{dataset_root}/pred_onlineA.0.txt') as f:
-            self.hypothesis = {'hypo': [l.strip() for l in f]}
+            self.hypothesis = {'hypo': [line.strip() for line in f]}
         self.tags = {'tag': ['default' for _ in self.source]}
 
     def test_view_stats(self):

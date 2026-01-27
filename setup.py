@@ -9,8 +9,8 @@ from setuptools import setup, find_packages
 import sys
 
 
-if sys.version_info < (3,):
-    sys.exit('Sorry, Python 3 is required for vizseq.')
+if sys.version_info < (3, 8):
+    sys.exit('Sorry, Python 3.8+ is required for vizseq.')
 
 with open('README.md') as f:
     readme = f.read()
@@ -28,12 +28,13 @@ setup(
     url='https://github.com/facebookresearch/vizseq',
     classifiers=[
         'Intended Audience :: Science/Research',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
+    python_requires='>=3.8',
     long_description=readme,
     long_description_content_type='text/markdown',
     license='MIT',

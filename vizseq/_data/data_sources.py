@@ -200,7 +200,7 @@ class VizSeqTextFileSource(VizSeqDataSourceBase):
     def __init__(self, path: str):
         assert os.path.exists(path)
         with open(path) as f:
-            self.data = [l.strip() for l in f]
+            self.data = [line.strip() for line in f]
 
 
 class VizSeqZipFileSource(VizSeqDataSourceBase):
@@ -216,7 +216,7 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
                 self._data_type = VizSeqDataType.text
                 assert name_list[0].endswith(TXT_EXT)
                 with zip_f.open(name_list[0]) as f:
-                    self.data = [l.decode('utf-8').strip() for l in f]
+                    self.data = [line.decode('utf-8').strip() for line in f]
             else:
                 metadata_txt_name = None
                 for name in name_list:
@@ -225,7 +225,7 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
                         assert metadata_txt_name is None
                         metadata_txt_name = name
                 with zip_f.open(metadata_txt_name) as f:
-                    self.data = [l.decode('utf-8').strip() for l in f]
+                    self.data = [line.decode('utf-8').strip() for line in f]
                 self._data_type = get_file_type_from_list(self.data)
                 assert all(fn in name_list for fn in self.data)
 

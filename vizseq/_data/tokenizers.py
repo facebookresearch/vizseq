@@ -7,8 +7,9 @@
 
 from enum import Enum
 
-from sacrebleu.tokenizers import (Tokenizer13a, TokenizerV14International,
-                                 TokenizerZh)
+from sacrebleu.tokenizers import (
+    Tokenizer13a, TokenizerV14International, TokenizerZh
+)
 
 
 class VizSeqTokenization(Enum):
