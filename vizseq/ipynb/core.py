@@ -165,7 +165,7 @@ def view_scores(
         if s in all_metrics:
             _metrics.append(s)
         else:
-            logger.warn(f'"{s}" is not a valid metric.')
+            logger.warning(f'"{s}" is not a valid metric.')
 
     scores = {
         s: {

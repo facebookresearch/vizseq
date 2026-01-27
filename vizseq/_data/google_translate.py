@@ -34,5 +34,5 @@ def get_g_translate(sent: str, lang: str) -> Optional[str]:
         t = client.translate(sent, target_language=lang)['translatedText']
         return t
     except Exception as e:
-        logger.warn(f'Google Translate error: {e}')
+        logger.warning(f'Google Translate error: {e}')
         return None
