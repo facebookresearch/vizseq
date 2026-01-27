@@ -8,6 +8,7 @@
 import os
 import os.path as op
 import argparse
+import re
 from typing import List
 
 from vizseq._utils.logger import logger
@@ -40,6 +41,34 @@ env = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
+# Pattern for safe path components: alphanumeric, underscore, hyphen, dot (but not ..)
+SAFE_PATH_COMPONENT = re.compile(r'^[a-zA-Z0-9_\-\.]+$')
+
+
+def validate_path_component(value: str, name: str = 'parameter') -> str:
+    """Validate a path component to prevent directory traversal attacks."""
+    if not value:
+        raise web.HTTPError(400, f'Empty {name}')
+    if '..' in value or '/' in value or '\\' in value:
+        raise web.HTTPError(400, f'Invalid {name}: path traversal not allowed')
+    if not SAFE_PATH_COMPONENT.match(value):
+        raise web.HTTPError(400, f'Invalid {name}: contains disallowed characters')
+    return value
+
+
+def sanitize_filename(filename: str) -> str:
+    """Sanitize a filename to prevent directory traversal."""
+    # Extract just the filename, removing any path components
+    filename = op.basename(filename)
+    if not filename:
+        raise web.HTTPError(400, 'Invalid filename')
+    if '..' in filename:
+        raise web.HTTPError(400, 'Invalid filename: path traversal not allowed')
+    # Only allow safe characters in filenames
+    if not SAFE_PATH_COMPONENT.match(filename):
+        raise web.HTTPError(400, 'Invalid filename: contains disallowed characters')
+    return filename
+
 
 class VizSeqBaseRequestHandler(web.RequestHandler):
     def get_url_args(self):
@@ -53,12 +82,16 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
 
     def get_task_arg(self) -> str:
         task = self.get_query_argument('t', '')
-        assert len(task) > 0
-        return task
+        if not task:
+            raise web.HTTPError(400, 'Task parameter is required')
+        return validate_path_component(task, 'task')
 
     def get_models_arg(self) -> List[str]:
         models = self.get_query_argument('m', '')
-        return models.split(',') if len(models) > 0 else []
+        if not models:
+            return []
+        model_list = models.split(',')
+        return [validate_path_component(m, 'model') for m in model_list]
 
     def get_page_sz_arg(self) -> int:
         p_sz = self.get_query_argument('p_sz', '')
@@ -165,11 +198,12 @@ class UploadHandler(VizSeqBaseRequestHandler):
 
     def post(self):
         file1 = self.request.files['file1'][0]
-        zip_file_path = os.path.join(args.data_root, file1['filename'])
+        filename = sanitize_filename(file1['filename'])
+        zip_file_path = os.path.join(args.data_root, filename)
         with open(zip_file_path, 'wb') as f:
             f.write(file1['body'])
         VizSeqZipFile.unzip(
-            args.data_root, file1['filename'], remove_after_unpacking=True
+            args.data_root, filename, remove_after_unpacking=True
         )
         self.redirect('/', status=303)
 
