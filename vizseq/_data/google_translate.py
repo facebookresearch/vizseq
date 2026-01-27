@@ -11,6 +11,8 @@ from typing import Optional
 
 from google.cloud import translate
 
+from vizseq._utils.logger import logger
+
 
 def set_g_cred_path(path: str):
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = path
@@ -23,5 +25,5 @@ def get_g_translate(sent: str, lang: str) -> Optional[str]:
         t = client.translate(sent, target_language=lang)['translatedText']
         return t
     except Exception as e:
-        print(e)
+        logger.warn(f'Google Translate error: {e}')
         return ''

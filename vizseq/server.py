@@ -247,7 +247,7 @@ def start_server(hostname=DEFAULT_HOSTNAME, port=DEFAULT_PORT, debug=False):
     ], debug=debug)
     app.listen(port, max_buffer_size=1024 ** 3)
     logger.info("Application Started")
-    print(f'You can navigate to http://{hostname}:{port}')
+    logger.info(f'You can navigate to http://{hostname}:{port}')
     ioloop.IOLoop.current().start()
 
 

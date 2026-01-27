@@ -22,7 +22,7 @@ class BERTScoreScorer(VizSeqScorer):
         import bert_score as bs
         import langid
         import logging
-        logging.getLogger('pytorch_pretrained_bert').setLevel(logging.WARNING)
+        logging.getLogger('transformers').setLevel(logging.WARNING)
         logging.getLogger('langid').setLevel(logging.WARNING)
 
         lang = langid.classify(references[0][0])[0]

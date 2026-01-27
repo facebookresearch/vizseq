@@ -30,7 +30,7 @@ env = Environment(
 
 # TODO: show id with name
 def available_scorers():
-    print('Available scorers: {}'.format(', '.join(sorted(get_scorer_ids()))))
+    logger.info('Available scorers: {}'.format(', '.join(sorted(get_scorer_ids()))))
 
 
 def view_examples(
