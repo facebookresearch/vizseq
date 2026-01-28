@@ -6,7 +6,7 @@
 #
 
 from collections import Counter, defaultdict
-from typing import List, NamedTuple, Optional, Tuple, Union, Dict
+from typing import List, NamedTuple, Optional, Tuple, Union, Dict, Any
 
 import numpy as np
 
@@ -29,7 +29,7 @@ class VizSeqStatsResult(NamedTuple):
     src_lens: Dict[str, List[int]]
     ref_lens: Dict[str, List[int]]
 
-    def to_dict(self, formatting: bool = True) -> Dict:
+    def to_dict(self, formatting: bool = True) -> Dict[str, Any]:
         r = self._asdict()
 
         if formatting:
@@ -89,7 +89,8 @@ class VizSeqStats(object):
                 ref_lens[name] = []
 
         if tags is not None:
-            assert tags.text_merged
+            if not tags.text_merged:
+                raise ValueError('Tags must have text_merged=True')
             for cur_tags in tags.text:
                 tag_freq.update(cur_tags)
         tag_freq = tag_freq.most_common()

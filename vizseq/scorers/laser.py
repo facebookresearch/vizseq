@@ -5,30 +5,34 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+import subprocess
+import sys
 from typing import List, Optional, Dict
 
 import numpy as np
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
 
-setup_flag = False
+_setup_complete = False
 
 
 def set_up():
-    global setup_flag
-    if setup_flag:
+    """Initialize LASER embeddings, downloading models if needed."""
+    global _setup_complete
+    if _setup_complete:
         return
+
+    import laserembeddings
     try:
-        import laserembeddings
         laserembeddings.Laser().embed_sentences(['This is a test.'], lang='en')
     except FileNotFoundError:
-        import runpy
-        import sys
-        argv = [v for v in sys.argv]
-        sys.argv = [sys.argv[0], 'download-models']
-        runpy.run_module('laserembeddings', run_name='__main__')
-        sys.argv = argv
-        setup_flag = True
+        # Download models using subprocess to avoid mutating global sys.argv
+        subprocess.run(
+            [sys.executable, '-m', 'laserembeddings', 'download-models'],
+            check=True
+        )
+
+    _setup_complete = True
 
 
 def _get_sent_laser(

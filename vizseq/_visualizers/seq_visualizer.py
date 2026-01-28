@@ -5,6 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+from html import escape
 from typing import Dict, List
 
 from jinja2 import Markup
@@ -31,7 +32,7 @@ class VizSeqSrcVisualizer(object):
     @classmethod
     def _visualize_sent(cls, sent: str, data_id: int, example_id: int):
         spans = [
-            f'<span id="src_{data_id}_{example_id}_{k}">{t}</span>'
+            f'<span id="src_{data_id}_{example_id}_{k}">{escape(t)}</span>'
             for k, t in enumerate(sent.split())
         ]
         return Markup(' '.join(spans))

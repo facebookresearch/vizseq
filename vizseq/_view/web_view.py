@@ -5,7 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-from typing import List, Tuple, Iterable
+from typing import List, Tuple, Iterable, Callable, Dict
 import math
 import os
 import os.path as op
@@ -169,7 +169,10 @@ class VizSeqWebView(object):
             self, total_examples: int, page_sz: int, page_no: int,
             nav_group_sz: int = 3
     ) -> Tuple[List[int], List[int], List[int], List[int]]:
-        assert page_sz > 0 and page_no > 0
+        if page_sz <= 0:
+            raise ValueError(f'page_sz must be positive, got {page_sz}')
+        if page_no <= 0:
+            raise ValueError(f'page_no must be positive, got {page_no}')
         n_pages = math.ceil(total_examples / page_sz)
         _page_no = min(max(1, page_no), n_pages)
 
@@ -193,9 +196,13 @@ class VizSeqWebView(object):
 
     @classmethod
     def _export_corpus_group_scores(
-            cls, corpus_scores, group_scores, export_func: callable
+            cls, corpus_scores: Dict, group_scores: Dict,
+            export_func: Callable[[Dict], str]
     ):
-        assert set(corpus_scores.keys()) == set(group_scores.keys())
+        if set(corpus_scores.keys()) != set(group_scores.keys()):
+            raise ValueError(
+                'corpus_scores and group_scores must have the same keys'
+            )
         metrics = corpus_scores.keys()
         exported = {}
         for s in metrics:
