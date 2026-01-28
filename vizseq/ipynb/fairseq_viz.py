@@ -22,7 +22,8 @@ def _get_data(log_path_or_paths: Union[str, List[str]]):
     ids, src, ref, hypo = None, None, None, {}
     names = Counter()
     for k, log_path in enumerate(log_path_or_paths):
-        assert op.isfile(log_path)
+        if not op.isfile(log_path):
+            raise FileNotFoundError(f"Log file not found: {log_path}")
         cur_src, cur_ref, cur_hypo = {}, {}, {}
         with open(log_path) as f:
             for raw_line in f:
@@ -37,14 +38,30 @@ def _get_data(log_path_or_paths: Union[str, List[str]]):
                     _id, sent = line.split('\t', 1)
                     cur_src[_id[2:]] = sent
         cur_ids = sorted(cur_src.keys())
-        assert set(cur_ids) == set(cur_ref.keys()) == set(cur_hypo.keys())
+        if not (set(cur_ids) == set(cur_ref.keys()) == set(cur_hypo.keys())):
+            raise ValueError(
+                f"Mismatched IDs in log file {log_path}: "
+                f"source has {len(cur_src)} entries, "
+                f"reference has {len(cur_ref)} entries, "
+                f"hypothesis has {len(cur_hypo)} entries"
+            )
         cur_src = [cur_src[i] for i in cur_ids]
         cur_ref = [cur_ref[i] for i in cur_ids]
         if k == 0:
             ids, src, ref = cur_ids, cur_src, cur_ref
         else:
-            assert set(ids) == set(cur_ids) and set(src) == set(cur_src)
-            assert set(ref) == set(cur_ref)
+            if set(ids) != set(cur_ids):
+                raise ValueError(
+                    f"Log file {log_path} has different IDs than previous files"
+                )
+            if set(src) != set(cur_src):
+                raise ValueError(
+                    f"Log file {log_path} has different source sentences than previous files"
+                )
+            if set(ref) != set(cur_ref):
+                raise ValueError(
+                    f"Log file {log_path} has different reference sentences than previous files"
+                )
         name = op.splitext(op.basename(log_path))[0]
         names.update([name])
         if names[name] > 1:

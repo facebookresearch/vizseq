@@ -96,14 +96,26 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
     def get_page_sz_arg(self) -> int:
         p_sz = self.get_query_argument('p_sz', '')
         if len(p_sz) == 0:
-            p_sz = str(DEFAULT_PAGE_SIZE)
-        return int(p_sz)
+            return DEFAULT_PAGE_SIZE
+        try:
+            value = int(p_sz)
+            if value <= 0:
+                raise web.HTTPError(400, 'Page size must be a positive integer')
+            return value
+        except ValueError:
+            raise web.HTTPError(400, f'Invalid page size: {p_sz!r} is not a valid integer')
 
     def get_page_no_arg(self) -> int:
         p_no = self.get_query_argument('p_no', '')
         if len(p_no) == 0:
-            p_no = str(DEFAULT_PAGE_NO)
-        return int(p_no)
+            return DEFAULT_PAGE_NO
+        try:
+            value = int(p_no)
+            if value < 0:
+                raise web.HTTPError(400, 'Page number must be a non-negative integer')
+            return value
+        except ValueError:
+            raise web.HTTPError(400, f'Invalid page number: {p_no!r} is not a valid integer')
 
     def get_query_arg(self) -> str:
         return self.get_query_argument('q', '')
@@ -111,8 +123,11 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
     def get_sorting_arg(self) -> int:
         sorting = self.get_query_argument('s', '')
         if len(sorting) == 0:
-            sorting = '0'
-        return int(sorting)
+            return 0
+        try:
+            return int(sorting)
+        except ValueError:
+            raise web.HTTPError(400, f'Invalid sorting value: {sorting!r} is not a valid integer')
 
     def get_sorting_metric_arg(self) -> str:
         return self.get_query_argument('s_metric', '')
