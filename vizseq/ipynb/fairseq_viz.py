@@ -25,18 +25,23 @@ def _get_data(log_path_or_paths: Union[str, List[str]]):
         if not op.isfile(log_path):
             raise FileNotFoundError(f"Log file not found: {log_path}")
         cur_src, cur_ref, cur_hypo = {}, {}, {}
-        with open(log_path) as f:
-            for raw_line in f:
+        with open(log_path, encoding='utf-8') as f:
+            for line_num, raw_line in enumerate(f, 1):
                 line = raw_line.strip()
-                if line.startswith('H-'):
-                    _id, _, sent = line.split('\t', 2)
-                    cur_hypo[_id[2:]] = sent
-                elif line.startswith('T-'):
-                    _id, sent = line.split('\t', 1)
-                    cur_ref[_id[2:]] = sent
-                elif line.startswith('S-'):
-                    _id, sent = line.split('\t', 1)
-                    cur_src[_id[2:]] = sent
+                try:
+                    if line.startswith('H-'):
+                        _id, _, sent = line.split('\t', 2)
+                        cur_hypo[_id[2:]] = sent
+                    elif line.startswith('T-'):
+                        _id, sent = line.split('\t', 1)
+                        cur_ref[_id[2:]] = sent
+                    elif line.startswith('S-'):
+                        _id, sent = line.split('\t', 1)
+                        cur_src[_id[2:]] = sent
+                except ValueError as e:
+                    raise ValueError(
+                        f"Failed to parse line {line_num} in {log_path}: {e}"
+                    ) from e
         cur_ids = sorted(cur_src.keys())
         if not (set(cur_ids) == set(cur_ref.keys()) == set(cur_hypo.keys())):
             raise ValueError(

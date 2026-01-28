@@ -5,6 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+import json
 import os
 import os.path as op
 import argparse
@@ -241,7 +242,6 @@ class ConfigHandler(VizSeqBaseRequestHandler):
         valid = op.exists(g_cred_path)
         if valid:
             VizSeqGlobalConfigManager().set_g_cred_path(g_cred_path)
-        import json
         self.write(json.dumps({'valid': valid}))
 
 
