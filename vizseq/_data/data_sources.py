@@ -165,7 +165,7 @@ class VizSeqDataSourceBase(object):
         return result
 
     def get_len(self, idx: int, finer=False) -> int:
-        if not 0 <= idx <= len(self):
+        if not 0 <= idx < len(self):
             raise ValueError(f'Invalid index {idx}')
         if self.is_text:
             return len(self.data[idx]) if finer else len(self.data[idx].split())
@@ -275,7 +275,7 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
             return result
 
     def get_len(self, idx: int, finer=False) -> int:
-        if not 0 <= idx <= len(self):
+        if not 0 <= idx < len(self):
             raise ValueError(f'Invalid index {idx}')
         if self.is_text:
             return len(self.data[idx]) if finer else len(self.data[idx].split())

@@ -7,6 +7,7 @@
 
 import logging
 import time
+import warnings
 from datetime import timedelta
 
 
@@ -42,8 +43,17 @@ class VizSeqLogger(object):
     def info(self, msg, *args, **kwargs):
         self._logger.info(msg, *args, **kwargs)
 
-    def warn(self, msg, *args, **kwargs):
+    def warning(self, msg, *args, **kwargs):
         self._logger.warning(msg, *args, **kwargs)
+
+    def warn(self, msg, *args, **kwargs):
+        """Deprecated: Use warning() instead."""
+        warnings.warn(
+            "logger.warn() is deprecated, use logger.warning() instead",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        self.warning(msg, *args, **kwargs)
 
 
 logger = VizSeqLogger()
