@@ -10,6 +10,7 @@ from functools import lru_cache
 from typing import Optional
 
 from google.cloud import translate
+from google.api_core import exceptions as google_exceptions
 
 from vizseq._utils.logger import logger
 
@@ -33,6 +34,9 @@ def get_g_translate(sent: str, lang: str) -> Optional[str]:
         client = translate.Client()
         t = client.translate(sent, target_language=lang)['translatedText']
         return t
-    except Exception as e:
-        logger.warning(f'Google Translate error: {e}')
+    except google_exceptions.GoogleAPIError as e:
+        logger.warning(f'Google Translate API error: {e}')
+        return None
+    except KeyError as e:
+        logger.warning(f'Unexpected Google Translate response format: {e}')
         return None

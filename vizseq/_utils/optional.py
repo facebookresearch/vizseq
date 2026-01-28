@@ -6,7 +6,7 @@
 #
 
 
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Callable
 
 
 def get_optional_dict(
@@ -17,5 +17,5 @@ def get_optional_dict(
     return maybe_dict.get(key, default)
 
 
-def map_optional(obj: Optional[Any], map_fn: callable):
+def map_optional(obj: Optional[Any], map_fn: Callable[[Any], Any]) -> Optional[Any]:
     return None if obj is None else map_fn(obj)

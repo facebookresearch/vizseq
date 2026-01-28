@@ -26,7 +26,8 @@ MAX_PAGE_SZ = 100
 def _get_start_end_idx(
         n_items: int, page_sz: int, page_no: int
 ) -> Tuple[int, int]:
-    assert page_sz > 0 and page_no > 0
+    if page_sz <= 0 or page_no <= 0:
+        raise ValueError("page_sz and page_no must be positive integers")
     start_idx = min(page_sz * (page_no - 1), n_items - 1)
     end_idx = max(page_sz * page_no - 1, start_idx)
     # inclusive on both sides
@@ -70,7 +71,8 @@ class VizSeqDataPageView(object):
             sorting: int = 0, sorting_metric: str = '',
             need_lang_tags: bool = False, disable_alignment: bool = False,
     ) -> VizSeqPageData:
-        assert page_no > 0 and page_sz > 0
+        if page_no <= 0 or page_sz <= 0:
+            raise ValueError("page_no and page_sz must be positive integers")
         page_sz = min(page_sz, MAX_PAGE_SZ)
         metrics = [] if metrics is None else metrics
         models = hypo.text_names
@@ -84,7 +86,8 @@ class VizSeqDataPageView(object):
 
         # sorting
         sorting = {e.value: e for e in VizSeqSortingType}.get(sorting, None)
-        assert sorting is not None
+        if sorting is None:
+            raise ValueError(f"Invalid sorting value: must be one of {[e.value for e in VizSeqSortingType]}")
         if sorting == VizSeqSortingType.random:
             cur_idx = VizSeqRandomSorter.sort(cur_idx)
         elif sorting == VizSeqSortingType.ref_len:
