@@ -22,7 +22,13 @@ def set_up():
     if _setup_complete:
         return
 
-    import laserembeddings
+    try:
+        import laserembeddings
+    except ImportError as e:
+        raise ImportError(
+            'The LASER scorer requires the optional "laserembeddings" '
+            'dependency. Install it with: pip install vizseq[embeddings]'
+        ) from e
     try:
         laserembeddings.Laser().embed_sentences(['This is a test.'], lang='en')
     except FileNotFoundError:

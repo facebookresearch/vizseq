@@ -19,7 +19,13 @@ class BERTScoreScorer(VizSeqScorer):
     ) -> VizSeqScore:
         corpus_score, sent_scores, group_scores = None, None, None
 
-        import bert_score as bs
+        try:
+            import bert_score as bs
+        except ImportError as e:
+            raise ImportError(
+                'The BERTScore scorer requires the optional "bert-score" '
+                'dependency. Install it with: pip install vizseq[embeddings]'
+            ) from e
         import langid
         import logging
         logging.getLogger('transformers').setLevel(logging.WARNING)
