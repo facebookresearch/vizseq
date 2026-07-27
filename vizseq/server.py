@@ -27,15 +27,20 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 DEFAULT_HOSTNAME = 'localhost'
 DEFAULT_PORT = 9001
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--hostname', type=str, default=DEFAULT_HOSTNAME,
-                    help='server hostname')
-parser.add_argument('--port', type=int, default=DEFAULT_PORT,
-                    help='server port number')
-parser.add_argument('--data-root', type=str, default='./examples/data',
-                    help='root path to data')
-parser.add_argument('--debug', action='store_true', help='debug mode')
-args, _ = parser.parse_known_args()
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hostname', type=str, default=DEFAULT_HOSTNAME,
+                        help='server hostname')
+    parser.add_argument('--port', type=int, default=DEFAULT_PORT,
+                        help='server port number')
+    parser.add_argument('--data-root', type=str, default='./examples/data',
+                        help='root path to data')
+    parser.add_argument('--debug', action='store_true', help='debug mode')
+    return parser.parse_args()
+
+
+args = argparse.Namespace(data_root='./examples/data')
 
 env = Environment(
     loader=PackageLoader('vizseq', '_templates'),
@@ -307,5 +312,11 @@ def start_server(hostname=DEFAULT_HOSTNAME, port=DEFAULT_PORT, debug=False):
     ioloop.IOLoop.current().start()
 
 
-if __name__ == '__main__':
+def main():
+    global args
+    args = parse_args()
     start_server(args.hostname, args.port, args.debug)
+
+
+if __name__ == '__main__':
+    main()

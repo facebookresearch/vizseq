@@ -5,12 +5,12 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-import os.path as op
-from pathlib import Path
+from importlib.metadata import PackageNotFoundError, version
 
-FILE_ROOT = Path(__file__).parent
-with open(op.join(FILE_ROOT, 'VERSION')) as f:
-    __version__ = f.read()
+try:
+    __version__ = version('vizseq')
+except PackageNotFoundError:
+    __version__ = '0+unknown'
 
 from vizseq.ipynb import *  # noqa: F401, F403, E402
 from vizseq.ipynb import fairseq_viz as fairseq  # noqa: E402

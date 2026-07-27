@@ -145,7 +145,7 @@ function Home() {
                 <CodeBlock className="python">{fairseqCode}</CodeBlock>
                 <br/>
                 <h4>Use VizSeq Web App:</h4>
-                <CodeBlock className="bash">$ python -m vizseq.server --port 9001 --data-root examples/data</CodeBlock>
+                <CodeBlock className="bash">$ vizseq-server --port 9001 --data-root examples/data</CodeBlock>
                 <br/>
                 <h9>In your web browser, navigate to:</h9>
                 <CodeBlock className="bash">http://localhost:9001</CodeBlock>

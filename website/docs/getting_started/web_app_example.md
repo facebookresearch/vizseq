@@ -17,7 +17,7 @@ text summarization and speech translation.
 
 To view these examples in the web App, first launch the backend server:
 ```bash
-$ python -m vizseq.server --port 9001 --data-root examples/data
+$ vizseq-server --port 9001 --data-root examples/data
 ```
 And then, navigate to the following URL in your web browser:
 ```
