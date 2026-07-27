@@ -9,9 +9,6 @@ import os
 from functools import lru_cache
 from typing import Optional
 
-from google.cloud import translate
-from google.api_core import exceptions as google_exceptions
-
 from vizseq._utils.logger import logger
 
 
@@ -45,6 +42,15 @@ def get_g_translate(sent: str, lang: str) -> Optional[str]:
     Returns:
         Translated text, or None if translation fails.
     """
+    try:
+        from google.cloud import translate
+        from google.api_core import exceptions as google_exceptions
+    except ImportError as e:
+        raise ImportError(
+            'Google Translate integration requires the optional '
+            '"google-cloud-translate" dependency. Install it with: '
+            'pip install vizseq[translate]'
+        ) from e
     try:
         client = translate.Client()
         t = client.translate(sent, target_language=lang)['translatedText']

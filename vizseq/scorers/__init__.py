@@ -229,4 +229,9 @@ scorer_filenames = sorted(
 for m in scorer_filenames:
     module_name = f'vizseq.scorers.{os.path.splitext(os.path.basename(m))[0]}'
     if module_name not in sys.modules:
-        importlib.import_module(module_name)
+        try:
+            importlib.import_module(module_name)
+        except ImportError:
+            # A scorer may depend on an optional extra (e.g. embeddings).
+            # Skip registering it rather than breaking the whole registry.
+            pass

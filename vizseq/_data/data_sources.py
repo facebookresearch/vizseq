@@ -15,10 +15,25 @@ from enum import Enum
 import base64
 
 import numpy as np
-import soundfile as sf
 
 TXT_EXT = '.txt'
 ZIP_EXT = '.zip'
+
+
+def _import_soundfile():
+    """Lazily import the optional ``soundfile`` dependency.
+
+    Raises a helpful error if the ``audio`` extra is not installed.
+    """
+    try:
+        import soundfile as sf
+    except ImportError as e:
+        raise ImportError(
+            'Reading audio data requires the optional "soundfile" '
+            'dependency. Install it with: pip install vizseq[audio]'
+        ) from e
+    return sf
+
 
 PathOrPathsOrDictOfStrList = Union[str, List[str], Dict[str, List[str]]]
 
@@ -171,7 +186,7 @@ class VizSeqDataSourceBase(object):
             return len(self.data[idx]) if finer else len(self.data[idx].split())
         elif self.is_audio:
             if any(self.data[idx].endswith(e) for e in SOUNDFILE_FILE_EXTS):
-                sound, sr = sf.read(self.data[idx])
+                sound, sr = _import_soundfile().read(self.data[idx])
                 duration_ms = int(len(sound) / sr * 1000)
                 n_frames = int(1 + (duration_ms - 25) / 10)
                 return duration_ms if finer else n_frames
@@ -189,7 +204,7 @@ class VizSeqDataSourceBase(object):
     def get_audio(self, idx) -> Optional[Tuple[np.ndarray, int]]:
         if not self.is_audio:
             return None
-        sound, sample_rate = sf.read(self.data[idx])
+        sound, sample_rate = _import_soundfile().read(self.data[idx])
         return sound, sample_rate
 
     @property
@@ -283,7 +298,7 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
             if any(self.data[idx].endswith(e) for e in SOUNDFILE_FILE_EXTS):
                 with zipfile.ZipFile(self.path) as zip_f:
                     with zip_f.open(self.data[idx], 'r') as f:
-                        sound, sr = sf.read(f)
+                        sound, sr = _import_soundfile().read(f)
                         duration_ms = int(len(sound) / sr * 1000)
                         n_frames = int(1 + (duration_ms - 25) / 10)
                         return duration_ms if finer else n_frames
@@ -294,7 +309,7 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
             return None
         with zipfile.ZipFile(self.path) as zip_f:
             with zip_f.open(self.data[idx], 'r') as f:
-                sound, sample_rate = sf.read(f)
+                sound, sample_rate = _import_soundfile().read(f)
         return sound, sample_rate
 
 

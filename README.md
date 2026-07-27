@@ -58,6 +58,15 @@ $ cd vizseq
 $ pip install -e .
 ```
 
+The base install keeps dependencies lightweight. Install optional extras only if
+you need them:
+```bash
+$ pip install vizseq[embeddings]  # LASER and BERTScore scorers (pulls in torch)
+$ pip install vizseq[audio]       # reading .wav/.flac/.sph audio sources
+$ pip install vizseq[translate]   # Google Translate integration
+$ pip install vizseq[all]         # everything above
+```
+
 ### [Documentation](https://facebookresearch.github.io/vizseq)
 
 ### Jupyter Notebook Examples
