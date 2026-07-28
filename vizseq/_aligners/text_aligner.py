@@ -6,9 +6,10 @@
 #
 
 
-from typing import List, Tuple, Dict
 from collections import Counter
 from enum import Enum
+from html import escape
+from typing import Dict, List, Tuple
 
 from nltk.translate.ribes_score import word_rank_alignment
 
@@ -46,7 +47,8 @@ class VizSeqBaseTextAligner(object):
             trg_token_id: int
     ):
         attributes = [
-            f'id="{span_id_prefix}_{data_id}_{example_id}_{token_id}"',
+            f'id="{span_id_prefix}_{escape(str(data_id), quote=True)}_'
+            f'{example_id}_{token_id}"',
         ]
         if trg_token_id != cls.NEG_IDX:
             trg_span_id = f'{trg_span_id_prefix}_{example_id}_{trg_token_id}'
@@ -57,7 +59,7 @@ class VizSeqBaseTextAligner(object):
         span_style = cls.ALIGNMENT_TYPE_TO_STYLE[span_type]
         if len(span_style) > 0:
             attributes.append(f'style="{span_style}"')
-        return '<span ' + ' '.join(attributes) + ' >' + token + '</span>'
+        return '<span ' + ' '.join(attributes) + ' >' + escape(token) + '</span>'
 
     @classmethod
     def to_span_html(
