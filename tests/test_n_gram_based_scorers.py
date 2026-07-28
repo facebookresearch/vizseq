@@ -7,6 +7,7 @@
 
 
 if __name__ == '__main__':
+    import sys
     import unittest
     from tests.scorers import (test_bleu, test_chrf, test_bp, test_cider,
                                test_gleu, test_meteor, test_nist, test_ribes,
@@ -29,3 +30,4 @@ if __name__ == '__main__':
     # initialize a runner, pass it your suite and run it
     runner = unittest.TextTestRunner(verbosity=3)
     result = runner.run(suite)
+    sys.exit(0 if result.wasSuccessful() else 1)

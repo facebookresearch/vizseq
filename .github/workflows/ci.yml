@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install flake8
+      - name: Run flake8
+        run: flake8 vizseq tests
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Upgrade build tooling
+        run: pip install --upgrade "setuptools>=83"
+      - run: pip install -e . bandit pip-audit
+      - name: Run bandit security scan
+        run: bandit -r vizseq -ll -ii
+      - name: Audit dependencies for known vulnerabilities
+        run: pip-audit
+
+  test:
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install libsndfile (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libsndfile1
+      - name: Install libsndfile (macOS)
+        if: runner.os == 'macOS'
+        run: brew install libsndfile
+      - name: Install VizSeq
+        run: pip install -e .
+      - name: Download example data
+        run: bash get_example_data.sh
+      - run: python -m tests.test_n_gram_based_scorers
+      - run: python -m tests.test_ipynb
+
+  embeddings:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install VizSeq with embedding dependencies
+        run: pip install -e .[embeddings]
+      - name: Download example data
+        run: bash get_example_data.sh
+      - run: python -m tests.test_embedding_based_scorers
+
+  coverage:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          # torch<2.0 (via [all] -> embeddings) ships no cp311 wheel
+          python-version: "3.10"
+      - run: sudo apt-get update && sudo apt-get install -y libsndfile1
+      - name: Install VizSeq
+        run: pip install -e .[all] pytest pytest-cov
+      - name: Download example data
+        run: bash get_example_data.sh
+      - name: Run tests with coverage
+        run: pytest tests/ --cov=vizseq --cov-report=xml --cov-report=term-missing
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml

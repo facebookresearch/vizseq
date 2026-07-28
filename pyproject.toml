@@ -7,24 +7,24 @@ name = "vizseq"
 version = "0.1.15"
 description = "Visual Analysis Toolkit for Text Generation Tasks"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = { file = "LICENSE" }
 classifiers = [
     "Intended Audience :: Science/Research",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
     "numpy>=1.20.0,<3.0.0",
-    "sacrebleu>=1.4.13,<3.0.0",
+    "sacrebleu>=2.0.0,<3.0.0",
     "tqdm>=4.0.0,<5.0.0",
     "nltk>=3.5,<4.0.0",
-    "py-rouge>=1.1,<2.0.0",
+    "rouge-score>=0.1.2,<0.2.0",
     "langid>=1.1.6,<2.0.0",
     "jinja2>=2.11.0,<4.0.0",
     "IPython>=7.0.0,<10.0.0",
@@ -35,7 +35,11 @@ dependencies = [
 
 [project.optional-dependencies]
 embeddings = [
-    "torch>=1.9.0,<3.0.0",
+    # laserembeddings caps torch<2.0, so bert-score's transformers must stay
+    # on a release that still supports torch 1.x (transformers>=4.46 requires
+    # torch>=2.0 and reports it as missing otherwise).
+    "torch>=1.9.0,<2.0.0",
+    "transformers>=3.0.0,<4.46.0",
     "laserembeddings>=1.0.0,<2.0.0",
     "bert-score>=0.3.0,<1.0.0",
 ]

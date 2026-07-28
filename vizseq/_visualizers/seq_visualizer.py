@@ -8,7 +8,7 @@
 from html import escape
 from typing import Dict, List
 
-from jinja2 import Markup
+from markupsafe import Markup
 
 from vizseq._aligners import VizseqSrcRefTextAligner, VizseqRefHypoTextAligner
 
@@ -35,7 +35,7 @@ class VizSeqSrcVisualizer(object):
             f'<span id="src_{data_id}_{example_id}_{k}">{escape(t)}</span>'
             for k, t in enumerate(sent.split())
         ]
-        return Markup(' '.join(spans))
+        return Markup(' '.join(spans))  # nosec B704: tokens escaped above
 
     @classmethod
     def visualize(
@@ -69,7 +69,10 @@ class VizSeqRefVisualizer(object):
                 ref_tokens, alignments, 'ref', i, f'src_{src_idx}'
             )
             for ii in range(len(r_list)):
-                sent_markup = Markup(' '.join(visualized[str(ii)]))
+                # The aligner escapes tokens and dynamic attribute values.
+                sent_markup = Markup(  # nosec B704
+                    ' '.join(visualized[str(ii)])
+                )
                 rendered[ii].append(sent_markup)
         return rendered
 
@@ -89,6 +92,9 @@ class VizSeqHypoVisualizer(object):
                 hypo_tokens, alignments, 'hypo', i, f'ref_{ref_idx}'
             )
             for h_id in hypo_ids:
-                sent_markup = Markup(' '.join(visualized[h_id]))
+                # The aligner escapes tokens and dynamic attribute values.
+                sent_markup = Markup(  # nosec B704
+                    ' '.join(visualized[h_id])
+                )
                 rendered[h_id].append(sent_markup)
         return rendered

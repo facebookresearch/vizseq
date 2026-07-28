@@ -7,7 +7,6 @@
 
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from typing import List, Optional, Dict
-import argparse
 
 from sacrebleu.metrics import BLEU
 from tqdm import tqdm
@@ -16,16 +15,8 @@ from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
 from vizseq._utils.optional import get_optional_dict
 
 
-def get_default_args(force=True, lc=False, smooth_value=None,
-                     smooth_method='exp', tokenize='13a', num_refs=1):
-    args = argparse.Namespace()
-    args.force = force
-    args.lc = lc
-    args.smooth_value = smooth_value
-    args.smooth_method = smooth_method
-    args.tokenize = tokenize
-    args.num_refs = num_refs
-    return args
+def _project(score, kind: str = 'score') -> float:
+    return {'score': lambda s: s.score, 'bp': lambda s: s.bp}[kind](score)
 
 
 def _get_sent_bleu(
@@ -33,16 +24,13 @@ def _get_sent_bleu(
         extra_args: Optional[Dict[str, str]] = None, score='score'
 ) -> List[float]:
     tokenizer = get_optional_dict(extra_args, 'tokenizer', 'none')
+    scorer = BLEU(
+        tokenize=tokenizer, smooth_method='floor', effective_order=True,
+        force=True,
+    )
     data = [hypothesis] + references
-    args = get_default_args(smooth_method='floor', tokenize=tokenizer,
-                            num_refs=len(references))
-    scorer = BLEU(args)
-    scores = [
-        scorer.corpus_score([h], [[rr] for rr in r], use_effective_order=True)
-        for h, *r in zip(*data)
-    ]
-    proj = {'score': lambda s: s.score, 'bp': lambda s: s.bp}.get(score)
-    return [proj(s) for s in scores]
+    scores = [scorer.sentence_score(h, list(r)) for h, *r in zip(*data)]
+    return [_project(s, score) for s in scores]
 
 
 @register_scorer('bleu', 'BLEU')
@@ -52,24 +40,18 @@ class BLEUScorer(VizSeqScorer):
             score='score'
     ) -> float:
         tokenizer = get_optional_dict(self.extra_args, 'tokenizer', 'none')
-        args = get_default_args(tokenize=tokenizer, num_refs=len(references))
-        scorer = BLEU(args)
+        scorer = BLEU(tokenize=tokenizer, force=True)
         if self.n_workers == 1:
-            corpus_score = scorer.corpus_score(
-                hypothesis, references, use_effective_order=False
-            )
+            corpus_score = scorer.corpus_score(hypothesis, references)
         else:
             batches = list(
                 self._batch(hypothesis, references, n_batches=self.n_workers)
             )
-            ref_len, sys_len = 0, 0
-            correct = [0 for _ in range(BLEU.NGRAM_ORDER)]
-            total = [0 for _ in range(BLEU.NGRAM_ORDER)]
+            stats: List[List[int]] = []
             with ProcessPoolExecutor(max_workers=self.n_workers) as executor:
                 futures = [
                     executor.submit(
-                        scorer.corpus_score, b[0], b[1],
-                        use_effective_order=False
+                        scorer._extract_corpus_statistics, b[0], b[1]
                     )
                     for b in batches
                 ]
@@ -77,17 +59,9 @@ class BLEUScorer(VizSeqScorer):
                 if self.verbose:
                     progress = tqdm(progress)
                 for future in progress:
-                    s = future.result()
-                    ref_len += s.ref_len
-                    sys_len += s.sys_len
-                    for n in range(BLEU.NGRAM_ORDER):
-                        correct[n] += s.counts[n]
-                        total[n] += s.totals[n]
-                corpus_score = scorer.compute_bleu(
-                    correct, total, sys_len, ref_len, smooth_method='exp'
-                )
-        proj = {'score': lambda s: s.score, 'bp': lambda s: s.bp}.get(score)
-        return proj(corpus_score)
+                    stats.extend(future.result())
+            corpus_score = scorer._aggregate_and_compute(stats)
+        return _project(corpus_score, score)
 
     def score(
             self, hypothesis: List[str], references: List[List[str]],

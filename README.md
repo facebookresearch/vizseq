@@ -1,5 +1,5 @@
 [![PyPI](https://img.shields.io/pypi/v/vizseq?style=flat-square)](https://pypi.org/project/vizseq/)
-[![CircleCI](https://img.shields.io/circleci/build/github/facebookresearch/vizseq?style=flat-square)](https://circleci.com/gh/facebookresearch/vizseq)
+[![CI](https://img.shields.io/github/actions/workflow/status/facebookresearch/vizseq/ci.yml?branch=main&style=flat-square)](https://github.com/facebookresearch/vizseq/actions/workflows/ci.yml)
 ![PyPI - License](https://img.shields.io/pypi/l/vizseq?style=flat-square)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/vizseq?style=flat-square)
 
@@ -44,7 +44,7 @@ a normal Python package.
 ## Getting Started
 
 ### Installation
-VizSeq requires **Python 3.6+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as well in the future.
+VizSeq requires **Python 3.9+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as well in the future.
 
 You can install VizSeq from PyPI repository:
 ```bash

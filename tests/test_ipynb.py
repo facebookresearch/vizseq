@@ -7,6 +7,7 @@
 
 
 if __name__ == '__main__':
+    import sys
     import unittest
     from tests.ipynb import test_core, test_fairseq
 
@@ -21,3 +22,4 @@ if __name__ == '__main__':
     # initialize a runner, pass it your suite and run it
     runner = unittest.TextTestRunner(verbosity=3)
     result = runner.run(suite)
+    sys.exit(0 if result.wasSuccessful() else 1)

@@ -22,7 +22,8 @@ def _get_sent_meteor(
 ) -> List[float]:
     joined_references = list(zip(*references))
     return [
-        meteor_score(r, h) for r, h in zip(joined_references, hypothesis)
+        meteor_score([rr.split() for rr in r], h.split())
+        for r, h in zip(joined_references, hypothesis)
     ]
 
 
