@@ -22,10 +22,14 @@ def _get_sent_rouge(
         'rouge-2': 'rouge2',
         'rouge-l': 'rougeL',
     }[rouge_type]
-    scorer = rouge_scorer.RougeScorer([metric], use_stemmer=True)
+    scorer = rouge_scorer.RougeScorer([metric], use_stemmer=False)
+    joint_references = list(zip(*references))
     return [
-        scorer.score(reference, prediction)[metric].fmeasure
-        for prediction, reference in zip(hypothesis, references[0])
+        max(
+            scorer.score(reference, prediction)[metric].fmeasure
+            for reference in refs
+        )
+        for prediction, refs in zip(hypothesis, joint_references)
     ]
 
 
