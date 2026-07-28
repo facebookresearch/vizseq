@@ -5,7 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-from jinja2 import Markup
+from markupsafe import Markup
 
 
 class VizSeqDictVisualizer(object):
