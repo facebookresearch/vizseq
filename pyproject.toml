@@ -35,7 +35,7 @@ dependencies = [
 
 [project.optional-dependencies]
 embeddings = [
-    "torch>=1.9.0,<3.0.0",
+    "torch>=2.0.0,<3.0.0",
     "laserembeddings>=1.0.0,<2.0.0",
     "bert-score>=0.3.0,<1.0.0",
 ]
