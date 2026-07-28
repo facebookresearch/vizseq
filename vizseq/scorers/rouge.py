@@ -5,18 +5,11 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-from typing import List, Optional, Dict
+from typing import Dict, List, Optional
 
-import rouge as _rouge
-import nltk
+from rouge_score import rouge_scorer
 
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
-
-
-nltk.download('punkt', quiet=True)
-
-
-STATS_TYPE = 'f'
 
 
 def _get_sent_rouge(
@@ -24,13 +17,16 @@ def _get_sent_rouge(
         extra_args: Optional[Dict[str, str]] = None
 ) -> List[float]:
     assert rouge_type in {'rouge-1', 'rouge-2', 'rouge-l'}
-    _rouge_type = 'rouge-l' if rouge_type == 'rouge-l' else 'rouge-n'
-    _max_n = 1 if rouge_type == 'rouge-1' else 2
-    joint_references = [list(r) for r in zip(*references)]
-    scores = _rouge.Rouge(
-        metrics=[_rouge_type], max_n=_max_n, apply_avg=False
-    ).get_scores(hypothesis, joint_references)
-    return [s[STATS_TYPE][0] for s in scores[rouge_type]]
+    metric = {
+        'rouge-1': 'rouge1',
+        'rouge-2': 'rouge2',
+        'rouge-l': 'rougeL',
+    }[rouge_type]
+    scorer = rouge_scorer.RougeScorer([metric], use_stemmer=True)
+    return [
+        scorer.score(reference, prediction)[metric].fmeasure
+        for prediction, reference in zip(hypothesis, references[0])
+    ]
 
 
 def _get_sent_rouge_1(
