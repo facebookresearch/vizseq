@@ -8,7 +8,7 @@
 from html import escape
 from typing import Dict, List
 
-from jinja2 import Markup
+from markupsafe import Markup
 
 from vizseq._aligners import VizseqSrcRefTextAligner, VizseqRefHypoTextAligner
 

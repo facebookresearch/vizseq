@@ -5,7 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-from markupsafe import Markup
+from markupsafe import Markup, escape
 
 
 class VizSeqDictVisualizer(object):
@@ -22,9 +22,9 @@ class VizSeqDictVisualizer(object):
         result = {}
         for k, v in a_dict.items():
             if v == best_v:
-                result[k] = Markup(cls.BEST_MD_TEMPLATE.format(v))
+                result[k] = Markup(cls.BEST_MD_TEMPLATE).format(escape(v))
             elif v == worst_v:
-                result[k] = Markup(cls.WORSE_MD_TEMPLATE.format(v))
+                result[k] = Markup(cls.WORSE_MD_TEMPLATE).format(escape(v))
             else:
                 result[k] = str(v)
         return result
