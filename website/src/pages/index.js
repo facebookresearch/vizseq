@@ -6,52 +6,56 @@
  */
 
 import React from 'react';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import useBrokenLinks from '@docusaurus/useBrokenLinks';
 import styles from './styles.module.css';
 
 const features = [
   {
-    title: <>Multi-Modal</>,
-    description: (
-        <>
-            Covering a wide range of {"{text, image, audio, video}"}-to-text generation tasks. Supporting multiple sources and references.
-        </>
-    ),
-  },
-  {
-    title: <>Usable</>,
-    description: (
-        <>
-            Built with a full collection of common metrics. Analyzing data in various formats. Providing visualization in both Jupyter Notebook and Web App interfaces.
-        </>
-    ),
-  },
-  {
-    title: <>Productive</>,
+    title: 'Multi-Modal',
     description: (
       <>
-        Highly-integrated UI with samples and statistics in one place. Interactive data filtering with keyword searching, sorting and grouping. One-click export of tables and figures to slides, papers or spreadsheets.
-
+        Covering a wide range of {'{text, image, audio, video}'}-to-text generation tasks.
+        Supporting multiple sources and references.
       </>
     ),
   },
   {
-    title: <>Scalable</>,
+    title: 'Usable',
     description: (
       <>
-        Multi-process acceleration of metrics and statistics computation. Auto-sampling and caching mechanism for performance on large-scale datasets.
+        Built with a full collection of common metrics. Analyzing data in various formats.
+        Providing visualization in both Jupyter Notebook and Web App interfaces.
+      </>
+    ),
+  },
+  {
+    title: 'Productive',
+    description: (
+      <>
+        Highly-integrated UI with samples and statistics in one place. Interactive data filtering
+        with keyword searching, sorting and grouping. One-click export of tables and figures to
+        slides, papers or spreadsheets.
+      </>
+    ),
+  },
+  {
+    title: 'Scalable',
+    description: (
+      <>
+        Multi-process acceleration of metrics and statistics computation. Auto-sampling and caching
+        mechanism for performance on large-scale datasets.
       </>
     ),
   },
 ];
 
-const ipynbCode = `
-# Set up data inputs
+const ipynbCode = `# Set up data inputs
 from glob import glob
 root = 'examples/data/translation_wmt14_en_de_test'
 src, ref, hypo = glob(f'{root}/src_*.txt'), glob(f'{root}/ref_*.txt'), glob(f'{root}/pred_*.txt')
@@ -60,23 +64,20 @@ import vizseq
 vizseq.view_stats(src, ref)
 vizseq.view_n_grams(src)
 vizseq.view_scores(ref, hypo, ['bleu', 'meteor'])
-vizseq.view_examples(src, ref, hypo, ['bleu', 'meteor'], query='book', page_sz=10, page_no=1)
-`;
+vizseq.view_examples(src, ref, hypo, ['bleu', 'meteor'], query='book', page_sz=10, page_no=1)`;
 
-const fairseqCode = `
-from vizseq.ipynb import fairseq_viz as vizseq_fs
+const fairseqCode = `from vizseq.ipynb import fairseq_viz as vizseq_fs
 log_path = 'examples/data/wmt14_fr_en_test.fairseq_generate.log'
 # Similar APIs to normal Jupyter Notebook APIs
 vizseq_fs.view_stats(log_path)
 vizseq_fs.view_n_grams(log_path)
 vizseq_fs.view_scores(log_path, ['bleu', 'meteor'])
-vizseq_fs.view_examples(log_path, ['bleu', 'meteor'], query='book', page_sz=10, page_no=1)
-`;
+vizseq_fs.view_examples(log_path, ['bleu', 'meteor'], query='book', page_sz=10, page_no=1)`;
 
 function Feature({imageUrl, title, description}) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
-    <div className={classnames('col col-3', styles.feature)}>
+    <div className={clsx('col col--3', styles.feature)}>
       {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
@@ -89,39 +90,33 @@ function Feature({imageUrl, title, description}) {
 }
 
 function Home() {
-  const context = useDocusaurusContext();
-  const {siteConfig = {}} = context;
+  const {siteConfig} = useDocusaurusContext();
+  // Docusaurus only auto-registers anchors rendered by its Heading component, so
+  // the plain <section id> below has to be declared for the broken-anchor check.
+  useBrokenLinks().collectAnchor('quickstartSection');
   return (
     <Layout
-      title={`${siteConfig.title}`}
+      title={siteConfig.title}
       description="VizSeq: A Visual Analysis Toolkit for Text Generation (Translation, Captioning, Summarization, etc.)">
-      <header className={classnames('hero hero--primary', styles.heroBanner)}>
+      <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
-            <Link
-              className={classnames(
-                'button button--success button--lg',
-                styles.getStarted,
-              )}
-              to="#quickstartSection">
+            <Link className="button button--secondary button--lg" to="#quickstartSection">
               Get Started
             </Link>
             &emsp;
             <Link
-              className={classnames(
-                'button button--secondary button--lg',
-                styles.getStarted,
-              )}
-              to="docs/overview">
+              className="button button--secondary button--outline button--lg"
+              to="/docs/overview">
               Learn More
             </Link>
           </div>
         </div>
       </header>
       <main>
-        {features && features.length && (
+        {features && features.length > 0 && (
           <section className={styles.features}>
             <div className="container">
               <div className="row">
@@ -132,26 +127,35 @@ function Home() {
             </div>
           </section>
         )}
-        <section id="quickstartSection" className={classnames('hero', styles.quickstart)}>
-            <div className="container">
-                <h1 className="text--center">Quickstart</h1>
-                <h4>Install VizSeq:</h4>
-                <CodeBlock className="bash">$ pip install vizseq</CodeBlock>
-                <br/>
-                <h4>Use VizSeq in Jupyter notebook (<Link to={useBaseUrl('docs/features/ipynb_api')}>APIs</Link>):</h4>
-                <CodeBlock className="python">{ipynbCode}</CodeBlock>
-                <br/>
-                <h4>Use VizSeq with Fairseq (<Link to={useBaseUrl('docs/features/fairseq_api')}>APIs</Link>):</h4>
-                <CodeBlock className="python">{fairseqCode}</CodeBlock>
-                <br/>
-                <h4>Use VizSeq Web App:</h4>
-                <CodeBlock className="bash">$ vizseq-server --port 9001 --data-root examples/data</CodeBlock>
-                <br/>
-                <h9>In your web browser, navigate to:</h9>
-                <CodeBlock className="bash">http://localhost:9001</CodeBlock>
-                <br/>
-                <h4>For more details, please check out the <Link to={useBaseUrl('docs/overview')}>Docs</Link>.</h4>
-            </div>
+        <section id="quickstartSection" className={clsx('hero', styles.quickstart)}>
+          <div className="container">
+            <h1 className="text--center">Quickstart</h1>
+            <h4>Install VizSeq:</h4>
+            <CodeBlock language="bash">pip install vizseq</CodeBlock>
+            <br />
+            <h4>
+              Use VizSeq in Jupyter notebook (
+              <Link to="/docs/features/ipynb_api">APIs</Link>):
+            </h4>
+            <CodeBlock language="python">{ipynbCode}</CodeBlock>
+            <br />
+            <h4>
+              Use VizSeq with Fairseq (<Link to="/docs/features/fairseq_api">APIs</Link>):
+            </h4>
+            <CodeBlock language="python">{fairseqCode}</CodeBlock>
+            <br />
+            <h4>Use VizSeq Web App:</h4>
+            <CodeBlock language="bash">
+              vizseq-server --port 9001 --data-root examples/data
+            </CodeBlock>
+            <br />
+            <p>In your web browser, navigate to:</p>
+            <CodeBlock language="bash">http://localhost:9001</CodeBlock>
+            <br />
+            <h4>
+              For more details, please check out the <Link to="/docs/overview">Docs</Link>.
+            </h4>
+          </div>
         </section>
       </main>
     </Layout>

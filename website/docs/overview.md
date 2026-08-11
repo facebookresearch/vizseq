@@ -18,7 +18,7 @@ normal Python package.
 
 
 <p align="center">
-  <img src={useBaseUrl('img/overview.png')} alt="VizSeq Overview" width="480" class="center" />
+  <img src={useBaseUrl('img/overview.png')} alt="VizSeq Overview" width="480" className="center" />
 </p>
 
 Please also see our <a href="https://arxiv.org/pdf/1909.05424.pdf" target="_blank">paper</a> for more details. To
@@ -46,4 +46,4 @@ range of text generation tasks, examples of which are listed below:
 
 ## License
 
-VizSeq is licensed under <a href="https://github.com/facebookresearch/vizseq/blob/master/LICENSE" target="_blank">MIT</a>.
+VizSeq is licensed under <a href="https://github.com/facebookresearch/vizseq/blob/main/LICENSE" target="_blank">MIT</a>.

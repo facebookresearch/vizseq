@@ -6,6 +6,9 @@ sidebar_label: Google Translate Integration
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
+Requires the <a href={useBaseUrl('docs/getting_started/installation')}>`translate` extra</a>
+(`pip install "vizseq[translate]"`).
+
 ## Jupyter Notebook
 
 Before enabling Google Translate in `view_examples()`, set the credential JSON path:

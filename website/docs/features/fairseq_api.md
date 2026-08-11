@@ -8,7 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## `vizseq.ipynb.fairseq_viz.*`
 VizSeq can directly import and analyze model predictions generated
-by <a href="https://github.com/pytorch/fairseq/blob/master/generate.py" target="_blank">fairseq-generate</a> or <a href="https://github.com/pytorch/fairseq/blob/master/interactive.py" target="_blank">fairseq-interactive</a> in
+by <a href="https://github.com/facebookresearch/fairseq/blob/main/fairseq_cli/generate.py" target="_blank">fairseq-generate</a> or <a href="https://github.com/facebookresearch/fairseq/blob/main/fairseq_cli/interactive.py" target="_blank">fairseq-interactive</a> in
 Jupyter Notebook. The APIs are almost the same
 as <a href={useBaseUrl('docs/features/ipynb_api')}>the normal Jupyter Notebook APIs</a>.
 ### `view_stats()`
@@ -17,13 +17,13 @@ as <a href={useBaseUrl('docs/features/ipynb_api')}>the normal Jupyter Notebook A
 ### `view_scores()`
 #### Arguments
 - **`log_path`: str**: The path to `fairseq-generate` or `fairseq-interactive` log file.
-- **`metrics`: List[str]**: List of scorer IDs. Use [`available_scorers()`](#available_scorers) to check all the
+- **`metrics`: List[str]**: List of scorer IDs. Use [`available_scorers()`](./ipynb_api.md#available_scorers) to check all the
 available ones.
 ### `view_examples()`
 #### Arguments
 - **`log_path`: str**: The path to `fairseq-generate` or `fairseq-interactive` log file.
 - **`metrics`: Optional[List[str]] = None**: List of scorer IDs. Default to `None`. Use
-[`available_scorers()`](#available_scorers) to check all the available ones.
+[`available_scorers()`](./ipynb_api.md#available_scorers) to check all the available ones.
 - **`query`: str = ''**: The keyword(s) for example filtering. Default to `''`.
 - **`page_sz`: int = 10**: Page size. Default to `10`.
 - **`page_no`: int = 1**: Page number. Default to `1`.
