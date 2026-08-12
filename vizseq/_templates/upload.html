@@ -11,6 +11,7 @@
     <div class="container w-75">
         <br>
         <form enctype="multipart/form-data" method="post" action="/upload">
+            <input type="hidden" name="_xsrf" value="{{ xsrf_token }}">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>

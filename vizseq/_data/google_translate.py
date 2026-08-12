@@ -20,6 +20,7 @@ def set_g_cred_path(path: str):
 
     Raises:
         FileNotFoundError: If the path does not exist.
+        PermissionError: If the file cannot be read.
         ValueError: If the path is not a file or not a JSON file.
     """
     if not os.path.exists(path):
@@ -28,6 +29,8 @@ def set_g_cred_path(path: str):
         raise ValueError(f'Credentials path is not a file: {path}')
     if not path.endswith('.json'):
         raise ValueError('Credentials must be a JSON file')
+    if not os.access(path, os.R_OK):
+        raise PermissionError(f'Credentials file is not readable: {path}')
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.abspath(path)
 
 

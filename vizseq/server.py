@@ -19,7 +19,8 @@ from vizseq._utils.logger import logger
 from vizseq._view import (VizSeqWebView, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NO,
                           MAX_PAGE_SZ, VizSeqSortingType)
 from vizseq._data.zip_file import VizSeqZipFile, ZipExtractionError
-from vizseq._data import get_g_translate, VizSeqGlobalConfigManager
+from vizseq._data import (get_g_translate, set_g_cred_path,
+                          VizSeqGlobalConfigManager)
 from vizseq._visualizers import SPAN_HIGHTLIGHT_JS
 from vizseq._utils import VizSeqJson
 from vizseq import __version__
@@ -35,7 +36,9 @@ DEFAULT_PORT = 9001
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--hostname', type=str, default=DEFAULT_HOSTNAME,
-                        help='server hostname')
+                        help='address to bind to. Defaults to localhost, so '
+                             'the server is only reachable from this machine; '
+                             'pass 0.0.0.0 to expose it on the network')
     parser.add_argument('--port', type=int, default=DEFAULT_PORT,
                         help='server port number')
     parser.add_argument('--data-root', type=str, default='./examples/data',
@@ -84,6 +87,15 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
     def write_json(self, value: str) -> None:
         self.set_header('Content-Type', 'application/json')
         self.write(value)
+
+    def render_template(self, template_name: str, **kwargs) -> None:
+        # Reading xsrf_token is what sets the _xsrf cookie; check_xsrf_cookie()
+        # compares that cookie against the copy embedded in the page below.
+        self.write(
+            env.get_template(template_name).render(
+                xsrf_token=self.xsrf_token.decode('ascii'), **kwargs
+            )
+        )
 
     def get_url_args(self):
         return {
@@ -165,10 +177,10 @@ class TaskListHandler(VizSeqBaseRequestHandler):
     def get(self):
         enum_tasks_and_names_and_enum_models = \
             VizSeqWebView.get_enum_tasks_and_names_and_enum_models(args.data_root)
-        html = env.get_template('tasks.html').render(
+        self.render_template(
+            'tasks.html',
             enum_tasks_and_names_and_enum_models=enum_tasks_and_names_and_enum_models
         )
-        self.write(html)
 
 
 class ViewHandler(VizSeqBaseRequestHandler):
@@ -192,7 +204,8 @@ class ViewHandler(VizSeqBaseRequestHandler):
         page_tags = [
             all_tags[i] if i < len(all_tags) else [] for i in pd.cur_idx
         ]
-        html = env.get_template('view.html').render(
+        self.render_template(
+            'view.html',
             url_args=url_args, task=task, models=models, page_sz=page_sz,
             page_no=page_no, sorting=sorting, query=query, metrics=wv.metrics,
             src_has_text=wv.src_has_text, task_name=wv.task_name,
@@ -210,7 +223,6 @@ class ViewHandler(VizSeqBaseRequestHandler):
             tokenization=wv.tokenization, all_tokenization=wv.all_tokenization,
             total_examples=pd.total_examples, n_cur_samples=pd.n_cur_samples
         )
-        self.write(html)
 
 
 class PageDataHandler(VizSeqBaseRequestHandler):
@@ -243,8 +255,7 @@ class TaskCfgHandler(VizSeqBaseRequestHandler):
 
 class UploadHandler(VizSeqBaseRequestHandler):
     def get(self):
-        html = env.get_template('upload.html').render()
-        self.write(html)
+        self.render_template('upload.html')
 
     def post(self):
         files = self.request.files.get('file1', [])
@@ -269,17 +280,24 @@ class UploadHandler(VizSeqBaseRequestHandler):
 
 class ConfigHandler(VizSeqBaseRequestHandler):
     def get(self):
-        html = env.get_template('config.html').render(
+        self.render_template(
+            'config.html',
             g_cred_path=VizSeqGlobalConfigManager().g_cred_path,
         )
-        self.write(html)
 
     def post(self):
         g_cred_path = self.get_argument('g_cred_path', '')
-        valid = op.exists(g_cred_path)
-        if valid:
-            VizSeqGlobalConfigManager().set_g_cred_path(g_cred_path)
-        self.write_json(json.dumps({'valid': valid}))
+        # set_g_cred_path() accepts only a readable JSON file, which keeps this
+        # endpoint from doubling as a probe for arbitrary filesystem paths. It
+        # also applies the credentials to this process, so /g_translate picks
+        # them up without a restart.
+        try:
+            set_g_cred_path(g_cred_path)
+        except (OSError, ValueError):
+            self.write_json(json.dumps({'valid': False}))
+            return
+        VizSeqGlobalConfigManager().set_g_cred_path(g_cred_path)
+        self.write_json(json.dumps({'valid': True}))
 
 
 class GTranslateHandler(VizSeqBaseRequestHandler):
@@ -318,10 +336,7 @@ class NGramsHandler(VizSeqBaseRequestHandler):
 
 class AboutHandler(VizSeqBaseRequestHandler):
     def get(self):
-        html = env.get_template('about.html').render(
-            version=__version__
-        )
-        self.write(html)
+        self.render_template('about.html', version=__version__)
 
 
 ROUTES = [
@@ -340,12 +355,20 @@ ROUTES = [
 
 
 def make_app(debug=False):
-    return web.Application(ROUTES, debug=debug)
+    return web.Application(
+        ROUTES, debug=debug,
+        # /upload, /config and /task_cfg all mutate state without
+        # authentication, so they must not be reachable from another origin.
+        xsrf_cookies=True,
+        xsrf_cookie_kwargs={'samesite': 'Strict'},
+    )
 
 
 def start_server(hostname=DEFAULT_HOSTNAME, port=DEFAULT_PORT, debug=False):
     app = make_app(debug=debug)
-    app.listen(port, max_buffer_size=1024 ** 3)
+    # Bind to hostname rather than every interface: an unauthenticated upload
+    # endpoint should not be exposed to the network unless asked for.
+    app.listen(port, address=hostname, max_buffer_size=1024 ** 3)
     logger.info("Application Started")
     logger.info(f'You can navigate to http://{hostname}:{port}')
     ioloop.IOLoop.current().start()
