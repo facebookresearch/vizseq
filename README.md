@@ -94,7 +94,7 @@ http://localhost:9001
 ```
 
 ## License
-VizSeq is licensed under [MIT](https://github.com/facebookresearch/vizseq/blob/master/LICENSE). See the [LICENSE](https://github.com/facebookresearch/vizseq/blob/master/LICENSE) file for details.
+VizSeq is licensed under [MIT](https://github.com/facebookresearch/vizseq/blob/main/LICENSE). See the [LICENSE](https://github.com/facebookresearch/vizseq/blob/main/LICENSE) file for details.
 
 ## Citation
 Please cite as

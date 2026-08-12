@@ -36,7 +36,9 @@
   --ifm-color-primary-lighter: #b2c2e2;
   --ifm-color-primary-lightest: #d9e1f1;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --vizseq-quickstart-bg: #1c1e21;
+  /* Infima's dark surface color. A darker tint would be indistinguishable from
+     the #1b1b1d page background and the section would lose its separation. */
+  --vizseq-quickstart-bg: #242526;
 }
 
 /* The docs screenshots are all light-background PNGs; a subtle surface keeps
