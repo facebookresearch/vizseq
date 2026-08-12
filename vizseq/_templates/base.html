@@ -24,21 +24,15 @@
 
 <body>
 
-<script>
-  function goTo(endpoint) {
-    window.location.href = location.protocol + '//' + location.hostname + ':' + location.port + '/' + endpoint;
-  }
-</script>
-
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color:#3b5998">
-    <a class="navbar-brand" href="javascript:goTo('about');">VizSeq</a>
+    <a class="navbar-brand" href="/about">VizSeq</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"><a class="nav-link" href="javascript:goTo('');">Tasks</a></li>
-        <li class="nav-item active"><a class="nav-link" href="javascript:goTo('upload');">Upload</a></li>
-        <li class="nav-item active"><a class="nav-link" href="javascript:goTo('config');">Configuration</a></li>
-        <li class="nav-item active"><a class="nav-link" href="javascript:goTo('about');">About</a></li>
+        <li class="nav-item active"><a class="nav-link" href="/">Tasks</a></li>
+        <li class="nav-item active"><a class="nav-link" href="/upload">Upload</a></li>
+        <li class="nav-item active"><a class="nav-link" href="/config">Configuration</a></li>
+        <li class="nav-item active"><a class="nav-link" href="/about">About</a></li>
       </ul>
     </div>
   </nav>

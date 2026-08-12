@@ -9,23 +9,22 @@
 <div class="container"><br><h3>{{ task_name }}</h3><br></div>
 
 {{ span_highlight_js }}
-{% from 'macros.html' import nav_pages, stats_table, visualize_dict, copy_to_clipboard %}
+{% from 'macros.html' import nav_pages, stats_table, copy_to_clipboard %}
 
-{{ visualize_dict() }}
 {{ copy_to_clipboard() }}
 
 <script>
-    const urlArgs = {{ url_args|safe }};
-    const task = '{{ task }}';
-    const taskName = '{{ task_name }}';
-    const models = {{ models|safe }};
-    const tagSet = {{ tag_set|safe }};
-    const enum_src_names_and_types = {{ enum_src_names_and_types|safe }};
-    const enum_ref_names = {{ enum_ref_names|safe }};
-    const enum_metrics_and_names = {{ enum_metrics_and_names|safe }};
-    const all_metrics_and_names = {{ all_metrics_and_names|safe }};
-    const allTokenization = {{ all_tokenization|safe }};
-    const tokenization = '{{ tokenization }}';
+    const urlArgs = {{ url_args|tojson }};
+    const task = {{ task|tojson }};
+    const taskName = {{ task_name|tojson }};
+    const models = {{ models|tojson }};
+    const tagSet = {{ tag_set|tojson }};
+    const enum_src_names_and_types = {{ enum_src_names_and_types|tojson }};
+    const enum_ref_names = {{ enum_ref_names|tojson }};
+    const enum_metrics_and_names = {{ enum_metrics_and_names|tojson }};
+    const all_metrics_and_names = {{ all_metrics_and_names|tojson }};
+    const allTokenization = {{ all_tokenization|tojson }};
+    const tokenization = {{ tokenization|tojson }};
 
     const plotCfg = {
         responsive: true,
@@ -53,23 +52,31 @@
     function deriveURL(args, key, newValue) {
         let newArgs = JSON.parse(JSON.stringify(args));
         newArgs[key] = newValue;
-        let pairs = Object.keys(newArgs).map(k => k + "=" + newArgs[k]);
-        window.location.href = location.protocol + "//" + location.hostname + ":" + location.port + location.pathname +
-            "?" + pairs.join("&");
+        let url = new URL(window.location.href);
+        url.search = '';
+        Object.keys(newArgs).forEach(k => url.searchParams.set(k, newArgs[k]));
+        window.location.assign(url.toString());
     }
 
-    function getGTranslate(selfId, srcRowId, sent, lang) {
+    function getGTranslate(link, srcRowId) {
         let callback = function(jsonResponse) {
             let trNode = document.createElement('tr');
             trNode.setAttribute('style', 'background-color:#EAF2F8');
-            trNode.innerHTML = '<th class="text-nowrap text-left" scope="row">Google Translate</th><td>' +
-                jsonResponse['translation'] + '</td>';
+            let heading = document.createElement('th');
+            heading.className = 'text-nowrap text-left';
+            heading.setAttribute('scope', 'row');
+            heading.textContent = 'Google Translate';
+            let translation = document.createElement('td');
+            translation.textContent = jsonResponse['translation'];
+            trNode.appendChild(heading);
+            trNode.appendChild(translation);
             document.getElementById(srcRowId).after(trNode);
-            $('#' + selfId).remove();
+            link.remove();
         };
-        let url = location.protocol + '//' + location.hostname + ':' + location.port + "/g_translate?s=" +
-            encodeURIComponent(sent) + "&l=" +  encodeURIComponent(lang);
-        doJsonAjax(url, callback);
+        let url = new URL('/g_translate', window.location.origin);
+        url.searchParams.set('s', link.dataset.sent);
+        url.searchParams.set('l', link.dataset.lang);
+        doJsonAjax(url.toString(), callback);
     }
 
     function submitSearchForm() {
@@ -266,7 +273,8 @@
                                 {% if src_type == 'text' %}
                                 <td class="text-left">
                                     {{ cur_viz_src }}
-                                    <a href="javascript:getGTranslate('gTranslate{{ j }}_{{ i }}', 'srcRow{{ j }}_{{ i }}', '{{ cur_src }}', '{{ trg_lang[i] }}');"
+                                    <a href="#" data-sent="{{ cur_src }}" data-lang="{{ trg_lang[i] }}"
+                                       onclick="getGTranslate(this, 'srcRow{{ j }}_{{ i }}'); return false;"
                                        title="Google Translate" id="gTranslate{{ j }}_{{ i }}">GTranslate</a>
                                 </td>
                                 {% elif src_type == 'image' %}
@@ -321,6 +329,10 @@
                 </div>
                 <br>
                 {% endfor %}
+
+                {% if n_samples == 0 %}
+                <div class="alert alert-info" role="status">No examples match the current search.</div>
+                {% endif %}
 
                 <br>
                 {{ nav_pages(page_no, pagination[0], pagination[1], pagination[2], pagination[3]) }}
@@ -540,6 +552,69 @@
             Plotly.newPlot("sentScoresPlot4" + metric, data, layout, plotCfg);
         }
 
+        function appendScoreRow(tbodyNode, label, scores) {
+            let values = models.map(m => scores[m]);
+            let worstValue = Math.min(...values);
+            let bestValue = Math.max(...values);
+            let row = document.createElement('tr');
+            let heading = document.createElement('th');
+            heading.setAttribute('scope', 'row');
+            heading.textContent = label;
+            row.appendChild(heading);
+            models.forEach(function (model) {
+                let cell = document.createElement('td');
+                cell.textContent = scores[model];
+                if (scores[model] === worstValue) {
+                    cell.style.fontStyle = 'italic';
+                    cell.style.textDecoration = 'underline';
+                } else if (scores[model] === bestValue) {
+                    cell.style.fontWeight = 'bold';
+                }
+                row.appendChild(cell);
+            });
+            tbodyNode.appendChild(row);
+        }
+
+        function appendNGramTable(container, n, entries) {
+            let column = document.createElement('div');
+            column.className = 'col';
+            let table = document.createElement('table');
+            table.className = 'table table-hover table-sm table-bordered text-center';
+            let thead = document.createElement('thead');
+            thead.className = 'thead-light';
+            let headingRow = document.createElement('tr');
+            [n + '-Gram', 'Count'].forEach(function (label) {
+                let heading = document.createElement('th');
+                heading.setAttribute('scope', 'col');
+                heading.textContent = label;
+                headingRow.appendChild(heading);
+            });
+            thead.appendChild(headingRow);
+            table.appendChild(thead);
+
+            let tbody = document.createElement('tbody');
+            entries.forEach(function (entry) {
+                let row = document.createElement('tr');
+                let ngramCell = document.createElement('td');
+                let link = document.createElement('a');
+                link.href = '#';
+                link.textContent = entry[0];
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    deriveURL(urlArgs, 'q', entry[0]);
+                });
+                ngramCell.appendChild(link);
+                let countCell = document.createElement('td');
+                countCell.textContent = entry[1];
+                row.appendChild(ngramCell);
+                row.appendChild(countCell);
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+            column.appendChild(table);
+            container.appendChild(column);
+        }
+
         doJsonAjax('/stats?t=' + urlArgs['t'], function (jsonData) {
             plotSentenceLength(jsonData['src_lens'], jsonData['ref_lens']);
             plotTokenFrequency('srcTknFreqPlot', jsonData['src_tkn_log2_freq'], 'Source');
@@ -556,21 +631,15 @@
                     let s = e[1];
                     plotSentScores(jsonData['sent_scores'], s);
 
-                    document.getElementById('latex_' + s).innerText = jsonData['corpus_group_scores_latex'];
-                    document.getElementById('csv_' + s).innerText = jsonData['corpus_group_scores_csv'];
-                    let corpusScores = visualizeDict(jsonData['corpus_scores'][s]);
+                    document.getElementById('latex_' + s).textContent =
+                        jsonData['corpus_group_scores_latex'][s];
+                    document.getElementById('csv_' + s).textContent =
+                        jsonData['corpus_group_scores_csv'][s];
 
                     let tbodyNode = document.getElementById('tableBodyMetric_' + s);
-                    let trNode1 = document.createElement('tr');
-                    let tdNodes1 = models.map(m => '<td>' + corpusScores[m] + '</td>');
-                    trNode1.innerHTML = '<th scope="row">All</th>' + tdNodes1.join('');
-                    tbodyNode.appendChild(trNode1);
+                    appendScoreRow(tbodyNode, 'All', jsonData['corpus_scores'][s]);
                     tagSet.forEach(function (t) {
-                        let groupScores = visualizeDict(jsonData['group_scores'][s][t]);
-                        let trNode = document.createElement('tr');
-                        let tdNodes = models.map(m => '<td>' + groupScores[m] + '</td>');
-                        trNode.innerHTML = '<th scope="row">' + t + '</th>' + tdNodes.join('');
-                        tbodyNode.appendChild(trNode);
+                        appendScoreRow(tbodyNode, t, jsonData['group_scores'][s][t]);
                     });
 
                     $('#' + s + 'ScoreSpinner').remove();
@@ -579,29 +648,11 @@
         }
 
         doJsonAjax('/ngrams?t=' + urlArgs['t'], function (jsonData) {
+            let container = document.getElementById('ngramsDiv');
             Object.keys(jsonData).forEach(function (n) {
-                let theadHTML =
-                    `<thead class="thead-light">
-                        <tr><th scope="col">${n}-Gram</th><th scope="col">Count</th></tr>
-                    </thead>`;
-                let trHTMLs = jsonData[n].map(
-                    t =>
-                        `<tr>
-                            <td><a href="javascript:deriveURL(urlArgs, 'q', '${t[0]}');">${t[0]}</a></td>
-                            <td>${t[1]}</td>
-                        </tr>`
-                );
-                let tbodyHTML = `<tbody>${trHTMLs.join('')}</tbody>`;
-
-                let colHTML =
-                    `<div class="col">
-                        <table class="table table-hover table-sm table-bordered text-center">
-                            ${theadHTML}${tbodyHTML}
-                        </table>
-                    </div>`;
-                document.getElementById('ngramsDiv').innerHTML += colHTML;
-                $('#ngramsSpinner').remove();
+                appendNGramTable(container, n, jsonData[n]);
             });
+            $('#ngramsSpinner').remove();
         });
 
         resetTaskCfgMetrics();

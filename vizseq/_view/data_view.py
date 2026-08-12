@@ -34,10 +34,14 @@ MAX_PAGE_SZ = 100
 def _get_start_end_idx(n_items: int, page_sz: int, page_no: int) -> Tuple[int, int]:
     if page_sz <= 0 or page_no <= 0:
         raise ValueError("page_sz and page_no must be positive integers")
-    if n_items <= 0:
-        raise ValueError("n_items must be positive")
-    start_idx = min(page_sz * (page_no - 1), n_items - 1)
-    end_idx = max(page_sz * page_no - 1, start_idx)
+    if n_items < 0:
+        raise ValueError("n_items must be non-negative")
+    if n_items == 0:
+        return 0, -1
+    n_pages = int(np.ceil(n_items / page_sz))
+    page_no = min(page_no, n_pages)
+    start_idx = page_sz * (page_no - 1)
+    end_idx = min(start_idx + page_sz, n_items) - 1
     # inclusive on both sides
     return start_idx, end_idx
 
@@ -98,6 +102,26 @@ class VizSeqDataPageView(object):
         elif ref.has_text:
             cur_idx = VizSeqFilter.filter(ref.text, query)
         n_samples = len(cur_idx)
+
+        if n_samples == 0:
+            cur_src = src.cached([])
+            cur_src_text = [] if src.has_text else None
+            cur_ref = [[] for _ in ref.text]
+            cur_hypo = {name: [] for name in models}
+            return VizSeqPageData(
+                viz_src=cur_src,
+                viz_ref=cur_ref,
+                viz_hypo=cur_hypo,
+                cur_src=cur_src,
+                cur_src_text=cur_src_text,
+                cur_ref=cur_ref,
+                cur_idx=[],
+                viz_sent_scores=[],
+                trg_lang=[] if need_lang_tags else None,
+                n_cur_samples=0,
+                n_samples=0,
+                total_examples=len(src),
+            )
 
         # sorting
         sorting = {e.value: e for e in VizSeqSortingType}.get(sorting, None)
