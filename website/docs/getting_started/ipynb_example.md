@@ -83,12 +83,13 @@ vizseq.available_scorers()
 Available scorers: bert_score, bleu, bp, chrf, cider, gleu, laser, meteor, nist, ribes, rouge_1, rouge_2, rouge_l, ter, wer, wer_del, wer_ins, wer_sub
 ```
 
-`bert_score` and `laser` only appear if VizSeq was installed with
-the <a href={useBaseUrl('docs/getting_started/installation')}>`embeddings` extra</a>.
+All built-in scorers are listed regardless of which extras are installed. `bert_score` and `laser`
+need the <a href={useBaseUrl('docs/getting_started/installation')}>`embeddings` extra</a>, and raise
+an `ImportError` telling you to install it if you score with them without it.
 
 We can view examples in pages with sorting:
 ```python
-from vizseq._view import VizSeqSortingType
+from vizseq import VizSeqSortingType
 vizseq.view_examples(src, ref, hypo, ['bleu'], page_sz=2, page_no=12, sorting=VizSeqSortingType.src_len)
 ```
 

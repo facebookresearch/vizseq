@@ -38,7 +38,9 @@ $ pip install "vizseq[embeddings,audio]"
 $ pip install -e ".[all]"
 ```
 
-Without the `embeddings` extra, `vizseq.available_scorers()` will not list `bert_score` or `laser`.
+`vizseq.available_scorers()` lists every built-in scorer regardless of which extras are installed.
+Scorers that need an extra raise an `ImportError` naming the extra when you actually use them, so
+`bert_score` and `laser` are listed even without the `embeddings` extra.
 
 ## Citation
 If you find VizSeq useful in your research, please cite as

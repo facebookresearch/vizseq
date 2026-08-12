@@ -94,6 +94,12 @@ module.exports = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        // Replaces the retired UA-151434920-1 property; Universal Analytics
+        // stopped collecting in July 2023 and Docusaurus 3 dropped its plugin.
+        gtag: {
+          trackingID: 'G-PN1X1ZJXPN',
+          anonymizeIP: true,
+        },
         sitemap: {
           changefreq: 'weekly',
           priority: 0.5,

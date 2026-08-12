@@ -13,14 +13,14 @@ on:
   # Allows deploying the current main manually from the Actions tab.
   workflow_dispatch:
 
-# Only one concurrent deployment; don't cancel an in-progress one.
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Superseded builds of the same branch/PR are pointless; cancel them. Keyed
+    # per ref so PR builds never queue behind each other or behind a deployment.
+    concurrency:
+      group: website-build-${{ github.ref }}
+      cancel-in-progress: true
     defaults:
       run:
         working-directory: website
@@ -46,6 +46,10 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    # Only one concurrent deployment; don't cancel an in-progress one.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     permissions:
       pages: write
       id-token: write
