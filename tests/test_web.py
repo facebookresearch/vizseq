@@ -5,6 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 
 import argparse
+import http.cookies
 import io
 import json
 import os
@@ -110,10 +111,37 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         query.update(params)
         return '/view?' + urllib.parse.urlencode(query)
 
+    def _get_xsrf_token(self):
+        """Mint an ``_xsrf`` cookie the way a browser loading a page would.
+
+        ``AsyncHTTPTestCase`` has no cookie jar, so callers have to echo the
+        returned token back themselves via ``_xsrf_headers()``.
+        """
+        response = self.fetch('/upload')
+        self.assertEqual(response.code, 200)
+        cookie = http.cookies.SimpleCookie()
+        for header in response.headers.get_list('Set-Cookie'):
+            cookie.load(header)
+        self.assertIn('_xsrf', cookie, 'server did not set an _xsrf cookie')
+        return cookie['_xsrf'].value
+
     @staticmethod
-    def _multipart_zip(filename, zip_bytes):
+    def _xsrf_headers(token):
+        return {'Cookie': f'_xsrf={token}'}
+
+    @staticmethod
+    def _multipart_zip(filename, zip_bytes, xsrf_token=None):
         boundary = b'vizseq-test-boundary'
-        body = b'\r\n'.join([
+        parts = []
+        if xsrf_token is not None:
+            # upload.html carries the token in a hidden form field.
+            parts += [
+                b'--' + boundary,
+                b'Content-Disposition: form-data; name="_xsrf"',
+                b'',
+                xsrf_token.encode('ascii'),
+            ]
+        parts += [
             b'--' + boundary,
             b'Content-Disposition: form-data; name="file1"; filename="'
             + filename.encode('ascii') + b'"',
@@ -122,9 +150,20 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
             zip_bytes,
             b'--' + boundary + b'--',
             b'',
-        ])
+        ]
+        body = b'\r\n'.join(parts)
         content_type = 'multipart/form-data; boundary=' + boundary.decode('ascii')
         return body, content_type
+
+    def _post_zip(self, filename, zip_bytes):
+        token = self._get_xsrf_token()
+        body, content_type = self._multipart_zip(filename, zip_bytes, token)
+        headers = self._xsrf_headers(token)
+        headers['Content-Type'] = content_type
+        return self.fetch(
+            '/upload', method='POST', headers=headers, body=body,
+            follow_redirects=False,
+        )
 
     def test_view_escapes_script_payloads_in_html_and_javascript(self):
         response = self.fetch(self._view_url(q=XSS_PAYLOAD))
@@ -177,34 +216,65 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         archive = io.BytesIO()
         with zipfile.ZipFile(archive, 'w') as zip_file:
             zip_file.writestr('../escaped.txt', 'unsafe')
-        body, content_type = self._multipart_zip('malicious.zip', archive.getvalue())
 
-        response = self.fetch(
-            '/upload',
-            method='POST',
-            headers={'Content-Type': content_type},
-            body=body,
-            follow_redirects=False,
-        )
+        response = self._post_zip('malicious.zip', archive.getvalue())
 
         self.assertEqual(response.code, 400)
         self.assertFalse(os.path.exists(os.path.join(self.data_root, 'malicious.zip')))
         self.assertFalse(os.path.exists(os.path.join(self.temp_dir.name, 'escaped.txt')))
 
     def test_upload_rejects_corrupt_archives_and_missing_files(self):
-        body, content_type = self._multipart_zip('corrupt.zip', b'not a zip')
-        corrupt_response = self.fetch(
-            '/upload',
-            method='POST',
-            headers={'Content-Type': content_type},
-            body=body,
-            follow_redirects=False,
+        corrupt_response = self._post_zip('corrupt.zip', b'not a zip')
+
+        token = self._get_xsrf_token()
+        headers = self._xsrf_headers(token)
+        headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        missing_response = self.fetch(
+            '/upload', method='POST', headers=headers,
+            body=urllib.parse.urlencode({'_xsrf': token}),
         )
-        missing_response = self.fetch('/upload', method='POST', body=b'')
 
         self.assertEqual(corrupt_response.code, 400)
         self.assertEqual(missing_response.code, 400)
         self.assertFalse(os.path.exists(os.path.join(self.data_root, 'corrupt.zip')))
+
+    def test_upload_accepts_a_valid_archive_with_an_xsrf_token(self):
+        archive = io.BytesIO()
+        with zipfile.ZipFile(archive, 'w') as zip_file:
+            zip_file.writestr('new_task/src_0.txt', 'zero\none\n')
+            zip_file.writestr('new_task/ref_0.txt', 'zero\none\n')
+
+        response = self._post_zip('new_task.zip', archive.getvalue())
+
+        self.assertEqual(response.code, 303)
+        self.assertTrue(
+            os.path.exists(os.path.join(self.data_root, 'new_task', 'src_0.txt'))
+        )
+        # The archive itself is unpacked and cleaned up, not left behind.
+        self.assertFalse(os.path.exists(os.path.join(self.data_root, 'new_task.zip')))
+
+    def test_state_changing_posts_without_an_xsrf_token_are_rejected(self):
+        archive = io.BytesIO()
+        with zipfile.ZipFile(archive, 'w') as zip_file:
+            zip_file.writestr('new_task/src_0.txt', 'zero\n')
+        body, content_type = self._multipart_zip('new_task.zip', archive.getvalue())
+
+        upload = self.fetch(
+            '/upload', method='POST', headers={'Content-Type': content_type},
+            body=body, follow_redirects=False,
+        )
+        task_cfg = self.fetch(
+            '/task_cfg?' + urllib.parse.urlencode({'t': 'test_task', 'n': 'renamed'}),
+            method='POST', body=b'',
+        )
+        config = self.fetch('/config', method='POST', body=b'')
+
+        for name, response in (
+            ('upload', upload), ('task_cfg', task_cfg), ('config', config),
+        ):
+            with self.subTest(endpoint=name):
+                self.assertEqual(response.code, 403)
+        self.assertFalse(os.path.exists(os.path.join(self.data_root, 'new_task')))
 
 
 if __name__ == '__main__':
