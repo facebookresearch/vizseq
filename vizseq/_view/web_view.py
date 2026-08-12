@@ -51,7 +51,9 @@ class VizSeqWebView(object):
         self.query = query
         self.sorting = sorting
         self.sorting_metric = sorting_metric
-        set_g_cred_path(VizSeqGlobalConfigManager().g_cred_path)
+        g_cred_path = VizSeqGlobalConfigManager().g_cred_path
+        if g_cred_path:
+            set_g_cred_path(g_cred_path)
         src = _get_src(self.dir_path)
         self.src_has_text = src.has_text
         self.enum_src_names_and_types = self.get_enum(
@@ -161,7 +163,7 @@ class VizSeqWebView(object):
     def get_page_data_with_pagination(self) -> str:
         page_data = self.get_page_data()._asdict()
         page_data['pagination'] = self.get_pagination(
-            page_data['total_examples'], self.page_sz, self.page_no
+            page_data['n_samples'], self.page_sz, self.page_no
         )
         return json.dumps(page_data)
 
@@ -173,6 +175,8 @@ class VizSeqWebView(object):
             raise ValueError(f'page_sz must be positive, got {page_sz}')
         if page_no <= 0:
             raise ValueError(f'page_no must be positive, got {page_no}')
+        if total_examples <= 0:
+            return [], [], [], []
         n_pages = math.ceil(total_examples / page_sz)
         _page_no = min(max(1, page_no), n_pages)
 

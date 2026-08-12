@@ -57,6 +57,7 @@ jobs:
         run: bash get_example_data.sh
       - run: python -m tests.test_n_gram_based_scorers
       - run: python -m tests.test_ipynb
+      - run: python -m tests.test_web
 
   embeddings:
     needs: lint

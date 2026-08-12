@@ -6,7 +6,8 @@
 #
 
 from .web_view import VizSeqWebView
-from .data_view import VizSeqDataPageView, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NO
+from .data_view import (VizSeqDataPageView, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NO,
+                        MAX_PAGE_SZ)
 from .data_filter import VizSeqFilter
 from .data_sorters import (VizSeqSortingType, VizSeqRandomSorter,
                            VizSeqByLenSorter, VizSeqByStrOrderSorter,
