@@ -6,4 +6,5 @@
 #
 
 from .core import (view_examples, view_n_grams, view_stats, view_scores,
-                   set_google_credential_path, available_scorers)
+                   set_google_credential_path, available_scorers,
+                   VizSeqSortingType)

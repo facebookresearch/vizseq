@@ -28,6 +28,8 @@ the <a href={useBaseUrl('docs/features/scorer_api')}>APIs</a>.
 
 ### Embedding-based
 
+Requires the <a href={useBaseUrl('docs/getting_started/installation')}>`embeddings` extra</a>
+(`pip install "vizseq[embeddings]"`).
 
 - LASER ([Artetxe and Schwenk, 2018](https://arxiv.org/pdf/1812.10464.pdf)): official [LASER](https://github.com/facebookresearch/LASER) implementation
 - BERTScore ([Zhang et al., 2019](https://arxiv.org/pdf/1904.09675.pdf)): official [BERTScore](https://github.com/Tiiiger/bert_score) implementation

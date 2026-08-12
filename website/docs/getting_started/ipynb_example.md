@@ -83,9 +83,13 @@ vizseq.available_scorers()
 Available scorers: bert_score, bleu, bp, chrf, cider, gleu, laser, meteor, nist, ribes, rouge_1, rouge_2, rouge_l, ter, wer, wer_del, wer_ins, wer_sub
 ```
 
+All built-in scorers are listed regardless of which extras are installed. `bert_score` and `laser`
+need the <a href={useBaseUrl('docs/getting_started/installation')}>`embeddings` extra</a>, and raise
+an `ImportError` telling you to install it if you score with them without it.
+
 We can view examples in pages with sorting:
 ```python
-import vizseq.VizSeqSortingType
+from vizseq import VizSeqSortingType
 vizseq.view_examples(src, ref, hypo, ['bleu'], page_sz=2, page_no=12, sorting=VizSeqSortingType.src_len)
 ```
 
@@ -102,9 +106,12 @@ Then in example viewing API, simply switch the `need_g_translate` argument on:
 vizseq.view_examples(src, ref, hypo, ['bleu'], need_g_translate=True)
 ```
 
-## <a href={useBaseUrl('docs/getting_started/fairseq_example')}>Fairseq Integration</a>
+## Fairseq Integration
+
+Model predictions from `fairseq-generate` and `fairseq-interactive` can be imported directly.
+See the <a href={useBaseUrl('docs/getting_started/fairseq_example')}>Fairseq Integration</a> example.
 
 ## More Examples
-- <a href="https://github.com/facebookresearch/vizseq/blob/master/examples/multimodal_machine_translation.ipynb" target="_blank">Multimodal Machine Translation</a>
-- <a href="https://github.com/facebookresearch/vizseq/blob/master/examples/multilingual_machine_translation.ipynb" target="_blank">Multilingual Machine Translation</a>
-- <a href="https://github.com/facebookresearch/vizseq/blob/master/examples/speech_translation.ipynb" target="_blank">Speech Translation</a>
+- <a href="https://github.com/facebookresearch/vizseq/blob/main/examples/multimodal_machine_translation.ipynb" target="_blank">Multimodal Machine Translation</a>
+- <a href="https://github.com/facebookresearch/vizseq/blob/main/examples/multilingual_machine_translation.ipynb" target="_blank">Multilingual Machine Translation</a>
+- <a href="https://github.com/facebookresearch/vizseq/blob/main/examples/speech_translation.ipynb" target="_blank">Speech Translation</a>

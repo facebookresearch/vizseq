@@ -17,7 +17,14 @@
   overflow: hidden;
 }
 
-@media screen and (max-width: 966px) {
+/* The dark-mode primary is lightened for link legibility, which would make the
+   hero a glaring pale band. Use a deep brand-tinted surface instead (12.9:1). */
+[data-theme='dark'] .heroBanner {
+  --ifm-hero-background-color: #223052;
+  --ifm-hero-text-color: #ffffff;
+}
+
+@media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2rem;
   }
@@ -27,6 +34,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .features {
@@ -34,6 +43,10 @@
   align-items: center;
   padding: 5rem 0;
   width: 100%;
+}
+
+.feature {
+  padding: 0 1rem;
 }
 
 .featureImage {
@@ -45,6 +58,6 @@
   align-items: center;
   display: flex;
   width: 100%;
-  background-color: #CCD1D1;
+  background-color: var(--vizseq-quickstart-bg);
   padding: 2rem;
 }

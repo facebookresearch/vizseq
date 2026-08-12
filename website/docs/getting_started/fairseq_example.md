@@ -6,9 +6,9 @@ sidebar_label: Fairseq Integration
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-<a href="https://github.com/pytorch/fairseq" target="_blank">Fairseq</a> is a popular sequence modeling toolkit
+<a href="https://github.com/facebookresearch/fairseq" target="_blank">Fairseq</a> is a popular sequence modeling toolkit
 developed by Facebook AI Research. VizSeq can directly import and analyze model predictions generated
-by <a href="https://github.com/pytorch/fairseq/blob/master/generate.py" target="_blank">fairseq-generate</a> or <a href="https://github.com/pytorch/fairseq/blob/master/interactive.py" target="_blank">fairseq-interactive</a> in
+by <a href="https://github.com/facebookresearch/fairseq/blob/main/fairseq_cli/generate.py" target="_blank">fairseq-generate</a> or <a href="https://github.com/facebookresearch/fairseq/blob/main/fairseq_cli/interactive.py" target="_blank">fairseq-interactive</a> in
 Jupyter Notebook. <a href={useBaseUrl('docs/features/fairseq_api')}>The APIs</a> are almost the same
 as <a href={useBaseUrl('docs/getting_started/ipynb_example')}>the normal Jupyter Notebook APIs</a>:
 

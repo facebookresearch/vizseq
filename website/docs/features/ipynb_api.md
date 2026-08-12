@@ -23,7 +23,7 @@ Default to `None`.
 
 ### `available_scorers()`
 Showing the IDs of built-in scorers, which can be used in [`view_scores()`](#view_scores) and
-[`view_examples()`](#vizseqview_examples).
+[`view_examples()`](#view_examples).
 
 ### `view_scores()`
 #### Arguments
@@ -70,4 +70,7 @@ for more details.
 - **`k`: int = 64**:
 Number of n-grams to be shown. Default to `64`.
 
-## <a href={useBaseUrl('docs/features/fairseq_api')}>Fairseq Integration APIs</a>
+## Fairseq Integration APIs
+
+VizSeq has a parallel set of APIs for analyzing `fairseq-generate` and `fairseq-interactive` logs
+directly. See <a href={useBaseUrl('docs/features/fairseq_api')}>Fairseq Integration APIs</a>.
