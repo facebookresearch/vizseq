@@ -16,6 +16,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     # Superseded builds of the same branch/PR are pointless; cancel them. Keyed
     # per ref so PR builds never queue behind each other or behind a deployment.
     concurrency:
