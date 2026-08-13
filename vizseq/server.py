@@ -287,10 +287,19 @@ class ConfigHandler(VizSeqBaseRequestHandler):
 
     def post(self):
         g_cred_path = self.get_argument('g_cred_path', '')
-        # set_g_cred_path() accepts only a readable JSON file, which keeps this
-        # endpoint from doubling as a probe for arbitrary filesystem paths. It
-        # also applies the credentials to this process, so /g_translate picks
-        # them up without a restart.
+        # The path is deliberately unconstrained: service account credentials
+        # normally live outside --data-root (e.g. ~/.config/gcloud), so
+        # confining it to an allowlisted root would break the common setup.
+        # set_g_cred_path() therefore validates the file's kind (a readable
+        # .json) but not its location, which does make the valid/invalid
+        # response an existence oracle for readable JSON files anywhere on
+        # disk. That is accepted rather than fixed: the server binds to
+        # localhost by default and requires an XSRF token, so reaching this
+        # needs an operator to expose it deliberately. See CodeQL alert #15
+        # (py/path-injection), dismissed on the same rationale. Revisit if
+        # this endpoint ever becomes reachable without those two conditions.
+        # set_g_cred_path() also applies the credentials to this process, so
+        # /g_translate picks them up without a restart.
         try:
             set_g_cred_path(g_cred_path)
         except (OSError, ValueError):
