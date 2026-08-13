@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="VizSeq: a visual analysis toolkit for text generation tasks">
   <meta name="author" content="Changhan Wang">
+  <meta name="xsrf-token" content="{{ xsrf_token }}">
 
   <title>VizSeq - {% block title %}{% endblock %}</title>
 
@@ -44,6 +45,21 @@
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script>
+    // Tornado rejects state-changing requests that don't echo the _xsrf cookie
+    // back. Same-origin only, so the token is never sent to a third party.
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!settings.crossDomain && !/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+                xhr.setRequestHeader(
+                    'X-XSRFToken',
+                    document.querySelector('meta[name="xsrf-token"]').content
+                );
+            }
+        }
+    });
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
         integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
