@@ -75,7 +75,12 @@ class VizSeqScorer(object):
     ):
         self.corpus_level = corpus_level
         self.sent_level = sent_level
-        self.n_workers = n_workers
+        # Keep what the caller asked for. n_workers=None means "scale with the
+        # sample count", which can only be resolved once the samples are known,
+        # so _update_n_workers() must always re-derive from this rather than
+        # from the value it last wrote to self.n_workers.
+        self._requested_n_workers = n_workers
+        self.n_workers = 1
         self._update_n_workers()
         self.verbose = verbose
         self.extra_args = extra_args
@@ -91,14 +96,13 @@ class VizSeqScorer(object):
 
     def _update_n_workers(self, n_samples: Optional[int] = None) -> None:
         max_n_workers = cpu_count() - 1
-        if self.n_workers is None:
-            if n_samples is not None:
-                self.n_workers = int(
-                    math.ceil(n_samples / self.SAMPLES_PER_WORKER)
-                )
+        n_workers = self._requested_n_workers
+        if n_workers is None:
+            if n_samples is None:
+                n_workers = 1
             else:
-                self.n_workers = 1
-        self.n_workers = max(1, min(self.n_workers, max_n_workers))
+                n_workers = int(math.ceil(n_samples / self.SAMPLES_PER_WORKER))
+        self.n_workers = max(1, min(n_workers, max_n_workers))
 
     @staticmethod
     def _batch(hypo: List[str], ref: List[List[str]], n_batches: int):
