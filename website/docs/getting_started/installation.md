@@ -6,7 +6,7 @@ sidebar_label: Installation
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-VizSeq requires **Python 3.9+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as
+VizSeq requires **Python 3.11+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as
 well in the future.
 
 You can install VizSeq from PyPI repository:
