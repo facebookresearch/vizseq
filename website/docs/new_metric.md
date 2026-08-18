@@ -24,6 +24,7 @@ class NewMetricScorer(VizSeqScorer):
     ) -> VizSeqScore:
         # calculate the number of workers by number of examples
         self._update_n_workers(len(hypothesis))
+        # read the result from self.n_workers (do not assign to it, see below)
 
         corpus_score, group_scores, sent_scores = None, None, None
 
@@ -42,6 +43,21 @@ class NewMetricScorer(VizSeqScorer):
             corpus_score=corpus_score, sent_scores=sent_scores,
             group_scores=group_scores
         )
+```
+
+### Choosing the Number of Workers
+
+`self.n_workers` is a *derived* value, not a setting: every `self._update_n_workers(n_samples)` call recomputes it from
+the `n_workers` argument the scorer was constructed with, capped by the number of CPUs available to the process. When
+that argument is `None` (the default), the worker count scales with `n_samples`, which is why it can only be resolved
+inside `score()`.
+
+Read `self.n_workers` after calling `_update_n_workers()`, but do not assign to it — the next `_update_n_workers()` call
+overwrites whatever you store there. To pin a worker count, pass `n_workers` to the constructor instead of setting the
+attribute:
+
+```python
+NewMetricScorer(corpus_level=True, n_workers=2)  # not: scorer.n_workers = 2
 ```
 
 ### Testing the New Scorer Class

@@ -58,6 +58,40 @@ class VizSeqScore(NamedTuple):
         }
 
 
+def _cgroup_cpu_quota() -> Optional[float]:
+    try:  # cgroup v2: '<quota> <period>', with quota 'max' when unlimited
+        quota, period = Path('/sys/fs/cgroup/cpu.max').read_text().split()
+        if quota != 'max':
+            return int(quota) / int(period)
+    except (OSError, ValueError):
+        pass
+    try:  # cgroup v1: non-positive quota when unlimited
+        root = Path('/sys/fs/cgroup/cpu')
+        quota = int((root / 'cpu.cfs_quota_us').read_text())
+        period = int((root / 'cpu.cfs_period_us').read_text())
+        if quota > 0 and period > 0:
+            return quota / period
+    except (OSError, ValueError):
+        pass
+    return None
+
+
+def _available_cpu_count() -> int:
+    # cpu_count() reports the machine's CPUs, which overshoots whenever this
+    # process is confined to fewer of them: by a CPU affinity mask (taskset,
+    # `docker --cpuset-cpus`) or by a cgroup CPU quota (`docker --cpus`,
+    # Kubernetes CPU limits). Oversubscribing a process pool that far is much
+    # worse than running a few workers short.
+    try:
+        n_cpus = len(os.sched_getaffinity(0))  # Linux-only
+    except AttributeError:
+        n_cpus = cpu_count()
+    quota = _cgroup_cpu_quota()
+    if quota is not None:
+        n_cpus = min(n_cpus, max(1, int(math.floor(quota))))
+    return n_cpus
+
+
 def _batch(a_list: list, n_batches: int):
     batch_size = len(a_list) // n_batches + int(len(a_list) % n_batches > 0)
     if batch_size > 0:
@@ -75,7 +109,11 @@ class VizSeqScorer(object):
     ):
         self.corpus_level = corpus_level
         self.sent_level = sent_level
-        self.n_workers = n_workers
+        # Keep what the caller asked for. n_workers=None means "scale with the
+        # sample count", which can only be resolved once the samples are known,
+        # so _update_n_workers() must always re-derive from this rather than
+        # from the value it last wrote to self.n_workers.
+        self._requested_n_workers = n_workers
         self._update_n_workers()
         self.verbose = verbose
         self.extra_args = extra_args
@@ -90,15 +128,14 @@ class VizSeqScorer(object):
         return unique_elements
 
     def _update_n_workers(self, n_samples: Optional[int] = None) -> None:
-        max_n_workers = cpu_count() - 1
-        if self.n_workers is None:
-            if n_samples is not None:
-                self.n_workers = int(
-                    math.ceil(n_samples / self.SAMPLES_PER_WORKER)
-                )
+        max_n_workers = _available_cpu_count() - 1
+        n_workers = self._requested_n_workers
+        if n_workers is None:
+            if n_samples is None:
+                n_workers = 1
             else:
-                self.n_workers = 1
-        self.n_workers = max(1, min(self.n_workers, max_n_workers))
+                n_workers = int(math.ceil(n_samples / self.SAMPLES_PER_WORKER))
+        self.n_workers = max(1, min(n_workers, max_n_workers))
 
     @staticmethod
     def _batch(hypo: List[str], ref: List[List[str]], n_batches: int):
