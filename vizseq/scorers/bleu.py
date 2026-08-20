@@ -23,7 +23,7 @@ def _get_sent_bleu(
         hypothesis: List[str], references: List[List[str]],
         extra_args: Optional[Dict[str, str]] = None, score='score'
 ) -> List[float]:
-    tokenizer = get_optional_dict(extra_args, 'tokenizer', 'none')
+    tokenizer = get_optional_dict(extra_args, 'tokenizer', '13a')
     scorer = BLEU(
         tokenize=tokenizer, smooth_method='floor', effective_order=True,
         force=True,
@@ -39,7 +39,7 @@ class BLEUScorer(VizSeqScorer):
             self, hypothesis: List[str], references: List[List[str]],
             score='score'
     ) -> float:
-        tokenizer = get_optional_dict(self.extra_args, 'tokenizer', 'none')
+        tokenizer = get_optional_dict(self.extra_args, 'tokenizer', '13a')
         scorer = BLEU(tokenize=tokenizer, force=True)
         if self.n_workers == 1:
             corpus_score = scorer.corpus_score(hypothesis, references)
