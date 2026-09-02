@@ -8,6 +8,7 @@
 from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
 
 import numpy as np
+from threading import Lock
 from typing import Any, List, Optional, Tuple
 
 
@@ -21,6 +22,7 @@ from typing import Any, List, Optional, Tuple
 # changes when the dataset or the worker count does.
 _cached_bert_scorer_key: Optional[Tuple[type, str, int]] = None
 _cached_bert_scorer: Optional[Any] = None
+_bert_scorer_cache_lock = Lock()
 
 
 def _get_bert_scorer(bs, lang: str, nthreads: int):
@@ -29,15 +31,21 @@ def _get_bert_scorer(bs, lang: str, nthreads: int):
     # constructor that produced it, so a swapped-out bert_score module (a
     # reload, or a test double) gets its own scorer rather than a stale one.
     key = (bs.BERTScorer, lang, nthreads)
-    if _cached_bert_scorer is None or _cached_bert_scorer_key != key:
-        _cached_bert_scorer = bs.BERTScorer(lang=lang, nthreads=nthreads)
-        _cached_bert_scorer_key = key
-    return _cached_bert_scorer
+    with _bert_scorer_cache_lock:
+        if _cached_bert_scorer is None or _cached_bert_scorer_key != key:
+            # Drop the old model before loading its replacement so a language
+            # or worker-count change does not require both models to fit in
+            # memory at once.
+            _cached_bert_scorer_key, _cached_bert_scorer = None, None
+            scorer = bs.BERTScorer(lang=lang, nthreads=nthreads)
+            _cached_bert_scorer_key, _cached_bert_scorer = key, scorer
+        return _cached_bert_scorer
 
 
 def _clear_bert_scorer_cache() -> None:
     global _cached_bert_scorer_key, _cached_bert_scorer
-    _cached_bert_scorer_key, _cached_bert_scorer = None, None
+    with _bert_scorer_cache_lock:
+        _cached_bert_scorer_key, _cached_bert_scorer = None, None
 
 
 @register_scorer('bert_score', 'BERTScore')
