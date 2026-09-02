@@ -40,17 +40,12 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         python-version: ["3.11", "3.12", "3.13"]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install libsndfile (Linux)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libsndfile1
-      - name: Install libsndfile (macOS)
-        if: runner.os == 'macOS'
-        run: brew install libsndfile
       - name: Install VizSeq
         run: pip install -e .
       - name: Download example data
@@ -76,12 +71,24 @@ jobs:
   coverage:
     needs: lint
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: sudo apt-get update && sudo apt-get install -y libsndfile1
+      - name: Install libsndfile
+        run: |
+          sudo apt-get \
+            -o Acquire::Retries=3 \
+            -o Acquire::http::Timeout=30 \
+            -o Acquire::https::Timeout=30 \
+            update
+          sudo apt-get \
+            -o Acquire::Retries=3 \
+            -o Acquire::http::Timeout=30 \
+            -o Acquire::https::Timeout=30 \
+            install -y libsndfile1
       - name: Install VizSeq
         run: pip install -e .[all] pytest pytest-cov
       - name: Download example data
