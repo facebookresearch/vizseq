@@ -13,6 +13,10 @@ from typing import List, Optional
 
 @register_scorer('bert_score', 'BERTScore')
 class BERTScoreScorer(VizSeqScorer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._bert_scorer = None
+
     def score(
             self, hypothesis: List[str], references: List[List[str]],
             tags: Optional[List[List[str]]] = None
@@ -33,9 +37,13 @@ class BERTScoreScorer(VizSeqScorer):
 
         lang = langid.classify(references[0][0])[0]
 
-        sent_scores = bs.score(
-            hypothesis, references[0], nthreads=self.n_workers, lang=lang,
-            verbose=self.verbose
+        if self._bert_scorer is None or self._bert_scorer.lang != lang:
+            self._bert_scorer = bs.BERTScorer(
+                lang=lang, nthreads=self.n_workers
+            )
+
+        sent_scores = self._bert_scorer.score(
+            hypothesis, references[0], verbose=self.verbose
         )[2].tolist()
 
         if self.corpus_level:
