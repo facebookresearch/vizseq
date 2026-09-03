@@ -64,6 +64,19 @@ class BERTScoreScorer(VizSeqScorer):
             raise ValueError(
                 f'All reference lists must have the same length as hypothesis ({n_samples})'
             )
+        if n_samples == 0:
+            # Nothing to score, and no text to detect a language from. Most
+            # scorers return nan for an empty corpus rather than raising, so
+            # do the same instead of falling through to references[0][0].
+            return VizSeqScore.make(
+                corpus_score=np.nan if self.corpus_level else None,
+                sent_scores=[],
+                group_scores={} if tags is not None else None,
+            )
+        if not references:
+            # The length check above is vacuous when there is nothing to
+            # iterate over, and scoring reads references[0] below.
+            raise ValueError('At least one reference list is required')
 
         try:
             import bert_score as bs
