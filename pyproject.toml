@@ -39,7 +39,7 @@ embeddings = [
     "torch>=1.9.0,<2.0.0",
     "transformers>=3.0.0,<4.46.0",
     "laserembeddings>=1.0.0,<2.0.0",
-    "bert-score>=0.3.0,<1.0.0",
+    "bert-score>=0.3.1,<1.0.0",
 ]
 audio = [
     "soundfile>=0.10.0,<1.0.0",
