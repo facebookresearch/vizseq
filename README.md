@@ -44,7 +44,7 @@ a normal Python package.
 ## Getting Started
 
 ### Installation
-VizSeq requires **Python 3.11+** and currently runs on **Unix/Linux** and **macOS/OS X**. It will support **Windows** as well in the future.
+VizSeq requires **Python 3.11+** and supports **Windows**, **Linux**, and **macOS**.
 
 You can install VizSeq from PyPI repository:
 ```bash
@@ -82,7 +82,7 @@ Download example data:
 ```bash
 $ git clone https://github.com/facebookresearch/vizseq
 $ cd vizseq
-$ bash get_example_data.sh
+$ python get_example_data.py
 ```
 Launch the web server:
 ```bash

@@ -15,7 +15,7 @@ jobs:
           python-version: "3.11"
       - run: pip install flake8
       - name: Run flake8
-        run: flake8 vizseq tests
+        run: flake8 vizseq tests get_example_data.py
 
   security:
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.11", "3.12", "3.13"]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
@@ -49,7 +49,8 @@ jobs:
       - name: Install VizSeq
         run: pip install -e .
       - name: Download example data
-        run: bash get_example_data.sh
+        run: python get_example_data.py
+      - run: python -m tests.test_get_example_data
       - run: python -m tests.test_n_gram_based_scorers
       - run: python -m tests.test_ipynb
       - run: python -m tests.test_web
@@ -65,7 +66,7 @@ jobs:
       - name: Install VizSeq with embedding dependencies
         run: pip install -e .[embeddings]
       - name: Download example data
-        run: bash get_example_data.sh
+        run: python get_example_data.py
       - run: python -m tests.test_embedding_based_scorers
 
   coverage:
@@ -92,7 +93,7 @@ jobs:
       - name: Install VizSeq
         run: pip install -e .[all] pytest pytest-cov
       - name: Download example data
-        run: bash get_example_data.sh
+        run: python get_example_data.py
       - name: Run tests with coverage
         run: pytest tests/ --cov=vizseq --cov-report=xml --cov-report=term-missing
       - uses: actions/upload-artifact@v4

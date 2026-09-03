@@ -11,7 +11,7 @@ To get the data for the following examples:
 ```bash
 $ git clone https://github.com/facebookresearch/vizseq
 $ cd vizseq
-$ bash get_example_data.sh
+$ python get_example_data.py
 ```
 The data will be available in `examples/data`.
 

@@ -72,7 +72,9 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.old_home = os.environ.get('HOME')
+        self.old_userprofile = os.environ.get('USERPROFILE')
         os.environ['HOME'] = self.temp_dir.name
+        os.environ['USERPROFILE'] = self.temp_dir.name
         self.data_root = os.path.join(self.temp_dir.name, 'data')
         self.task_root = os.path.join(self.data_root, 'test_task')
         os.makedirs(self.task_root)
@@ -97,6 +99,10 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
             os.environ.pop('HOME', None)
         else:
             os.environ['HOME'] = self.old_home
+        if self.old_userprofile is None:
+            os.environ.pop('USERPROFILE', None)
+        else:
+            os.environ['USERPROFILE'] = self.old_userprofile
         self.temp_dir.cleanup()
 
     def get_app(self):
