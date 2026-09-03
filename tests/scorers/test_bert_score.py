@@ -14,12 +14,9 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 import numpy as np
+from vizseq.scorers.bert_score import _clear_bert_scorer_cache, BERTScoreScorer
 
 from . import VizSeqScorerTestCase
-from vizseq.scorers.bert_score import (
-    BERTScoreScorer,
-    _clear_bert_scorer_cache,
-)
 
 
 class BERTScoreScorerTestCase(VizSeqScorerTestCase):
@@ -38,9 +35,8 @@ class BERTScoreScorerReuseTestCase(unittest.TestCase):
         instances = []
 
         class FakeBERTScorer:
-            def __init__(self, lang, nthreads):
+            def __init__(self, lang):
                 self.lang = lang
-                self.nthreads = nthreads
                 self.calls = []
                 instances.append(self)
 
@@ -50,8 +46,8 @@ class BERTScoreScorerReuseTestCase(unittest.TestCase):
                 return scores, scores, scores
 
         modules = {
-            'bert_score': SimpleNamespace(BERTScorer=FakeBERTScorer),
-            'langid': SimpleNamespace(classify=lambda _: ('en', 1.0)),
+            "bert_score": SimpleNamespace(BERTScorer=FakeBERTScorer),
+            "langid": SimpleNamespace(classify=lambda _: ("en", 1.0)),
         }
         first_scorer = BERTScoreScorer(
             corpus_level=True, sent_level=True, n_workers=1, verbose=True
@@ -59,15 +55,14 @@ class BERTScoreScorerReuseTestCase(unittest.TestCase):
         second_scorer = BERTScoreScorer(
             corpus_level=True, sent_level=True, n_workers=1, verbose=True
         )
-        hypothesis = ['first hypothesis', 'second hypothesis']
-        references = [['first reference', 'second reference']]
+        hypothesis = ["first hypothesis", "second hypothesis"]
+        references = [["first reference", "second reference"]]
 
         with patch.dict(sys.modules, modules):
             first = first_scorer.score(hypothesis, references)
             second = second_scorer.score(hypothesis, references)
 
         self.assertEqual(len(instances), 1)
-        self.assertEqual(instances[0].nthreads, 1)
         self.assertEqual(len(instances[0].calls), 2)
         self.assertTrue(instances[0].calls[0][2])
         self.assertEqual(first, second)
@@ -78,9 +73,9 @@ class BERTScoreScorerReuseTestCase(unittest.TestCase):
         instances = []
 
         class FakeBERTScorer:
-            def __init__(self, lang, nthreads):
+            def __init__(self, lang):
                 if instances and instances[-1]() is not None:
-                    raise AssertionError('Previous model is still alive')
+                    raise AssertionError("Previous model is still alive")
                 self.lang = lang
                 instances.append(weakref.ref(self))
 
@@ -88,17 +83,15 @@ class BERTScoreScorerReuseTestCase(unittest.TestCase):
                 scores = np.array([0.5])
                 return scores, scores, scores
 
-        languages = iter(['en', 'de'])
+        languages = iter(["en", "de"])
         modules = {
-            'bert_score': SimpleNamespace(BERTScorer=FakeBERTScorer),
-            'langid': SimpleNamespace(
-                classify=lambda _: (next(languages), 1.0)
-            ),
+            "bert_score": SimpleNamespace(BERTScorer=FakeBERTScorer),
+            "langid": SimpleNamespace(classify=lambda _: (next(languages), 1.0)),
         }
 
         with patch.dict(sys.modules, modules):
-            BERTScoreScorer().score(['first'], [['first']])
-            BERTScoreScorer().score(['zweite'], [['zweite']])
+            BERTScoreScorer().score(["first"], [["first"]])
+            BERTScoreScorer().score(["zweite"], [["zweite"]])
 
         self.assertIsNone(instances[0]())
         self.assertIsNotNone(instances[1]())
@@ -109,7 +102,7 @@ class BERTScoreScorerReuseTestCase(unittest.TestCase):
         instances = []
 
         class FakeBERTScorer:
-            def __init__(self, lang, nthreads):
+            def __init__(self, lang):
                 self.lang = lang
                 instances.append(self)
                 constructor_started.set()
@@ -120,20 +113,18 @@ class BERTScoreScorerReuseTestCase(unittest.TestCase):
                 return scores, scores, scores
 
         modules = {
-            'bert_score': SimpleNamespace(BERTScorer=FakeBERTScorer),
-            'langid': SimpleNamespace(classify=lambda _: ('en', 1.0)),
+            "bert_score": SimpleNamespace(BERTScorer=FakeBERTScorer),
+            "langid": SimpleNamespace(classify=lambda _: ("en", 1.0)),
         }
 
         with patch.dict(sys.modules, modules):
             with ThreadPoolExecutor(max_workers=1) as executor:
-                first = executor.submit(
-                    BERTScoreScorer().score, ['first'], [['first']]
-                )
+                first = executor.submit(BERTScoreScorer().score, ["first"], [["first"]])
                 self.assertTrue(constructor_started.wait(timeout=1))
                 timer = Timer(0.5, release_constructor.set)
                 timer.start()
                 try:
-                    BERTScoreScorer().score(['second'], [['second']])
+                    BERTScoreScorer().score(["second"], [["second"]])
                     first.result(timeout=2)
                 finally:
                     release_constructor.set()
