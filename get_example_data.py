@@ -76,7 +76,7 @@ def download_example_data(
         except urllib.error.HTTPError as error:
             if error.code in {403, 404}:
                 raise SystemExit(
-                    f'No example dataset named {task!r} was found.'
+                    f'No example dataset named {task!r} was found at {url}.'
                 ) from error
             raise
         _safe_extract(archive_path, extracted_root)

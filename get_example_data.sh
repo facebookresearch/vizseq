@@ -4,6 +4,7 @@
 set -euo pipefail
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+python_cmd=()
 if [ -n "${PYTHON:-}" ]; then
   read -r -a python_cmd <<< "${PYTHON}"
 elif command -v python3 >/dev/null 2>&1; then
@@ -14,6 +15,10 @@ elif command -v py >/dev/null 2>&1; then
   python_cmd=(py)
 else
   echo "Python 3.11 or newer is required." >&2
+  exit 1
+fi
+if [ "${#python_cmd[@]}" -eq 0 ]; then
+  echo "Python interpreter not found: PYTHON is empty or whitespace only." >&2
   exit 1
 fi
 if ! command -v "${python_cmd[0]}" >/dev/null 2>&1; then
@@ -33,7 +38,11 @@ case "$(uname -s)" in
       echo "cygpath is required to run this wrapper on Windows." >&2
       exit 1
     fi
-    script_path="$(cygpath -w "${script_path}")"
+    if ! converted_path="$(cygpath -w "${script_path}")"; then
+      echo "Could not convert the downloader path for Windows." >&2
+      exit 1
+    fi
+    script_path="${converted_path}"
     if [ -z "${script_path}" ]; then
       echo "Could not convert the downloader path for Windows." >&2
       exit 1

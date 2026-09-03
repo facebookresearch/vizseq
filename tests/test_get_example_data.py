@@ -79,12 +79,15 @@ class ExampleDataDownloadTestCase(unittest.TestCase):
             'https://example.test/missing.zip', 403, 'Forbidden', {}, None
         )
 
-        with self.assertRaisesRegex(
-                SystemExit, "No example dataset named 'missing' was found"
-        ):
+        with self.assertRaises(SystemExit) as raised:
             download_example_data(
                 'missing', self.data_root, 'https://example.test'
             )
+        self.assertEqual(
+            str(raised.exception),
+            "No example dataset named 'missing' was found at "
+            'https://example.test/missing.zip.',
+        )
 
 
 if __name__ == '__main__':
