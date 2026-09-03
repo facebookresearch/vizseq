@@ -17,8 +17,9 @@ class VizSeqJson(object):
     @classmethod
     def load_from_path(cls, path: str) -> Any:
         # This path-based utility intentionally reads its caller's file.
-        # lgtm[py/path-injection]
-        with open(path, encoding='utf-8') as f:
+        with open(  # lgtm[py/path-injection]
+                path, encoding='utf-8'
+        ) as f:
             return cls.load(f)
 
     @classmethod
@@ -32,6 +33,7 @@ class VizSeqJson(object):
     @classmethod
     def dump_to_path(cls, obj: Any, path: str):
         # This path-based utility intentionally writes its caller's file.
-        # lgtm[py/path-injection]
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(  # lgtm[py/path-injection]
+                path, 'w', encoding='utf-8'
+        ) as f:
             return cls.dump(obj, f)
