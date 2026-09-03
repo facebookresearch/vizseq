@@ -7,13 +7,23 @@
 import unittest
 from unittest.mock import patch
 
-from vizseq.scorers import MAX_WINDOWS_WORKERS, VizSeqScorer
+from vizseq.scorers import (
+    MAX_WINDOWS_WORKERS, VizSeqScorer, _max_workers_for_platform,
+)
 
 
 class VizSeqScorerBaseTestCase(unittest.TestCase):
-    @patch('vizseq.scorers._available_cpu_count', return_value=128)
-    @patch('vizseq.scorers.sys.platform', 'win32')
-    def test_windows_worker_count_is_capped(self, _cpu_count):
+    def test_max_workers_for_windows_is_capped(self):
+        self.assertEqual(
+            _max_workers_for_platform(128, 'win32'), MAX_WINDOWS_WORKERS
+        )
+        self.assertEqual(_max_workers_for_platform(128, 'linux'), 127)
+
+    @patch(
+        'vizseq.scorers._max_workers_for_platform',
+        return_value=MAX_WINDOWS_WORKERS,
+    )
+    def test_worker_count_respects_platform_limit(self, _max_workers):
         automatically_scaled = VizSeqScorer()
         explicitly_scaled = VizSeqScorer(n_workers=100)
 

@@ -6,8 +6,10 @@
 
 import tempfile
 import unittest
+import urllib.error
 import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 from get_example_data import _safe_extract, download_example_data
 
@@ -70,6 +72,19 @@ class ExampleDataDownloadTestCase(unittest.TestCase):
             with self.subTest(task=task):
                 with self.assertRaisesRegex(ValueError, 'Invalid task name'):
                     download_example_data(task, self.data_root)
+
+    @patch('get_example_data.urllib.request.urlopen')
+    def test_missing_dataset_has_a_clear_error(self, urlopen):
+        urlopen.side_effect = urllib.error.HTTPError(
+            'https://example.test/missing.zip', 403, 'Forbidden', {}, None
+        )
+
+        with self.assertRaisesRegex(
+                SystemExit, "No example dataset named 'missing' was found"
+        ):
+            download_example_data(
+                'missing', self.data_root, 'https://example.test'
+            )
 
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@ import argparse
 import re
 import shutil
 import tempfile
+import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -66,8 +67,18 @@ def download_example_data(
         extracted_root.mkdir()
 
         print(f'Downloading {url}')
-        with urllib.request.urlopen(url) as response, archive_path.open('wb') as output:
-            shutil.copyfileobj(response, output)
+        try:
+            with (
+                    urllib.request.urlopen(url) as response,
+                    archive_path.open('wb') as output,
+            ):
+                shutil.copyfileobj(response, output)
+        except urllib.error.HTTPError as error:
+            if error.code in {403, 404}:
+                raise SystemExit(
+                    f'No example dataset named {task!r} was found.'
+                ) from error
+            raise
         _safe_extract(archive_path, extracted_root)
 
         extracted_task = extracted_root / task
