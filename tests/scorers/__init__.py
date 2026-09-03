@@ -19,11 +19,13 @@ class VizSeqScorerTestCase(unittest.TestCase):
         dataset_root = 'examples/data/translation_wmt14_en_de_test'
         if not os.path.isdir(dataset_root):
             raise NotADirectoryError(f'{dataset_root} does not exist.')
-        with open(f'{dataset_root}/src_0.txt') as f:
+        with open(f'{dataset_root}/src_0.txt', encoding='utf-8') as f:
             self.source = [line.strip() for line in f]
-        with open(f'{dataset_root}/ref_0.txt') as f:
+        with open(f'{dataset_root}/ref_0.txt', encoding='utf-8') as f:
             self.references = [[line.strip() for line in f]]
-        with open(f'{dataset_root}/pred_onlineA.0.txt') as f:
+        with open(
+                f'{dataset_root}/pred_onlineA.0.txt', encoding='utf-8'
+        ) as f:
             self.hypothesis = [line.strip() for line in f]
 
     # Multiprocessing only pays off once there is enough work to amortize

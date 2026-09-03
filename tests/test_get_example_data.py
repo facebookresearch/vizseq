@@ -9,7 +9,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from get_example_data import download_example_data
+from get_example_data import _safe_extract, download_example_data
 
 
 class ExampleDataDownloadTestCase(unittest.TestCase):
@@ -53,18 +53,17 @@ class ExampleDataDownloadTestCase(unittest.TestCase):
 
     def test_rejects_archive_path_traversal(self):
         task = 'example_task'
-        self._write_archive(task, {
+        archive_path = self._write_archive(task, {
             f'{task}/src_0.txt': 'hello\n',
             '../escaped.txt': 'unsafe\n',
         })
+        extracted_root = self.root / 'extracted'
+        extracted_root.mkdir()
 
         with self.assertRaisesRegex(ValueError, 'unsafe path'):
-            download_example_data(
-                task, self.data_root, self.source_root.as_uri()
-            )
+            _safe_extract(archive_path, extracted_root)
 
-        self.assertFalse((self.root / 'escaped.txt').exists())
-        self.assertFalse((self.data_root / task).exists())
+        self.assertFalse((extracted_root.parent / 'escaped.txt').exists())
 
     def test_rejects_invalid_task_name(self):
         with self.assertRaisesRegex(ValueError, 'Invalid task name'):

@@ -35,7 +35,7 @@ def reader(paths: List[str]) -> Dict[str, List[str]]:
     data = {}
     for path in paths:
         name = str(op.splitext(op.basename(path))[0]).split('_', 1)[1]
-        with open(path) as f:
+        with open(path, encoding='utf-8') as f:
             data[name] = [l.strip() for l in f]
     return data
 
