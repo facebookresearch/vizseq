@@ -16,8 +16,7 @@ class VizSeqJson(object):
 
     @classmethod
     def load_from_path(cls, path: str) -> Any:
-        with open(path) as f:
-            f.reconfigure(encoding='utf-8')
+        with open(path, encoding='utf-8') as f:
             return cls.load(f)
 
     @classmethod
@@ -30,6 +29,5 @@ class VizSeqJson(object):
 
     @classmethod
     def dump_to_path(cls, obj: Any, path: str):
-        with open(path, 'w') as f:
-            f.reconfigure(encoding='utf-8')
+        with open(path, 'w', encoding='utf-8') as f:
             return cls.dump(obj, f)

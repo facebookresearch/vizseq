@@ -223,8 +223,7 @@ class VizSeqTextFileSource(VizSeqDataSourceBase):
     def __init__(self, path: str):
         if not os.path.exists(path):
             raise FileNotFoundError(f'File not found: {path}')
-        with open(path) as f:
-            f.reconfigure(encoding='utf-8')
+        with open(path, encoding='utf-8') as f:
             self.data = [line.strip() for line in f]
 
 

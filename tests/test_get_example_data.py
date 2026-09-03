@@ -66,8 +66,10 @@ class ExampleDataDownloadTestCase(unittest.TestCase):
         self.assertFalse((extracted_root.parent / 'escaped.txt').exists())
 
     def test_rejects_invalid_task_name(self):
-        with self.assertRaisesRegex(ValueError, 'Invalid task name'):
-            download_example_data('../example_task', self.data_root)
+        for task in ('.', '..', '../example_task'):
+            with self.subTest(task=task):
+                with self.assertRaisesRegex(ValueError, 'Invalid task name'):
+                    download_example_data(task, self.data_root)
 
 
 if __name__ == '__main__':

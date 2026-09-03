@@ -51,8 +51,7 @@ class VizSeqBaseConfigManager(object):
         self.flush()
 
     def flush(self) -> None:
-        with open(self.path, 'w') as f:
-            f.reconfigure(encoding='utf-8')
+        with open(self.path, 'w', encoding='utf-8') as f:
             VizSeqJson.dump(self.cfg, f)
 
     @property

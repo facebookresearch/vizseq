@@ -10,6 +10,7 @@ import tempfile
 import urllib.request
 import zipfile
 from pathlib import Path
+from typing import Optional
 
 
 DEFAULT_TASK = 'translation_wmt14_en_de_test'
@@ -35,10 +36,14 @@ def _safe_extract(archive_path: Path, destination: Path) -> None:
 
 
 def download_example_data(
-        task: str = DEFAULT_TASK, data_root: Path = None,
+        task: str = DEFAULT_TASK, data_root: Optional[Path] = None,
         data_url: str = DATA_URL,
 ) -> Path:
-    if not TASK_NAME.fullmatch(task) or '..' in task:
+    if (
+            not TASK_NAME.fullmatch(task)
+            or task in {'.', '..'}
+            or Path(task).name != task
+    ):
         raise ValueError(f'Invalid task name: {task}')
 
     if data_root is None:

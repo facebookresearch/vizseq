@@ -23,6 +23,7 @@ from vizseq._utils.optional import map_optional
 EXCLUDED_PREFIXES = ('.', '_')
 PY_FILE_EXT = ('.py', '.pyc')
 PRECISION = 3
+MAX_WINDOWS_WORKERS = 61
 
 SENT_SCORE_FN_TYPE = Callable[[List[str], List[List[str]], Dict], List[float]]
 
@@ -129,6 +130,9 @@ class VizSeqScorer(object):
 
     def _update_n_workers(self, n_samples: Optional[int] = None) -> None:
         max_n_workers = _available_cpu_count() - 1
+        # ProcessPoolExecutor rejects explicit values above 61 on Windows.
+        if sys.platform == 'win32':
+            max_n_workers = min(max_n_workers, MAX_WINDOWS_WORKERS)
         n_workers = self._requested_n_workers
         if n_workers is None:
             if n_samples is None:
