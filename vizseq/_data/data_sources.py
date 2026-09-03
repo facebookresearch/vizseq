@@ -223,11 +223,8 @@ class VizSeqTextFileSource(VizSeqDataSourceBase):
     def __init__(self, path: str):
         if not os.path.exists(path):
             raise FileNotFoundError(f'File not found: {path}')
-        # This source is explicitly constructed with a caller-selected file.
-        with open(
-                path,  # codeql[py/path-injection]
-                encoding='utf-8'
-        ) as f:
+        with open(path) as f:
+            f.reconfigure(encoding='utf-8')
             self.data = [line.strip() for line in f]
 
 

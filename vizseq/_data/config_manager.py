@@ -51,11 +51,8 @@ class VizSeqBaseConfigManager(object):
         self.flush()
 
     def flush(self) -> None:
-        # The manager owns this path, derived from its configured root.
-        with open(
-                self.path,  # codeql[py/path-injection]
-                'w', encoding='utf-8'
-        ) as f:
+        with open(self.path, 'w') as f:
+            f.reconfigure(encoding='utf-8')
             VizSeqJson.dump(self.cfg, f)
 
     @property
