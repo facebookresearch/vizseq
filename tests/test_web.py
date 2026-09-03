@@ -18,6 +18,7 @@ from tornado.testing import AsyncHTTPTestCase
 
 from vizseq import server
 from vizseq._data import VizSeqDataSources
+from vizseq._data.data_sources import VizSeqTextFileSource
 from vizseq._view.data_view import VizSeqDataPageView
 from vizseq._view import mem_cached_data_getters
 
@@ -67,12 +68,24 @@ class VizSeqDataPageViewTestCase(unittest.TestCase):
 
         self.assertEqual(page.cur_idx, [4, 5])
 
+    def test_text_file_source_reads_utf8_independent_of_system_locale(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = os.path.join(temp_dir, 'src_0.txt')
+            with open(path, 'wb') as file:
+                file.write('Grüße 世界\n'.encode('utf-8'))
+
+            source = VizSeqTextFileSource(path)
+
+        self.assertEqual(source.data, ['Grüße 世界'])
+
 
 class VizSeqWebTestCase(AsyncHTTPTestCase):
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
         self.old_home = os.environ.get('HOME')
+        self.old_userprofile = os.environ.get('USERPROFILE')
         os.environ['HOME'] = self.temp_dir.name
+        os.environ['USERPROFILE'] = self.temp_dir.name
         self.data_root = os.path.join(self.temp_dir.name, 'data')
         self.task_root = os.path.join(self.data_root, 'test_task')
         os.makedirs(self.task_root)
@@ -97,13 +110,19 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
             os.environ.pop('HOME', None)
         else:
             os.environ['HOME'] = self.old_home
+        if self.old_userprofile is None:
+            os.environ.pop('USERPROFILE', None)
+        else:
+            os.environ['USERPROFILE'] = self.old_userprofile
         self.temp_dir.cleanup()
 
     def get_app(self):
         return server.make_app()
 
     def _write_lines(self, filename, lines):
-        with open(os.path.join(self.task_root, filename), 'w') as file:
+        with open(
+                os.path.join(self.task_root, filename), 'w', encoding='utf-8'
+        ) as file:
             file.write('\n'.join(lines) + '\n')
 
     def _view_url(self, **params):
