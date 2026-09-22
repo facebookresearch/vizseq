@@ -30,7 +30,10 @@ jobs:
       - name: Run bandit security scan
         run: bandit -r vizseq -ll -ii
       - name: Audit dependencies for known vulnerabilities
-        run: pip-audit
+        # PYSEC-2026-3740 affects NLTK model-artifact APIs that VizSeq does not
+        # use, and no patched NLTK release is available yet. Keep this scoped
+        # exception until upstream publishes one.
+        run: pip-audit --ignore-vuln PYSEC-2026-3740
 
   test:
     needs: lint
