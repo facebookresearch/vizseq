@@ -12,5 +12,25 @@ try:
 except PackageNotFoundError:
     __version__ = '0+unknown'
 
-from vizseq.ipynb import *  # noqa: F401, F403, E402
+from vizseq.ipynb import (  # noqa: E402  (must follow __version__ setup)
+    VizSeqSortingType,
+    available_scorers,
+    set_google_credential_path,
+    view_examples,
+    view_n_grams,
+    view_scores,
+    view_stats,
+)
 from vizseq.ipynb import fairseq_viz as fairseq  # noqa: E402
+
+__all__ = [
+    '__version__',
+    'VizSeqSortingType',
+    'available_scorers',
+    'fairseq',
+    'set_google_credential_path',
+    'view_examples',
+    'view_n_grams',
+    'view_scores',
+    'view_stats',
+]
