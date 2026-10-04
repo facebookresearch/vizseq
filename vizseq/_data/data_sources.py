@@ -125,9 +125,9 @@ def _get_base64_from_path(path: str, media_type: str) -> str:
 
 
 def get_file_type_from_list(paths: List[str]) -> VizSeqDataType:
-    file_extensions = list(set(_get_file_ext(p) for p in paths))
+    file_extensions = list({_get_file_ext(p) for p in paths})
     file_types = list(
-        set(NON_TXT_FILE_EXT_TO_DATA_TYPE.get(e, None) for e in file_extensions)
+        {NON_TXT_FILE_EXT_TO_DATA_TYPE.get(e, None) for e in file_extensions}
     )
     if len(file_types) != 1 or file_types[0] is None:
         raise ValueError(

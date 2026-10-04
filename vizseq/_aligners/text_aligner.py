@@ -26,7 +26,7 @@ class VizSeqBaseTextAligner(object):
         indices = word_rank_alignment(trg_tokens, tokens)
         token_labels = []
         cur = 0
-        for i, w in enumerate(tokens):
+        for _i, w in enumerate(tokens):
             if cur < len(indices) and w == trg_tokens[indices[cur]]:
                 token_labels.append((indices[cur], pos_label))
                 cur += 1

@@ -32,7 +32,7 @@ class VizSeqNGrams(object):
         progress = enumerate(text)
         if verbose:
             progress = tqdm(progress)
-        for i, e in progress:
+        for _i, e in progress:
             for s in e:
                 tokens = s.lower().split(cls.SPACE)
                 for t in range(len(tokens)):

@@ -50,7 +50,7 @@ class VizSeqSrcVisualizer(object):
                     cls._visualize_sent(ss, i, j) for j, ss in enumerate(s)
                 ])
             else:
-                visualized.append([ss for ss in s])
+                visualized.append(list(s))
         return visualized
 
 
