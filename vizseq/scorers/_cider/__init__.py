@@ -137,7 +137,7 @@ class _CIDErScorer(object):
         # measure cosine similarity
         val = np.array([0.0 for _ in range(self.n)])
         for n in range(self.n):
-            for ngram, count in vec_h[n].items():
+            for ngram, _count in vec_h[n].items():
                 val[n] += min(
                     vec_h[n][ngram], vec_r[n][ngram]
                 ) * vec_r[n][ngram]
@@ -154,7 +154,7 @@ class _CIDErScorer(object):
             ) for r in references
         ]
         for cur_refs in zip(*self.refs):
-            for ngram in set(ngram for r in cur_refs for ngram, c in r.items()):
+            for ngram in {k for r in cur_refs for k, _c in r.items()}:
                 self.doc_freq[ngram] += 1
 
     def get_sent_scores(

@@ -119,7 +119,7 @@ class VizSeqWebView(object):
         group_scores = {s: {t: {} for t in tag_set} for s in self.metrics}
         sent_scores = {s: {} for s in self.metrics}
         for s in self.metrics:
-            for i, m in enumerate(self.models):
+            for _i, m in enumerate(self.models):
                 cur = _get_scores(self.dir_path, s, m)
                 cur = [cur.corpus_score, cur.group_scores, cur.sent_scores]
                 corpus_scores[s][m] = cur[0]

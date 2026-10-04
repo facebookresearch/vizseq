@@ -59,6 +59,28 @@ Homepage = "https://github.com/facebookresearch/vizseq"
 [project.scripts]
 vizseq-server = "vizseq.server:main"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "C"]
+ignore = [
+    "E501",  # line too long - too many to fix immediately (matches .flake8)
+    # E203 is preview-only in ruff; W503 not present in ruff (pycodestyle)
+    "B905",  # zip() without strict= - large churn, address separately
+    "C901",  # complex-structure - large churn
+    "E741",  # ambiguous variable name (l, I, O)
+    "B904",  # raise without from - deliberate HTTPError mapping
+]
+# Keep re-exports in __init__.py as public API (matches .flake8 per-file-ignores)
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+
 [tool.setuptools.packages.find]
 include = ["vizseq*"]
 

@@ -5,10 +5,17 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+import importlib.util
+import unittest
+
 from . import VizSeqScorerTestCase
 from vizseq.scorers.laser import LaserScorer
 
 
+@unittest.skipUnless(
+    importlib.util.find_spec('laserembeddings') is not None,
+    'laserembeddings not installed (pip install vizseq[embeddings])',
+)
 class LaserScorerTestCase(VizSeqScorerTestCase):
     def test(self):
         return self._test_embedding_based(

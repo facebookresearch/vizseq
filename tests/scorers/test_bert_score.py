@@ -5,6 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+import importlib.util
 import sys
 import unittest
 import weakref
@@ -19,6 +20,10 @@ from vizseq.scorers.bert_score import _clear_bert_scorer_cache, BERTScoreScorer
 from . import VizSeqScorerTestCase
 
 
+@unittest.skipUnless(
+    importlib.util.find_spec('bert_score') is not None,
+    'bert_score not installed (pip install vizseq[embeddings])',
+)
 class BERTScoreScorerTestCase(VizSeqScorerTestCase):
     def test(self):
         return self._test_embedding_based(BERTScoreScorer)
