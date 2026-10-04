@@ -154,7 +154,7 @@ class _CIDErScorer(object):
             ) for r in references
         ]
         for cur_refs in zip(*self.refs):
-            for ngram in {ngram for r in cur_refs for ngram, _c in r.items()}:
+            for ngram in {k for r in cur_refs for k, _c in r.items()}:
                 self.doc_freq[ngram] += 1
 
     def get_sent_scores(
