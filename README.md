@@ -61,10 +61,11 @@ $ pip install -e .
 The base install keeps dependencies lightweight. Install optional extras only if
 you need them:
 ```bash
-$ pip install vizseq[embeddings]  # LASER and BERTScore scorers (pulls in torch)
+$ pip install vizseq[embeddings]  # BERTScore scorer (pulls in torch, modern torch 2.x supported)
+$ pip install vizseq[laser]       # legacy LASER scorer (pins torch<2.0, numpy<2.0)
 $ pip install vizseq[audio]       # reading .wav/.flac/.sph audio sources
 $ pip install vizseq[translate]   # Google Translate integration
-$ pip install vizseq[all]         # everything above
+$ pip install vizseq[all]         # everything above (embeddings, audio, translate)
 ```
 
 ### [Documentation](https://facebookresearch.github.io/vizseq)
