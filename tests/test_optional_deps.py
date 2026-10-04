@@ -103,10 +103,27 @@ class RuffConfigTestCase(unittest.TestCase):
         self.assertIn("[tool.ruff.lint]", toml)
 
     def test_no_regressed_b007_c401_c416(self):
+        import shutil
         import subprocess
+        import sys
+        from pathlib import Path as _Path
+
+        # CI coverage job has no .venv; lint job installs ruff on PATH.
+        # Resolve ruff portably: PATH first, then repo-local venv fallbacks.
+        ruff = shutil.which("ruff")
+        if ruff is None:
+            for cand in [
+                _Path(".venv/bin/ruff"),
+                _Path(sys.executable).with_name("ruff"),
+            ]:
+                if cand.is_file():
+                    ruff = str(cand)
+                    break
+        if ruff is None:
+            self.skipTest("ruff not installed in this environment")
 
         result = subprocess.run(
-            [".venv/bin/ruff", "check", "vizseq", "--select", "B007,C401,C416"],
+            [ruff, "check", "vizseq", "--select", "B007,C401,C416"],
             capture_output=True,
             text=True,
         )
