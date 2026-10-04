@@ -34,14 +34,23 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Modern BERTScore path — supports PyTorch 2.x, Transformers 4.5x+,
+# NumPy 1.x/2.x. LASER is legacy and frozen (torch<2, numpy<2) —
+# see [laser] extra below.
 embeddings = [
-    # laserembeddings caps torch<2.0, so bert-score's transformers must stay
-    # on a release that still supports torch 1.x (transformers>=4.46 requires
-    # torch>=2.0 and reports it as missing otherwise).
+    "torch>=1.9.0",
+    "transformers>=3.0.0",
+    "bert-score>=0.3.13",
+]
+# Legacy LASER support: laserembeddings 1.1.2 (2020) pins torch<2.0,
+# numpy<2.0, sacremoses==0.0.35, etc. Use only if you need the LASER
+# scorer:  pip install vizseq[laser]  or  pip install vizseq[embeddings,laser]
+laser = [
     "torch>=1.9.0,<2.0.0",
+    "numpy<2.0.0",
     "transformers>=3.0.0,<4.46.0",
-    "laserembeddings>=1.0.0,<2.0.0",
-    "bert-score>=0.3.1,<1.0.0",
+    "laserembeddings==1.1.2",
+    "bert-score>=0.3.13",
 ]
 audio = [
     "soundfile>=0.10.0,<1.0.0",

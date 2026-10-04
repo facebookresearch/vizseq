@@ -59,7 +59,7 @@ class OptionalDepsImportErrorTestCase(unittest.TestCase):
                     scorer = LaserScorer(corpus_level=True, sent_level=False)
                     with self.assertRaises(ImportError) as ctx:
                         scorer.score(["hello"], [["hallo"]])
-                    self.assertIn("vizseq[embeddings]", str(ctx.exception))
+                    self.assertIn("vizseq[laser]", str(ctx.exception))
         finally:
             laser_mod._setup_complete = orig_complete
 
@@ -81,7 +81,7 @@ class OptionalDepsImportErrorTestCase(unittest.TestCase):
 
         if importlib.util.find_spec("laserembeddings") is None:
             self.assertTrue(getattr(LaserScorerTestCase, "__unittest_skip__", False))
-            self.assertIn("embeddings", getattr(LaserScorerTestCase, "__unittest_skip_why__", ""))
+            self.assertIn("laser", getattr(LaserScorerTestCase, "__unittest_skip_why__", ""))
         else:
             self.skipTest("laserembeddings is installed — skip behaviour not exercised")
 

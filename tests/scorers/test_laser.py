@@ -14,7 +14,7 @@ from vizseq.scorers.laser import LaserScorer
 
 @unittest.skipUnless(
     importlib.util.find_spec('laserembeddings') is not None,
-    'laserembeddings not installed (pip install vizseq[embeddings])',
+    'laserembeddings not installed (pip install vizseq[laser])',
 )
 class LaserScorerTestCase(VizSeqScorerTestCase):
     def test(self):
