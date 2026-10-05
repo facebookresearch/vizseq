@@ -35,26 +35,21 @@ class VizSeqScore(NamedTuple):
 
     @classmethod
     def make(
-            cls, corpus_score: Optional[float],
-            sent_scores: Optional[List[float]],
-            group_scores: Optional[Dict[str, float]],
+        cls,
+        corpus_score: Optional[float],
+        sent_scores: Optional[List[float]],
+        group_scores: Optional[Dict[str, float]],
     ):
         return cls(
-            map_optional(
-                corpus_score, lambda x: np.round(x, PRECISION)
-            ),
-            map_optional(
-                sent_scores, lambda x: [np.round(xx, PRECISION) for xx in x]
-            ),
-            map_optional(
-                group_scores,
-                lambda x: {k: np.round(v, PRECISION) for k, v in x.items()}
-            ),
+            map_optional(corpus_score, lambda x: np.round(x, PRECISION)),
+            map_optional(sent_scores, lambda x: [np.round(xx, PRECISION) for xx in x]),
+            map_optional(group_scores, lambda x: {k: np.round(v, PRECISION) for k, v in x.items()}),
         )
 
     def to_dict(self):
         return {
-            'corpus_score': self.corpus_score, 'sent_scores': self.sent_scores,
+            'corpus_score': self.corpus_score,
+            'sent_scores': self.sent_scores,
             'group_scores': self.group_scores,
         }
 
@@ -105,16 +100,19 @@ def _batch(a_list: list, n_batches: int):
     batch_size = len(a_list) // n_batches + int(len(a_list) % n_batches > 0)
     if batch_size > 0:
         for i in range(0, len(a_list), batch_size):
-            yield a_list[i: min(i + batch_size, len(a_list))]
+            yield a_list[i : min(i + batch_size, len(a_list))]
 
 
 class VizSeqScorer(object):
     SAMPLES_PER_WORKER = 1000
 
     def __init__(
-            self, corpus_level: bool = True, sent_level: bool = False,
-            n_workers: Optional[int] = None, verbose: bool = False,
-            extra_args: Optional[Dict[str, str]] = None
+        self,
+        corpus_level: bool = True,
+        sent_level: bool = False,
+        n_workers: Optional[int] = None,
+        verbose: bool = False,
+        extra_args: Optional[Dict[str, str]] = None,
     ):
         self.corpus_level = corpus_level
         self.sent_level = sent_level
@@ -137,9 +135,7 @@ class VizSeqScorer(object):
         return unique_elements
 
     def _update_n_workers(self, n_samples: Optional[int] = None) -> None:
-        max_n_workers = _max_workers_for_platform(
-            _available_cpu_count(), sys.platform
-        )
+        max_n_workers = _max_workers_for_platform(_available_cpu_count(), sys.platform)
         n_workers = self._requested_n_workers
         if n_workers is None:
             if n_samples is None:
@@ -165,29 +161,27 @@ class VizSeqScorer(object):
     @classmethod
     @abstractmethod
     def score(
-            cls, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
+        cls,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
     ) -> VizSeqScore:
         raise NotImplementedError
 
     def _score_sentences_multiprocess(
-            self, hypothesis: List[str], references: List[List[str]],
-            sent_score_func: Optional[SENT_SCORE_FN_TYPE] = None
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        sent_score_func: Optional[SENT_SCORE_FN_TYPE] = None,
     ) -> List[float]:
         self._update_n_workers(len(hypothesis))
         if self.n_workers == 1:
-            sent_scores = sent_score_func(
-                hypothesis, references, extra_args=self.extra_args
-            )
+            sent_scores = sent_score_func(hypothesis, references, extra_args=self.extra_args)
         else:
-            batches = list(
-                self._batch(hypothesis, references, n_batches=self.n_workers)
-            )
+            batches = list(self._batch(hypothesis, references, n_batches=self.n_workers))
             with ProcessPoolExecutor(max_workers=self.n_workers) as executor:
                 futures = {
-                    executor.submit(
-                        sent_score_func, b[0], b[1], extra_args=self.extra_args
-                    ): i
+                    executor.submit(sent_score_func, b[0], b[1], extra_args=self.extra_args): i
                     for i, b in enumerate(batches)
                 }
                 progress = as_completed(futures)
@@ -200,16 +194,16 @@ class VizSeqScorer(object):
         return sent_scores
 
     def _score_multiprocess_averaged(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None,
-            sent_score_func: Optional[SENT_SCORE_FN_TYPE] = None,
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
+        sent_score_func: Optional[SENT_SCORE_FN_TYPE] = None,
     ) -> VizSeqScore:
         self._update_n_workers(len(hypothesis))
 
         corpus_score, sent_scores, group_scores = None, None, None
-        sent_scores = self._score_sentences_multiprocess(
-            hypothesis, references, sent_score_func
-        )
+        sent_scores = self._score_sentences_multiprocess(hypothesis, references, sent_score_func)
 
         if self.corpus_level:
             corpus_score = np.mean(sent_scores)
@@ -223,9 +217,8 @@ class VizSeqScorer(object):
             sent_scores = None
 
         return VizSeqScore.make(
-                corpus_score=corpus_score, sent_scores=sent_scores,
-                group_scores=group_scores
-            )
+            corpus_score=corpus_score, sent_scores=sent_scores, group_scores=group_scores
+        )
 
 
 FILE_ROOT = Path(__file__).parent
@@ -243,6 +236,7 @@ def register_scorer(scorer_id: str, scorer_name: str):
         _SCORER_REGISTRY[scorer_id] = scorer
         _SCORER_ID_TO_NAME[scorer_id] = scorer_name
         return scorer
+
     return register_scorer_class
 
 
@@ -271,7 +265,8 @@ def get_scorer_ids_and_names() -> List[Tuple[str, str]]:
 
 # automatically import any Python files in the scorers/ directory
 scorer_filenames = sorted(
-    m for m in os.listdir(FILE_ROOT)
+    m
+    for m in os.listdir(FILE_ROOT)
     if m.endswith(PY_FILE_EXT) and not m.startswith(EXCLUDED_PREFIXES)
 )
 for m in scorer_filenames:

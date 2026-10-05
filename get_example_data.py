@@ -25,26 +25,19 @@ def _safe_extract(archive_path: Path, destination: Path) -> None:
         for member in archive.infolist():
             member_path = Path(member.filename)
             if member_path.is_absolute() or '..' in member_path.parts:
-                raise ValueError(
-                    f'Archive contains an unsafe path: {member.filename}'
-                )
+                raise ValueError(f'Archive contains an unsafe path: {member.filename}')
             target = (destination / member_path).resolve()
             if not target.is_relative_to(destination):
-                raise ValueError(
-                    f'Archive contains an unsafe path: {member.filename}'
-                )
+                raise ValueError(f'Archive contains an unsafe path: {member.filename}')
         archive.extractall(destination)
 
 
 def download_example_data(
-        task: str = DEFAULT_TASK, data_root: Optional[Path] = None,
-        data_url: str = DATA_URL,
+    task: str = DEFAULT_TASK,
+    data_root: Optional[Path] = None,
+    data_url: str = DATA_URL,
 ) -> Path:
-    if (
-            not TASK_NAME.fullmatch(task)
-            or task in {'.', '..'}
-            or Path(task).name != task
-    ):
+    if not TASK_NAME.fullmatch(task) or task in {'.', '..'} or Path(task).name != task:
         raise ValueError(f'Invalid task name: {task}')
 
     if data_root is None:
@@ -58,9 +51,7 @@ def download_example_data(
 
     data_root.mkdir(parents=True, exist_ok=True)
     url = f'{data_url.rstrip("/")}/{task}.zip'
-    with tempfile.TemporaryDirectory(
-            prefix='.vizseq-download-', dir=data_root
-    ) as temp_dir_name:
+    with tempfile.TemporaryDirectory(prefix='.vizseq-download-', dir=data_root) as temp_dir_name:
         temp_dir = Path(temp_dir_name)
         archive_path = temp_dir / f'{task}.zip'
         extracted_root = temp_dir / 'extracted'
@@ -69,8 +60,8 @@ def download_example_data(
         print(f'Downloading {url}')
         try:
             with (
-                    urllib.request.urlopen(url) as response,
-                    archive_path.open('wb') as output,
+                urllib.request.urlopen(url) as response,
+                archive_path.open('wb') as output,
             ):
                 shutil.copyfileobj(response, output)
         except urllib.error.HTTPError as error:

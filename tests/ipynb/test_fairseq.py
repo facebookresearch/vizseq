@@ -7,15 +7,14 @@
 
 
 from . import VizSeqIpynbTestCase
-from vizseq.ipynb.fairseq_viz import (view_stats, view_examples, view_n_grams,
-                                      view_scores)
+from vizseq.ipynb.fairseq_viz import view_stats, view_examples, view_n_grams, view_scores
 
 
 class VizSeqIpynbFairSeqTestCase(VizSeqIpynbTestCase):
     def setUp(self) -> None:
         self.log_paths = [
             'examples/data/wmt14_fr_en_test.fairseq_generate.log',
-            'examples/data/wmt14_fr_en_test.fairseq_generate.log'
+            'examples/data/wmt14_fr_en_test.fairseq_generate.log',
         ]
 
     def test_view_stats(self):

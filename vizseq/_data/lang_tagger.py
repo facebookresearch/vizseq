@@ -9,7 +9,8 @@ from typing import List, Optional
 
 import langid
 import logging
-logging.getLogger("langid").setLevel(logging.WARNING)
+
+logging.getLogger('langid').setLevel(logging.WARNING)
 
 
 class VizSeqLanguageTagger(object):
@@ -27,9 +28,11 @@ class VizSeqLanguageTagger(object):
             if ref is not None:
                 machine_tags.append(f'trg_lang: {ref_lang}')
 
-        if ref_lang is not None \
-                and ref_lang in cls.POTENTIAL_UNSEGMENTED_LANGUAGES \
-                and ref.find(' ') == -1:
+        if (
+            ref_lang is not None
+            and ref_lang in cls.POTENTIAL_UNSEGMENTED_LANGUAGES
+            and ref.find(' ') == -1
+        ):
             machine_tags.append('unsegmented_trg')
         return machine_tags
 

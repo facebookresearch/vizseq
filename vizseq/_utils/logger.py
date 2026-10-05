@@ -18,14 +18,12 @@ class VizSeqLogFormatter(object):
     def format(self, record: logging.LogRecord):
         elapsed_seconds = round(record.created - self.start_time)
 
-        prefix = "{} - {} - {}".format(
-            record.levelname,
-            time.strftime('%x %X'),
-            timedelta(seconds=elapsed_seconds)
+        prefix = '{} - {} - {}'.format(
+            record.levelname, time.strftime('%x %X'), timedelta(seconds=elapsed_seconds)
         )
         message = record.getMessage()
         message = message.replace('\n', '\n' + ' ' * (len(prefix) + 3))
-        return "{} - {}".format(prefix, message)
+        return '{} - {}'.format(prefix, message)
 
 
 class VizSeqLogger(object):
@@ -49,9 +47,9 @@ class VizSeqLogger(object):
     def warn(self, msg, *args, **kwargs):
         """Deprecated: Use warning() instead."""
         warnings.warn(
-            "logger.warn() is deprecated, use logger.warning() instead",
+            'logger.warn() is deprecated, use logger.warning() instead',
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         self.warning(msg, *args, **kwargs)
 

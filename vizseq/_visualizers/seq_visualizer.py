@@ -12,7 +12,7 @@ from markupsafe import Markup
 
 from vizseq._aligners import VizseqSrcRefTextAligner, VizseqRefHypoTextAligner
 
-SPAN_HIGHTLIGHT_JS = Markup('''
+SPAN_HIGHTLIGHT_JS = Markup("""
 <script>
     function highlight_span(spanNode, trgSpanId) {
         trgSpanNode = document.getElementById(trgSpanId);
@@ -25,7 +25,7 @@ SPAN_HIGHTLIGHT_JS = Markup('''
         spanNode.style.backgroundColor = spanNode.parentNode.style.backgroundColor;
     }
 </script>
-''')
+""")
 
 
 class VizSeqSrcVisualizer(object):
@@ -35,20 +35,16 @@ class VizSeqSrcVisualizer(object):
             f'<span id="src_{data_id}_{example_id}_{k}">{escape(t)}</span>'
             for k, t in enumerate(sent.split())
         ]
-        return Markup(' '.join(spans))  # nosec B704: tokens escaped above
+        return Markup(' '.join(spans))  # nosec B704  # tokens escaped above
 
     @classmethod
-    def visualize(
-            cls, src: List[List[str]], text_data_ids: List[int]
-    ) -> List[List[str]]:
+    def visualize(cls, src: List[List[str]], text_data_ids: List[int]) -> List[List[str]]:
         if len(text_data_ids) == 0:
             return src
         visualized = []
         for i, s in enumerate(src):
             if i in text_data_ids:
-                visualized.append([
-                    cls._visualize_sent(ss, i, j) for j, ss in enumerate(s)
-                ])
+                visualized.append([cls._visualize_sent(ss, i, j) for j, ss in enumerate(s)])
             else:
                 visualized.append(list(s))
         return visualized
@@ -56,9 +52,7 @@ class VizSeqSrcVisualizer(object):
 
 class VizSeqRefVisualizer(object):
     @classmethod
-    def visualize(
-            cls, src: List[str], ref: List[List[str]], src_idx: int
-    ) -> List[List[str]]:
+    def visualize(cls, src: List[str], ref: List[List[str]], src_idx: int) -> List[List[str]]:
         src_ref = [src] + ref
         rendered = [[] for _ in range(len(ref))]
         for i, (s, *r_list) in enumerate(zip(*src_ref)):
@@ -80,7 +74,7 @@ class VizSeqRefVisualizer(object):
 class VizSeqHypoVisualizer(object):
     @classmethod
     def visualize(
-            cls, ref: List[str], hypo: Dict[str, List[str]], ref_idx: int
+        cls, ref: List[str], hypo: Dict[str, List[str]], ref_idx: int
     ) -> Dict[str, List[str]]:
         hypo_ids = sorted(hypo.keys())
         rendered = {k: [] for k in hypo_ids}

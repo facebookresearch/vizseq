@@ -29,10 +29,7 @@ class WerScore(NamedTuple):
 def _get_wer(r: List[str], h: List[str]) -> WerScore:
     len_r, len_h = len(r), len(h)
     edits = [[0 for _ in range(len_h + 1)] for _ in range(len_r + 1)]
-    pt = [
-        [OperationType.correct for _ in range(len_h + 1)]
-        for _ in range(len_r + 1)
-    ]
+    pt = [[OperationType.correct for _ in range(len_h + 1)] for _ in range(len_r + 1)]
 
     for i in range(1, len_r + 1):
         edits[i][0] = i
@@ -75,8 +72,11 @@ def _get_wer(r: List[str], h: List[str]) -> WerScore:
             i -= 1
 
     return WerScore(
-        wer=100. * (n_sub + n_del + n_ins) / len_r, len_r=len_r, deletion=n_del,
-        substitution=n_sub, insertion=n_ins
+        wer=100.0 * (n_sub + n_del + n_ins) / len_r,
+        len_r=len_r,
+        deletion=n_del,
+        substitution=n_sub,
+        insertion=n_ins,
     )
 
 

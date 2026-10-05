@@ -16,11 +16,15 @@ from typing import List
 
 from vizseq._utils.logger import logger
 
-from vizseq._view import (VizSeqWebView, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NO,
-                          MAX_PAGE_SZ, VizSeqSortingType)
+from vizseq._view import (
+    VizSeqWebView,
+    DEFAULT_PAGE_SIZE,
+    DEFAULT_PAGE_NO,
+    MAX_PAGE_SZ,
+    VizSeqSortingType,
+)
 from vizseq._data.zip_file import VizSeqZipFile, ZipExtractionError
-from vizseq._data import (get_g_translate, set_g_cred_path,
-                          VizSeqGlobalConfigManager)
+from vizseq._data import get_g_translate, set_g_cred_path, VizSeqGlobalConfigManager
 from vizseq._visualizers import SPAN_HIGHTLIGHT_JS
 from vizseq._utils import VizSeqJson
 from vizseq import __version__
@@ -35,14 +39,18 @@ DEFAULT_PORT = 9001
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--hostname', type=str, default=DEFAULT_HOSTNAME,
-                        help='address to bind to. Defaults to localhost, so '
-                             'the server is only reachable from this machine; '
-                             'pass 0.0.0.0 to expose it on the network')
-    parser.add_argument('--port', type=int, default=DEFAULT_PORT,
-                        help='server port number')
-    parser.add_argument('--data-root', type=str, default='./examples/data',
-                        help='root path to data')
+    parser.add_argument(
+        '--hostname',
+        type=str,
+        default=DEFAULT_HOSTNAME,
+        help='address to bind to. Defaults to localhost, so '
+        'the server is only reachable from this machine; '
+        'pass 0.0.0.0 to expose it on the network',
+    )
+    parser.add_argument('--port', type=int, default=DEFAULT_PORT, help='server port number')
+    parser.add_argument(
+        '--data-root', type=str, default='./examples/data', help='root path to data'
+    )
     parser.add_argument('--debug', action='store_true', help='debug mode')
     return parser.parse_args()
 
@@ -50,8 +58,7 @@ def parse_args():
 args = argparse.Namespace(data_root='./examples/data')
 
 env = Environment(
-    loader=PackageLoader('vizseq', '_templates'),
-    autoescape=select_autoescape(['html', 'xml'])
+    loader=PackageLoader('vizseq', '_templates'), autoescape=select_autoescape(['html', 'xml'])
 )
 
 # Pattern for safe path components: alphanumeric, underscore, hyphen, dot (but not ..)
@@ -99,8 +106,10 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
 
     def get_url_args(self):
         return {
-            't': self.get_task_arg(), 'm': ','.join(self.get_models_arg()),
-            'q': self.get_query_arg(), 'p_sz': str(self.get_page_sz_arg()),
+            't': self.get_task_arg(),
+            'm': ','.join(self.get_models_arg()),
+            'q': self.get_query_arg(),
+            'p_sz': str(self.get_page_sz_arg()),
             'p_no': str(self.get_page_no_arg()),
             's': str(self.get_sorting_arg()),
             's_metric': self.get_sorting_metric_arg(),
@@ -128,9 +137,7 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
             if value <= 0:
                 raise web.HTTPError(400, 'Page size must be a positive integer')
             if value > MAX_PAGE_SZ:
-                raise web.HTTPError(
-                    400, f'Page size must not exceed {MAX_PAGE_SZ}'
-                )
+                raise web.HTTPError(400, f'Page size must not exceed {MAX_PAGE_SZ}')
             return value
         except ValueError:
             raise web.HTTPError(400, f'Invalid page size: {p_sz!r} is not a valid integer')
@@ -158,9 +165,7 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
             value = int(sorting)
             valid_values = {sorting_type.value for sorting_type in VizSeqSortingType}
             if value not in valid_values:
-                raise web.HTTPError(
-                    400, f'Sorting value must be one of {sorted(valid_values)}'
-                )
+                raise web.HTTPError(400, f'Sorting value must be one of {sorted(valid_values)}')
             return value
         except ValueError:
             raise web.HTTPError(400, f'Invalid sorting value: {sorting!r} is not a valid integer')
@@ -175,11 +180,11 @@ class VizSeqBaseRequestHandler(web.RequestHandler):
 
 class TaskListHandler(VizSeqBaseRequestHandler):
     def get(self):
-        enum_tasks_and_names_and_enum_models = \
+        enum_tasks_and_names_and_enum_models = (
             VizSeqWebView.get_enum_tasks_and_names_and_enum_models(args.data_root)
+        )
         self.render_template(
-            'tasks.html',
-            enum_tasks_and_names_and_enum_models=enum_tasks_and_names_and_enum_models
+            'tasks.html', enum_tasks_and_names_and_enum_models=enum_tasks_and_names_and_enum_models
         )
 
 
@@ -193,45 +198,70 @@ class ViewHandler(VizSeqBaseRequestHandler):
         sorting = self.get_sorting_arg()
         s_metric = self.get_sorting_metric_arg()
         wv = VizSeqWebView(
-            args.data_root, task, models=models, page_sz=page_sz,
-            page_no=page_no, query=query, sorting=sorting,
-            sorting_metric=s_metric
+            args.data_root,
+            task,
+            models=models,
+            page_sz=page_sz,
+            page_no=page_no,
+            query=query,
+            sorting=sorting,
+            sorting_metric=s_metric,
         )
         pd = wv.get_page_data()
         page_no = min(page_no, max(1, math.ceil(pd.n_samples / page_sz)))
         url_args['p_no'] = str(page_no)
         all_tags = wv.get_tags()
-        page_tags = [
-            all_tags[i] if i < len(all_tags) else [] for i in pd.cur_idx
-        ]
+        page_tags = [all_tags[i] if i < len(all_tags) else [] for i in pd.cur_idx]
         self.render_template(
             'view.html',
-            url_args=url_args, task=task, models=models, page_sz=page_sz,
-            page_no=page_no, sorting=sorting, query=query, metrics=wv.metrics,
-            src_has_text=wv.src_has_text, task_name=wv.task_name,
+            url_args=url_args,
+            task=task,
+            models=models,
+            page_sz=page_sz,
+            page_no=page_no,
+            sorting=sorting,
+            query=query,
+            metrics=wv.metrics,
+            src_has_text=wv.src_has_text,
+            task_name=wv.task_name,
             enum_src_names_and_types=wv.enum_src_names_and_types,
-            enum_ref_names=wv.enum_ref_names, trg_lang=pd.trg_lang,
-            span_highlight_js=SPAN_HIGHTLIGHT_JS, page_sizes=wv.page_sizes,
+            enum_ref_names=wv.enum_ref_names,
+            trg_lang=pd.trg_lang,
+            span_highlight_js=SPAN_HIGHTLIGHT_JS,
+            page_sizes=wv.page_sizes,
             enum_metrics_and_names=wv.get_enum_metrics_and_names(),
-            tag_set=wv.get_tag_set(), tags=page_tags,
+            tag_set=wv.get_tag_set(),
+            tags=page_tags,
             auto_tags=[[e] for e in pd.trg_lang],
-            all_metrics_and_names=wv.all_metrics_and_names, s_metric=s_metric,
+            all_metrics_and_names=wv.all_metrics_and_names,
+            s_metric=s_metric,
             pagination=wv.get_pagination(pd.n_samples, page_sz, page_no),
-            cur_idx=pd.cur_idx, viz_src=pd.viz_src, src=pd.cur_src,
-            ref=pd.viz_ref, hypo=pd.viz_hypo, n_samples=pd.n_samples,
-            cur_sent_scores=pd.viz_sent_scores, description=wv.description,
-            tokenization=wv.tokenization, all_tokenization=wv.all_tokenization,
-            total_examples=pd.total_examples, n_cur_samples=pd.n_cur_samples
+            cur_idx=pd.cur_idx,
+            viz_src=pd.viz_src,
+            src=pd.cur_src,
+            ref=pd.viz_ref,
+            hypo=pd.viz_hypo,
+            n_samples=pd.n_samples,
+            cur_sent_scores=pd.viz_sent_scores,
+            description=wv.description,
+            tokenization=wv.tokenization,
+            all_tokenization=wv.all_tokenization,
+            total_examples=pd.total_examples,
+            n_cur_samples=pd.n_cur_samples,
         )
 
 
 class PageDataHandler(VizSeqBaseRequestHandler):
     def get(self):
         wv = VizSeqWebView(
-            args.data_root, self.get_task_arg(), models=self.get_models_arg(),
-            page_sz=self.get_page_sz_arg(), page_no=self.get_page_no_arg(),
-            query=self.get_query_arg(), sorting=self.get_sorting_arg(),
-            sorting_metric=self.get_sorting_metric_arg()
+            args.data_root,
+            self.get_task_arg(),
+            models=self.get_models_arg(),
+            page_sz=self.get_page_sz_arg(),
+            page_no=self.get_page_no_arg(),
+            query=self.get_query_arg(),
+            sorting=self.get_sorting_arg(),
+            sorting_metric=self.get_sorting_metric_arg(),
         )
         page_data_json = wv.get_page_data_with_pagination()
         self.write_json(page_data_json)
@@ -267,9 +297,7 @@ class UploadHandler(VizSeqBaseRequestHandler):
         with open(zip_file_path, 'wb') as f:
             f.write(file1['body'])
         try:
-            VizSeqZipFile.unzip(
-                args.data_root, filename, remove_after_unpacking=True
-            )
+            VizSeqZipFile.unzip(args.data_root, filename, remove_after_unpacking=True)
         except (ZipExtractionError, zipfile.BadZipFile) as e:
             # Clean up the uploaded file if extraction fails
             if os.path.exists(zip_file_path):
@@ -315,9 +343,7 @@ class GTranslateHandler(VizSeqBaseRequestHandler):
         lang = self.get_query_argument('l', None)
         if sent is None or lang is None:
             raise web.HTTPError(400, 'Missing required parameters: s (sentence) and l (language)')
-        translation = VizSeqJson.dumps(
-            {'translation': get_g_translate(sent, lang)}
-        )
+        translation = VizSeqJson.dumps({'translation': get_g_translate(sent, lang)})
         self.write_json(translation)
 
 
@@ -365,7 +391,8 @@ ROUTES = [
 
 def make_app(debug=False):
     return web.Application(
-        ROUTES, debug=debug,
+        ROUTES,
+        debug=debug,
         # /upload, /config and /task_cfg all mutate state without
         # authentication, so they must not be reachable from another origin.
         xsrf_cookies=True,
@@ -377,8 +404,8 @@ def start_server(hostname=DEFAULT_HOSTNAME, port=DEFAULT_PORT, debug=False):
     app = make_app(debug=debug)
     # Bind to hostname rather than every interface: an unauthenticated upload
     # endpoint should not be exposed to the network unless asked for.
-    app.listen(port, address=hostname, max_buffer_size=1024 ** 3)
-    logger.info("Application Started")
+    app.listen(port, address=hostname, max_buffer_size=1024**3)
+    logger.info('Application Started')
     logger.info(f'You can navigate to http://{hostname}:{port}')
     ioloop.IOLoop.current().start()
 

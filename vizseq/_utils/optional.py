@@ -10,7 +10,7 @@ from typing import Optional, Dict, Any, Callable
 
 
 def get_optional_dict(
-        maybe_dict: Optional[Dict[str, str]], key: str, default: Any
+    maybe_dict: Optional[Dict[str, str]], key: str, default: Any
 ) -> Optional[Any]:
     if maybe_dict is None:
         return default

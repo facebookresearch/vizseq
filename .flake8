@@ -1,3 +1,6 @@
+# .flake8 is kept for flake8-bugbear (B) and flake8-comprehensions (C)
+# which are not fully covered by ruff's E/F/B/C selection. Keep
+# max-line-length and ignores in sync with [tool.ruff] in pyproject.toml.
 [flake8]
 max-line-length = 100
 extend-ignore =

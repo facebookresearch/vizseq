@@ -33,23 +33,20 @@ def set_up():
         laserembeddings.Laser().embed_sentences(['This is a test.'], lang='en')
     except FileNotFoundError:
         # Download models using subprocess to avoid mutating global sys.argv
-        subprocess.run(
-            [sys.executable, '-m', 'laserembeddings', 'download-models'],
-            check=True
-        )
+        subprocess.run([sys.executable, '-m', 'laserembeddings', 'download-models'], check=True)
 
     _setup_complete = True
 
 
 def _get_sent_laser(
-        hypothesis: List[str], references: List[List[str]],
-        extra_args: Optional[Dict[str, str]] = None
+    hypothesis: List[str], references: List[List[str]], extra_args: Optional[Dict[str, str]] = None
 ) -> List[float]:
     set_up()
 
     import laserembeddings
     import langid
     import logging
+
     logging.getLogger('langid').setLevel(logging.WARNING)
 
     n_samples = len(hypothesis)
@@ -70,8 +67,10 @@ def _get_sent_laser(
 @register_scorer('laser', 'LASER')
 class LaserScorer(VizSeqScorer):
     def score(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
     ) -> VizSeqScore:
         corpus_score, group_scores, sent_scores = None, None, None
 
@@ -88,6 +87,5 @@ class LaserScorer(VizSeqScorer):
                 group_scores[t] = np.mean([sent_scores[i] for i in indices])
 
         return VizSeqScore.make(
-                corpus_score=corpus_score, sent_scores=sent_scores,
-                group_scores=group_scores
-            )
+            corpus_score=corpus_score, sent_scores=sent_scores, group_scores=group_scores
+        )

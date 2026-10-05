@@ -18,9 +18,7 @@ class VizSeqIpynbTestCase(unittest.TestCase):
             self.source = {'src': [line.strip() for line in f]}
         with open(f'{dataset_root}/ref_0.txt', encoding='utf-8') as f:
             self.references = {'ref': [line.strip() for line in f]}
-        with open(
-                f'{dataset_root}/pred_onlineA.0.txt', encoding='utf-8'
-        ) as f:
+        with open(f'{dataset_root}/pred_onlineA.0.txt', encoding='utf-8') as f:
             self.hypothesis = {'hypo': [line.strip() for line in f]}
         self.tags = {'tag': ['default' for _ in self.source]}
 

@@ -11,17 +11,9 @@ from vizseq.scorers.ter import TERScorer
 
 class TERScorerTestCase(VizSeqScorerTestCase):
     def test_basic_case(self):
-        ref = (
-            'SAUDI ARABIA denied THIS WEEK information published in the'
-            ' AMERICAN new york times'
-        )
-        hyp = (
-            'THIS WEEK THE SAUDIS denied information published in the'
-            ' new york times'
-        )
-        score = TERScorer(sent_level=True, corpus_level=False).score(
-            [hyp], [[ref]]
-        ).sent_scores[0]
+        ref = 'SAUDI ARABIA denied THIS WEEK information published in the AMERICAN new york times'
+        hyp = 'THIS WEEK THE SAUDIS denied information published in the new york times'
+        score = TERScorer(sent_level=True, corpus_level=False).score([hyp], [[ref]]).sent_scores[0]
         self.assertEqual(score, round(4 / 13, 3))
 
     def test(self):

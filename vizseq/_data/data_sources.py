@@ -90,9 +90,7 @@ def get_name_from_path(path: str) -> Optional[str]:
     return None
 
 
-def _get_data_source_names(
-        path_or_paths: Union[str, List[str]]
-) -> Union[str, List[str]]:
+def _get_data_source_names(path_or_paths: Union[str, List[str]]) -> Union[str, List[str]]:
     if len(path_or_paths) == 0:
         return []
 
@@ -126,13 +124,9 @@ def _get_base64_from_path(path: str, media_type: str) -> str:
 
 def get_file_type_from_list(paths: List[str]) -> VizSeqDataType:
     file_extensions = list({_get_file_ext(p) for p in paths})
-    file_types = list(
-        {NON_TXT_FILE_EXT_TO_DATA_TYPE.get(e, None) for e in file_extensions}
-    )
+    file_types = list({NON_TXT_FILE_EXT_TO_DATA_TYPE.get(e, None) for e in file_extensions})
     if len(file_types) != 1 or file_types[0] is None:
-        raise ValueError(
-            f'Expected exactly one valid file type, got extensions: {file_extensions}'
-        )
+        raise ValueError(f'Expected exactly one valid file type, got extensions: {file_extensions}')
     return file_types[0]
 
 
@@ -253,18 +247,14 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
                     if name.endswith(TXT_EXT):
                         # only one txt file for metadata
                         if metadata_txt_name is not None:
-                            raise ValueError(
-                                'ZIP file must contain exactly one .txt metadata file'
-                            )
+                            raise ValueError('ZIP file must contain exactly one .txt metadata file')
                         metadata_txt_name = name
                 with zip_f.open(metadata_txt_name) as f:
                     self.data = [line.decode('utf-8').strip() for line in f]
                 self._data_type = get_file_type_from_list(self.data)
                 missing = [fn for fn in self.data if fn not in name_list]
                 if missing:
-                    raise ValueError(
-                        f'Files listed in metadata not found in ZIP: {missing[:5]}'
-                    )
+                    raise ValueError(f'Files listed in metadata not found in ZIP: {missing[:5]}')
 
     @property
     def data_type(self) -> VizSeqDataType:
@@ -280,9 +270,7 @@ class VizSeqZipFileSource(VizSeqDataSourceBase):
             with zipfile.ZipFile(self.path) as zip_f:
                 for i in ids:
                     file_ext = _get_file_ext(self.data[i])
-                    media_type = NON_TXT_FILE_EXT_TO_MEDIA_TYPE.get(
-                        file_ext, None
-                    )
+                    media_type = NON_TXT_FILE_EXT_TO_MEDIA_TYPE.get(file_ext, None)
                     if media_type is None:
                         raise ValueError(f'Unsupported file extension: {file_ext}')
                     with zip_f.open(self.data[i], 'r') as f:
@@ -366,8 +354,9 @@ class VizSeqDataSource(object):
 
 
 class VizSeqDataSources(object):
-    def __init__(self, path_or_paths_or_dict: PathOrPathsOrDictOfStrList,
-                 text_merged: bool = False):
+    def __init__(
+        self, path_or_paths_or_dict: PathOrPathsOrDictOfStrList, text_merged: bool = False
+    ):
         self.text_merged = text_merged
         self.names = []
         self.data = []
@@ -376,31 +365,21 @@ class VizSeqDataSources(object):
         elif isinstance(path_or_paths_or_dict, str):
             if len(path_or_paths_or_dict) > 0:
                 self.names = _get_data_source_names(path_or_paths_or_dict)
-                self.data = [
-                    VizSeqDataSource(self.names[0], path_or_paths_or_dict)
-                ]
+                self.data = [VizSeqDataSource(self.names[0], path_or_paths_or_dict)]
         elif isinstance(path_or_paths_or_dict, list):
             if not all(isinstance(p, str) for p in path_or_paths_or_dict):
                 raise TypeError('All paths in list must be strings')
             self.names = _get_data_source_names(path_or_paths_or_dict)
-            self.data = [
-                VizSeqDataSource(n, p)
-                for n, p in zip(self.names, path_or_paths_or_dict)
-            ]
+            self.data = [VizSeqDataSource(n, p) for n, p in zip(self.names, path_or_paths_or_dict)]
         elif isinstance(path_or_paths_or_dict, dict):
             self.names = sorted(path_or_paths_or_dict)
-            self.data = [
-                VizSeqDataSource(n, path_or_paths_or_dict[n])
-                for n in self.names
-            ]
+            self.data = [VizSeqDataSource(n, path_or_paths_or_dict[n]) for n in self.names]
         else:
             raise ValueError('Unknown type of data source')
 
         self.n_examples = len(self.data[0]) if len(self.data) > 0 else 0
         if not all(len(d) == self.n_examples for d in self.data):
-            raise ValueError(
-                f'All data sources must have the same length ({self.n_examples})'
-            )
+            raise ValueError(f'All data sources must have the same length ({self.n_examples})')
 
     def __len__(self) -> int:
         return self.n_examples
@@ -459,9 +438,7 @@ class VizSeqDataSources(object):
     def has_audio(self):
         return any(d.is_audio for d in self.data)
 
-    def unique(
-            self, text=True, image=False, audio=False, video=False
-    ) -> Set[str]:
+    def unique(self, text=True, image=False, audio=False, video=False) -> Set[str]:
         _unique = set()
         for d in self.data:
             if d.data_type == VizSeqDataType.text and not text:

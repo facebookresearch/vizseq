@@ -33,6 +33,7 @@ class VizSeqStatsResult(NamedTuple):
         r = self._asdict()
 
         if formatting:
+
             def _format(d):
                 if isinstance(d, (int, float)):
                     return f'{d:,}'
@@ -58,8 +59,10 @@ class VizSeqStats(object):
 
     @classmethod
     def get(
-            cls, src: VizSeqDataSources, ref: VizSeqDataSources,
-            tags: Optional[VizSeqDataSources] = None
+        cls,
+        src: VizSeqDataSources,
+        ref: VizSeqDataSources,
+        tags: Optional[VizSeqDataSources] = None,
     ) -> VizSeqStatsResult:
         n_examples = len(src)
         n_src_tokens, n_ref_tokens = defaultdict(int), defaultdict(int)

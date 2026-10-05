@@ -16,6 +16,8 @@ jobs:
       - run: pip install ruff flake8 flake8-bugbear flake8-comprehensions
       - name: Run ruff
         run: ruff check vizseq tests get_example_data.py
+      - name: Check formatting
+        run: ruff format --check vizseq tests get_example_data.py
       - name: Run flake8
         run: flake8 vizseq tests get_example_data.py
 

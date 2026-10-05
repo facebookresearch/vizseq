@@ -5,6 +5,12 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-from .core import (view_examples, view_n_grams, view_stats, view_scores,
-                   set_google_credential_path, available_scorers,
-                   VizSeqSortingType)
+from .core import (
+    view_examples,
+    view_n_grams,
+    view_stats,
+    view_scores,
+    set_google_credential_path,
+    available_scorers,
+    VizSeqSortingType,
+)

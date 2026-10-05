@@ -33,9 +33,9 @@ MAX_PAGE_SZ = 100
 
 def _get_start_end_idx(n_items: int, page_sz: int, page_no: int) -> Tuple[int, int]:
     if page_sz <= 0 or page_no <= 0:
-        raise ValueError("page_sz and page_no must be positive integers")
+        raise ValueError('page_sz and page_no must be positive integers')
     if n_items < 0:
-        raise ValueError("n_items must be non-negative")
+        raise ValueError('n_items must be non-negative')
     if n_items == 0:
         return 0, -1
     n_pages = int(np.ceil(n_items / page_sz))
@@ -71,8 +71,7 @@ class VizSeqDataPageView(object):
         if data is None:
             return []
         return [
-            [i] + list(e) if isinstance(e, (list, tuple)) else [i, e]
-            for i, e in enumerate(data)
+            [i] + list(e) if isinstance(e, (list, tuple)) else [i, e] for i, e in enumerate(data)
         ]
 
     @classmethod
@@ -84,14 +83,14 @@ class VizSeqDataPageView(object):
         page_sz: int,
         page_no: int,
         metrics: Optional[List[str]] = None,
-        query: str = "",
+        query: str = '',
         sorting: int = 0,
-        sorting_metric: str = "",
+        sorting_metric: str = '',
         need_lang_tags: bool = False,
         disable_alignment: bool = False,
     ) -> VizSeqPageData:
         if page_no <= 0 or page_sz <= 0:
-            raise ValueError("page_no and page_sz must be positive integers")
+            raise ValueError('page_no and page_sz must be positive integers')
         page_sz = min(page_sz, MAX_PAGE_SZ)
         metrics = [] if metrics is None else metrics
         models = hypo.text_names
@@ -127,7 +126,7 @@ class VizSeqDataPageView(object):
         sorting = {e.value: e for e in VizSeqSortingType}.get(sorting, None)
         if sorting is None:
             raise ValueError(
-                f"Invalid sorting value: must be one of {[e.value for e in VizSeqSortingType]}"
+                f'Invalid sorting value: must be one of {[e.value for e in VizSeqSortingType]}'
             )
         if sorting == VizSeqSortingType.random:
             cur_idx = VizSeqRandomSorter.sort(cur_idx)
@@ -150,9 +149,7 @@ class VizSeqDataPageView(object):
                     .sent_scores
                     for m, t in zip(models, hypo.text)
                 }
-                scores = [
-                    {m: scores[m][i] for m in models} for i in range(len(cur_idx))
-                ]
+                scores = [{m: scores[m][i] for m in models} for i in range(len(cur_idx))]
                 cur_idx = VizSeqByMetricSorter.sort(scores, cur_idx)
 
         # pagination
@@ -186,17 +183,13 @@ class VizSeqDataPageView(object):
             viz_src = VizSeqSrcVisualizer.visualize(cur_src, src.text_indices)
         viz_ref = cur_ref
         if not disable_alignment and cur_src_text is not None:
-            viz_ref = VizSeqRefVisualizer.visualize(
-                cur_src_text, cur_ref, src.main_text_idx
-            )
+            viz_ref = VizSeqRefVisualizer.visualize(cur_src_text, cur_ref, src.main_text_idx)
         viz_hypo = cur_hypo
         if not disable_alignment:
             viz_hypo = VizSeqHypoVisualizer.visualize(cur_ref[0], cur_hypo, 0)
         viz_sent_scores = [
             {
-                s: VizSeqDictVisualizer.visualize(
-                    {m: cur_sent_scores[s][m][i] for m in models}
-                )
+                s: VizSeqDictVisualizer.visualize({m: cur_sent_scores[s][m][i] for m in models})
                 for s in metrics
             }
             for i in range(n_cur_samples)

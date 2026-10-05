@@ -5,8 +5,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-from .data_sources import (VizSeqDataSources, PathOrPathsOrDictOfStrList,
-                           SOUNDFILE_FILE_EXTS)
+from .data_sources import VizSeqDataSources, PathOrPathsOrDictOfStrList, SOUNDFILE_FILE_EXTS
 from .zip_file import VizSeqZipFile, ZipExtractionError
 from .n_grams import VizSeqNGrams
 from .stats import VizSeqStats
