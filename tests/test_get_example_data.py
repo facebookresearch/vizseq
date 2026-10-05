@@ -36,9 +36,7 @@ class ExampleDataDownloadTestCase(unittest.TestCase):
         task = 'example_task'
         self._write_archive(task, {f'{task}/src_0.txt': 'hello\n'})
 
-        destination = download_example_data(
-            task, self.data_root, self.source_root.as_uri()
-        )
+        destination = download_example_data(task, self.data_root, self.source_root.as_uri())
 
         self.assertEqual(destination, self.data_root / task)
         self.assertEqual((destination / 'src_0.txt').read_text(), 'hello\n')
@@ -47,18 +45,19 @@ class ExampleDataDownloadTestCase(unittest.TestCase):
         destination = self.data_root / 'example_task'
         destination.mkdir(parents=True)
 
-        result = download_example_data(
-            'example_task', self.data_root, 'not-a-valid-url'
-        )
+        result = download_example_data('example_task', self.data_root, 'not-a-valid-url')
 
         self.assertEqual(result, destination)
 
     def test_rejects_archive_path_traversal(self):
         task = 'example_task'
-        archive_path = self._write_archive(task, {
-            f'{task}/src_0.txt': 'hello\n',
-            '../escaped.txt': 'unsafe\n',
-        })
+        archive_path = self._write_archive(
+            task,
+            {
+                f'{task}/src_0.txt': 'hello\n',
+                '../escaped.txt': 'unsafe\n',
+            },
+        )
         extracted_root = self.root / 'extracted'
         extracted_root.mkdir()
 
@@ -80,13 +79,10 @@ class ExampleDataDownloadTestCase(unittest.TestCase):
         )
 
         with self.assertRaises(SystemExit) as raised:
-            download_example_data(
-                'missing', self.data_root, 'https://example.test'
-            )
+            download_example_data('missing', self.data_root, 'https://example.test')
         self.assertEqual(
             str(raised.exception),
-            "No example dataset named 'missing' was found at "
-            'https://example.test/missing.zip.',
+            "No example dataset named 'missing' was found at https://example.test/missing.zip.",
         )
 
 

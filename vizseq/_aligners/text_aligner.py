@@ -20,8 +20,7 @@ class VizSeqBaseTextAligner(object):
 
     @classmethod
     def _align(
-            cls, trg_tokens: List[str], tokens: List[str],
-            pos_label: Enum, neg_label: Enum
+        cls, trg_tokens: List[str], tokens: List[str], pos_label: Enum, neg_label: Enum
     ) -> List[Tuple[int, Enum]]:
         indices = word_rank_alignment(trg_tokens, tokens)
         token_labels = []
@@ -36,26 +35,33 @@ class VizSeqBaseTextAligner(object):
 
     @classmethod
     def align(
-            cls, trg_tokens: List[str], tokens: Dict[str, List[str]]
+        cls, trg_tokens: List[str], tokens: Dict[str, List[str]]
     ) -> Dict[str, List[Tuple[int, Enum]]]:
         raise NotImplementedError
 
     @classmethod
     def _get_span_html(
-            cls, token: str, span_id_prefix: str, span_type: Enum, data_id: str,
-            example_id: int, token_id: int, trg_span_id_prefix: str,
-            trg_token_id: int
+        cls,
+        token: str,
+        span_id_prefix: str,
+        span_type: Enum,
+        data_id: str,
+        example_id: int,
+        token_id: int,
+        trg_span_id_prefix: str,
+        trg_token_id: int,
     ):
         attributes = [
-            f'id="{span_id_prefix}_{escape(str(data_id), quote=True)}_'
-            f'{example_id}_{token_id}"',
+            f'id="{span_id_prefix}_{escape(str(data_id), quote=True)}_{example_id}_{token_id}"',
         ]
         if trg_token_id != cls.NEG_IDX:
             trg_span_id = f'{trg_span_id_prefix}_{example_id}_{trg_token_id}'
-            attributes.extend([
-                f'onmouseover="javascript:highlight_span(this, &quot;{trg_span_id}&quot;)"',
-                f'onmouseout="javascript:dehighlight_span(this, &quot;{trg_span_id}&quot;)"'
-            ])
+            attributes.extend(
+                [
+                    f'onmouseover="javascript:highlight_span(this, &quot;{trg_span_id}&quot;)"',
+                    f'onmouseout="javascript:dehighlight_span(this, &quot;{trg_span_id}&quot;)"',
+                ]
+            )
         span_style = cls.ALIGNMENT_TYPE_TO_STYLE[span_type]
         if len(span_style) > 0:
             attributes.append(f'style="{span_style}"')
@@ -63,15 +69,17 @@ class VizSeqBaseTextAligner(object):
 
     @classmethod
     def to_span_html(
-            cls, tokens: Dict[str, List[str]],
-            alignments: Dict[str, List[Tuple[int, Enum]]], span_id_prefix: str,
-            example_id: int, trg_span_id_prefix: str
+        cls,
+        tokens: Dict[str, List[str]],
+        alignments: Dict[str, List[Tuple[int, Enum]]],
+        span_id_prefix: str,
+        example_id: int,
+        trg_span_id_prefix: str,
     ) -> Dict[str, List[str]]:
         return {
             k: [
                 cls._get_span_html(
-                    tokens[k][i], span_id_prefix, t[1], k, example_id, i,
-                    trg_span_id_prefix, t[0]
+                    tokens[k][i], span_id_prefix, t[1], k, example_id, i, trg_span_id_prefix, t[0]
                 )
                 for i, t in enumerate(v)
             ]
@@ -99,12 +107,14 @@ class VizseqSrcRefTextAligner(VizSeqBaseTextAligner):
 
     @classmethod
     def align(
-            cls, trg_tokens: List[str], tokens: Dict[str, List[str]]
+        cls, trg_tokens: List[str], tokens: Dict[str, List[str]]
     ) -> Dict[str, List[Tuple[int, Enum]]]:
         return {
             i: cls._align(
-                trg_tokens, t, pos_label=VizSeqSrcRefAlignmentType.copy,
-                neg_label=VizSeqSrcRefAlignmentType.none
+                trg_tokens,
+                t,
+                pos_label=VizSeqSrcRefAlignmentType.copy,
+                neg_label=VizSeqSrcRefAlignmentType.none,
             )
             for i, t in tokens.items()
         }
@@ -120,19 +130,21 @@ class VizseqRefHypoTextAligner(VizSeqBaseTextAligner):
 
     @classmethod
     def align(
-            cls, trg_tokens: List[str], tokens: Dict[str, List[str]]
+        cls, trg_tokens: List[str], tokens: Dict[str, List[str]]
     ) -> Dict[str, List[Tuple[int, Enum]]]:
         aligned = {
             i: cls._align(
-                trg_tokens, t, pos_label=VizSeqRefHypoAlignmentType.confirmed,
-                neg_label=VizSeqRefHypoAlignmentType.unconfirmed
+                trg_tokens,
+                t,
+                pos_label=VizSeqRefHypoAlignmentType.confirmed,
+                neg_label=VizSeqRefHypoAlignmentType.unconfirmed,
             )
             for i, t in tokens.items()
         }
 
         counter = {
             VizSeqRefHypoAlignmentType.confirmed: Counter(),
-            VizSeqRefHypoAlignmentType.unconfirmed: Counter()
+            VizSeqRefHypoAlignmentType.unconfirmed: Counter(),
         }
 
         for k, a in aligned.items():
@@ -144,7 +156,7 @@ class VizseqRefHypoTextAligner(VizSeqBaseTextAligner):
 
         new_label_map = {
             VizSeqRefHypoAlignmentType.confirmed: VizSeqRefHypoAlignmentType.improving,
-            VizSeqRefHypoAlignmentType.unconfirmed: VizSeqRefHypoAlignmentType.worsening
+            VizSeqRefHypoAlignmentType.unconfirmed: VizSeqRefHypoAlignmentType.worsening,
         }
         cross_aligned = {}
         for k, a in aligned.items():

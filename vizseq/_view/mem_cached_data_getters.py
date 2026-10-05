@@ -26,9 +26,7 @@ def _get_ref(dir_path: str):
 
 @lru_cache(maxsize=2)
 def _get_tag(dir_path: str):
-    return VizSeqDataSources(
-        sorted(glob(op.join(dir_path, 'tag_*.txt'))), text_merged=True
-    )
+    return VizSeqDataSources(sorted(glob(op.join(dir_path, 'tag_*.txt'))), text_merged=True)
 
 
 @lru_cache(maxsize=2)

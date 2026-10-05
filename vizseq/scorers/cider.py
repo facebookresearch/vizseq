@@ -15,8 +15,7 @@ from vizseq._utils.optional import get_optional_dict
 
 
 def _get_sent_cider(
-        hypothesis: List[str], references: List[List[str]],
-        extra_args: Optional[Dict[str, str]] = None
+    hypothesis: List[str], references: List[List[str]], extra_args: Optional[Dict[str, str]] = None
 ) -> List[float]:
     n_workers = get_optional_dict(extra_args, 'n_workers', 1)
     verbose = get_optional_dict(extra_args, 'verbose', False)
@@ -28,15 +27,17 @@ def _get_sent_cider(
 @register_scorer('cider', 'CIDEr')
 class CIDErScorer(VizSeqScorer):
     def score(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
     ) -> VizSeqScore:
         self._update_n_workers(len(hypothesis))
 
         sent_scores = _get_sent_cider(
-            hypothesis, references, extra_args={
-                'n_workers': self.n_workers, 'verbose': self.verbose
-            }
+            hypothesis,
+            references,
+            extra_args={'n_workers': self.n_workers, 'verbose': self.verbose},
         )
         corpus_score, group_scores = None, None
 
@@ -52,6 +53,5 @@ class CIDErScorer(VizSeqScorer):
                 group_scores[t] = np.mean([sent_scores[i] for i in indices])
 
         return VizSeqScore.make(
-            corpus_score=corpus_score, sent_scores=sent_scores,
-            group_scores=group_scores
+            corpus_score=corpus_score, sent_scores=sent_scores, group_scores=group_scores
         )

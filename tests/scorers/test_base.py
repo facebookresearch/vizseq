@@ -8,15 +8,15 @@ import unittest
 from unittest.mock import patch
 
 from vizseq.scorers import (
-    MAX_WINDOWS_WORKERS, VizSeqScorer, _max_workers_for_platform,
+    MAX_WINDOWS_WORKERS,
+    VizSeqScorer,
+    _max_workers_for_platform,
 )
 
 
 class VizSeqScorerBaseTestCase(unittest.TestCase):
     def test_max_workers_for_windows_is_capped(self):
-        self.assertEqual(
-            _max_workers_for_platform(128, 'win32'), MAX_WINDOWS_WORKERS
-        )
+        self.assertEqual(_max_workers_for_platform(128, 'win32'), MAX_WINDOWS_WORKERS)
         self.assertEqual(_max_workers_for_platform(128, 'linux'), 127)
 
     @patch(
@@ -29,7 +29,5 @@ class VizSeqScorerBaseTestCase(unittest.TestCase):
 
         automatically_scaled._update_n_workers(62_000)
 
-        self.assertEqual(
-            automatically_scaled.n_workers, MAX_WINDOWS_WORKERS
-        )
+        self.assertEqual(automatically_scaled.n_workers, MAX_WINDOWS_WORKERS)
         self.assertEqual(explicitly_scaled.n_workers, MAX_WINDOWS_WORKERS)

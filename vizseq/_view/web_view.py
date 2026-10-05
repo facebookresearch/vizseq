@@ -12,20 +12,31 @@ import os.path as op
 from glob import glob
 import json
 
-from vizseq._data import (VizSeqTaskConfigManager, VizSeqGlobalConfigManager,
-                          VizSeqStats, set_g_cred_path, VizSeqTableExporter,
-                          VizSeqNGrams, VizSeqTokenization)
+from vizseq._data import (
+    VizSeqTaskConfigManager,
+    VizSeqGlobalConfigManager,
+    VizSeqStats,
+    set_g_cred_path,
+    VizSeqTableExporter,
+    VizSeqNGrams,
+    VizSeqTokenization,
+)
 from vizseq.scorers import get_scorer_name, get_scorer_ids_and_names
 from .data_view import VizSeqDataPageView, VizSeqPageData
-from .mem_cached_data_getters import (_get_src, _get_ref, _get_tag, _get_hypo,
-                                      _get_scores)
+from .mem_cached_data_getters import _get_src, _get_ref, _get_tag, _get_hypo, _get_scores
 
 
 class VizSeqWebView(object):
     def __init__(
-            self, data_root: str, task: str = '', models: List[str] = (),
-            page_sz: int = 10, page_no: int = 1, query: str = '',
-            sorting: int = 0, sorting_metric: str = ''
+        self,
+        data_root: str,
+        task: str = '',
+        models: List[str] = (),
+        page_sz: int = 10,
+        page_no: int = 1,
+        query: str = '',
+        sorting: int = 0,
+        sorting_metric: str = '',
     ):
         if not op.isdir(data_root):
             raise NotADirectoryError(f'{data_root} is not a valid data root.')
@@ -35,9 +46,7 @@ class VizSeqWebView(object):
         self.models = models
         self.page_sz = page_sz
         self.page_no = page_no
-        self.all_metrics_and_names = [
-            list(e) for e in get_scorer_ids_and_names()
-        ]
+        self.all_metrics_and_names = [list(e) for e in get_scorer_ids_and_names()]
 
         self.cfg = VizSeqTaskConfigManager(self.dir_path)
         self.metrics = self.cfg.metrics
@@ -77,12 +86,9 @@ class VizSeqWebView(object):
 
     @classmethod
     def get_enum_tasks_and_names_and_enum_models(
-            cls, data_root: str
+        cls, data_root: str
     ) -> List[Tuple[int, str, str, List[Tuple[int, str]]]]:
-        dirs = [
-            d for d in os.listdir(data_root)
-            if op.isdir(op.join(data_root, d))
-        ]
+        dirs = [d for d in os.listdir(data_root) if op.isdir(op.join(data_root, d))]
         enum_tasks_and_names_and_enum_models = []
         c = 0
         for d in dirs:
@@ -97,9 +103,7 @@ class VizSeqWebView(object):
                 (i, str(op.splitext(op.basename(p))[0]).split('_', 1)[1])
                 for i, p in enumerate(paths)
             ]
-            enum_tasks_and_names_and_enum_models.append(
-                (c, d, task_name, models)
-            )
+            enum_tasks_and_names_and_enum_models.append((c, d, task_name, models))
             c += 1
         return enum_tasks_and_names_and_enum_models
 
@@ -134,9 +138,7 @@ class VizSeqWebView(object):
             'corpus_group_scores_latex': self.latex_corpus_group_scores(
                 corpus_scores, group_scores
             ),
-            'corpus_group_scores_csv': self.csv_corpus_group_scores(
-                corpus_scores, group_scores
-            )
+            'corpus_group_scores_csv': self.csv_corpus_group_scores(corpus_scores, group_scores),
         }
         return json.dumps(scores)
 
@@ -155,9 +157,16 @@ class VizSeqWebView(object):
         ref = _get_ref(dir_path)
         hypo = _get_hypo(dir_path, self.models)
         return VizSeqDataPageView.get(
-            src, ref, hypo, self.page_sz, self.page_no, metrics=self.metrics,
-            query=self.query, sorting=self.sorting,
-            sorting_metric=self.sorting_metric, need_lang_tags=True
+            src,
+            ref,
+            hypo,
+            self.page_sz,
+            self.page_no,
+            metrics=self.metrics,
+            query=self.query,
+            sorting=self.sorting,
+            sorting_metric=self.sorting_metric,
+            need_lang_tags=True,
         )
 
     def get_page_data_with_pagination(self) -> str:
@@ -168,8 +177,7 @@ class VizSeqWebView(object):
         return json.dumps(page_data)
 
     def get_pagination(
-            self, total_examples: int, page_sz: int, page_no: int,
-            nav_group_sz: int = 3
+        self, total_examples: int, page_sz: int, page_no: int, nav_group_sz: int = 3
     ) -> Tuple[List[int], List[int], List[int], List[int]]:
         if page_sz <= 0:
             raise ValueError(f'page_sz must be positive, got {page_sz}')
@@ -191,22 +199,17 @@ class VizSeqWebView(object):
         group3_end = min(n_pages, _page_no + nav_group_sz)
         group3 = list(range(group3_start, group3_end + 1))
 
-        group4_start = max(
-                _page_no + nav_group_sz + 1, n_pages - nav_group_sz + 1
-            )
+        group4_start = max(_page_no + nav_group_sz + 1, n_pages - nav_group_sz + 1)
         group4 = list(range(group4_start, n_pages + 1))
 
         return group1, group2, group3, group4
 
     @classmethod
     def _export_corpus_group_scores(
-            cls, corpus_scores: Dict, group_scores: Dict,
-            export_func: Callable[[Dict], str]
+        cls, corpus_scores: Dict, group_scores: Dict, export_func: Callable[[Dict], str]
     ):
         if set(corpus_scores.keys()) != set(group_scores.keys()):
-            raise ValueError(
-                'corpus_scores and group_scores must have the same keys'
-            )
+            raise ValueError('corpus_scores and group_scores must have the same keys')
         metrics = corpus_scores.keys()
         exported = {}
         for s in metrics:

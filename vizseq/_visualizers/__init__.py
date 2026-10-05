@@ -6,5 +6,9 @@
 #
 
 from .dict_visualizer import VizSeqDictVisualizer
-from .seq_visualizer import (VizSeqSrcVisualizer, VizSeqRefVisualizer,
-                             VizSeqHypoVisualizer, SPAN_HIGHTLIGHT_JS)
+from .seq_visualizer import (
+    VizSeqSrcVisualizer,
+    VizSeqRefVisualizer,
+    VizSeqHypoVisualizer,
+    SPAN_HIGHTLIGHT_JS,
+)

@@ -57,8 +57,10 @@ def _clear_bert_scorer_cache() -> None:
 @register_scorer('bert_score', 'BERTScore')
 class BERTScoreScorer(VizSeqScorer):
     def score(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
     ) -> VizSeqScore:
         corpus_score, sent_scores, group_scores = None, None, None
 
@@ -93,6 +95,7 @@ class BERTScoreScorer(VizSeqScorer):
             ) from e
         import langid
         import logging
+
         logging.getLogger('transformers').setLevel(logging.WARNING)
         logging.getLogger('langid').setLevel(logging.WARNING)
 
@@ -100,9 +103,7 @@ class BERTScoreScorer(VizSeqScorer):
 
         bert_scorer = _get_bert_scorer(bs, lang)
 
-        sent_scores = bert_scorer.score(
-            hypothesis, references[0], verbose=self.verbose
-        )[2].tolist()
+        sent_scores = bert_scorer.score(hypothesis, references[0], verbose=self.verbose)[2].tolist()
 
         if self.corpus_level:
             corpus_score = np.mean(sent_scores)
@@ -115,6 +116,5 @@ class BERTScoreScorer(VizSeqScorer):
                 group_scores[t] = np.mean([sent_scores[i] for i in indices])
 
         return VizSeqScore.make(
-                corpus_score=corpus_score, sent_scores=sent_scores,
-                group_scores=group_scores
-            )
+            corpus_score=corpus_score, sent_scores=sent_scores, group_scores=group_scores
+        )

@@ -13,8 +13,10 @@ from vizseq.scorers import register_scorer, VizSeqScorer, VizSeqScore
 
 
 def _get_sent_rouge(
-        hypothesis: List[str], references: List[List[str]], rouge_type: str,
-        extra_args: Optional[Dict[str, str]] = None
+    hypothesis: List[str],
+    references: List[List[str]],
+    rouge_type: str,
+    extra_args: Optional[Dict[str, str]] = None,
 ) -> List[float]:
     assert rouge_type in {'rouge-1', 'rouge-2', 'rouge-l'}
     metric = {
@@ -25,31 +27,25 @@ def _get_sent_rouge(
     scorer = rouge_scorer.RougeScorer([metric], use_stemmer=False)
     joint_references = list(zip(*references))
     return [
-        max(
-            scorer.score(reference, prediction)[metric].fmeasure
-            for reference in refs
-        )
+        max(scorer.score(reference, prediction)[metric].fmeasure for reference in refs)
         for prediction, refs in zip(hypothesis, joint_references)
     ]
 
 
 def _get_sent_rouge_1(
-        hypothesis: List[str], references: List[List[str]],
-        extra_args: Optional[Dict[str, str]] = None
+    hypothesis: List[str], references: List[List[str]], extra_args: Optional[Dict[str, str]] = None
 ) -> List[float]:
     return _get_sent_rouge(hypothesis, references, rouge_type='rouge-1')
 
 
 def _get_sent_rouge_2(
-        hypothesis: List[str], references: List[List[str]],
-        extra_args: Optional[Dict[str, str]] = None
+    hypothesis: List[str], references: List[List[str]], extra_args: Optional[Dict[str, str]] = None
 ) -> List[float]:
     return _get_sent_rouge(hypothesis, references, rouge_type='rouge-2')
 
 
 def _get_sent_rouge_l(
-        hypothesis: List[str], references: List[List[str]],
-        extra_args: Optional[Dict[str, str]] = None
+    hypothesis: List[str], references: List[List[str]], extra_args: Optional[Dict[str, str]] = None
 ) -> List[float]:
     return _get_sent_rouge(hypothesis, references, rouge_type='rouge-l')
 
@@ -57,8 +53,10 @@ def _get_sent_rouge_l(
 @register_scorer('rouge_1', 'ROUGE-1')
 class Rouge1Scorer(VizSeqScorer):
     def score(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
     ) -> VizSeqScore:
         return self._score_multiprocess_averaged(
             hypothesis, references, tags, sent_score_func=_get_sent_rouge_1
@@ -68,8 +66,10 @@ class Rouge1Scorer(VizSeqScorer):
 @register_scorer('rouge_2', 'ROUGE-2')
 class Rouge2Scorer(VizSeqScorer):
     def score(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
     ) -> VizSeqScore:
         return self._score_multiprocess_averaged(
             hypothesis, references, tags, sent_score_func=_get_sent_rouge_2
@@ -79,9 +79,14 @@ class Rouge2Scorer(VizSeqScorer):
 @register_scorer('rouge_l', 'ROUGE-L')
 class RougeLScorer(VizSeqScorer):
     def score(
-            self, hypothesis: List[str], references: List[List[str]],
-            tags: Optional[List[List[str]]] = None
+        self,
+        hypothesis: List[str],
+        references: List[List[str]],
+        tags: Optional[List[List[str]]] = None,
     ) -> VizSeqScore:
         return self._score_multiprocess_averaged(
-            hypothesis, references, tags, sent_score_func=_get_sent_rouge_l,
+            hypothesis,
+            references,
+            tags,
+            sent_score_func=_get_sent_rouge_l,
         )

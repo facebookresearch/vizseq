@@ -22,7 +22,7 @@ class VizSeqNGrams(object):
     @classmethod
     # TODO: multi-process implementation
     def extract(
-            cls, data: VizSeqDataSources, k=MAX_K, verbose=False
+        cls, data: VizSeqDataSources, k=MAX_K, verbose=False
     ) -> Dict[int, List[Tuple[str, int]]]:
         k = max(1, min(k, MAX_K))
         count = {n: Counter() for n in range(1, cls.MAX_N + 1)}
@@ -37,7 +37,7 @@ class VizSeqNGrams(object):
                 tokens = s.lower().split(cls.SPACE)
                 for t in range(len(tokens)):
                     for n in range(1, min(cls.MAX_N, len(tokens) - t) + 1):
-                        n_gram = cls.SPACE.join(tokens[t: t + n])
+                        n_gram = cls.SPACE.join(tokens[t : t + n])
                         count[n].update([n_gram])
 
         for n in range(1, cls.MAX_N + 1):

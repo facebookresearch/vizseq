@@ -16,6 +16,7 @@ MAX_COMPRESSION_RATIO = 100
 
 class ZipExtractionError(Exception):
     """Exception raised for ZIP extraction security issues."""
+
     pass
 
 
@@ -39,15 +40,11 @@ class VizSeqZipFile(object):
 
         # Check for path traversal attempts
         if '..' in member_path:
-            raise ZipExtractionError(
-                f'Path traversal detected in ZIP member: {member_path}'
-            )
+            raise ZipExtractionError(f'Path traversal detected in ZIP member: {member_path}')
 
         # Check for absolute paths
         if os.path.isabs(member_path):
-            raise ZipExtractionError(
-                f'Absolute path not allowed in ZIP member: {member_path}'
-            )
+            raise ZipExtractionError(f'Absolute path not allowed in ZIP member: {member_path}')
 
         # Compute the absolute target path
         target_path = os.path.normpath(os.path.join(root, member_path))
@@ -84,8 +81,7 @@ class VizSeqZipFile(object):
             ratio = total_uncompressed / total_compressed
             if ratio > MAX_COMPRESSION_RATIO:
                 raise ZipExtractionError(
-                    f'Suspicious compression ratio ({ratio:.1f}:1) - '
-                    f'possible zip bomb detected'
+                    f'Suspicious compression ratio ({ratio:.1f}:1) - possible zip bomb detected'
                 )
 
     @classmethod
@@ -111,9 +107,7 @@ class VizSeqZipFile(object):
             # Test ZIP integrity
             bad_file = zip_f.testzip()
             if bad_file is not None:
-                raise ZipExtractionError(
-                    f'ZIP file is corrupted, bad file: {bad_file}'
-                )
+                raise ZipExtractionError(f'ZIP file is corrupted, bad file: {bad_file}')
 
             # Check for zip bomb
             cls._check_zip_bomb(zip_f)

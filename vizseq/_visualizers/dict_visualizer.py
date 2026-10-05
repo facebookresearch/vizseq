@@ -22,11 +22,11 @@ class VizSeqDictVisualizer(object):
         result = {}
         for k, v in a_dict.items():
             if v == best_v:
-                result[k] = Markup(cls.BEST_MD_TEMPLATE).format(  # nosec B704
+                result[k] = Markup(cls.BEST_MD_TEMPLATE).format(  # nosec B704  # value escaped
                     escape(v)
                 )
             elif v == worst_v:
-                result[k] = Markup(cls.WORSE_MD_TEMPLATE).format(  # nosec B704
+                result[k] = Markup(cls.WORSE_MD_TEMPLATE).format(  # nosec B704  # value escaped
                     escape(v)
                 )
             else:

@@ -120,9 +120,7 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         return server.make_app()
 
     def _write_lines(self, filename, lines):
-        with open(
-                os.path.join(self.task_root, filename), 'w', encoding='utf-8'
-        ) as file:
+        with open(os.path.join(self.task_root, filename), 'w', encoding='utf-8') as file:
             file.write('\n'.join(lines) + '\n')
 
     def _view_url(self, **params):
@@ -163,7 +161,8 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         parts += [
             b'--' + boundary,
             b'Content-Disposition: form-data; name="file1"; filename="'
-            + filename.encode('ascii') + b'"',
+            + filename.encode('ascii')
+            + b'"',
             b'Content-Type: application/zip',
             b'',
             zip_bytes,
@@ -180,7 +179,10 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         headers = self._xsrf_headers(token)
         headers['Content-Type'] = content_type
         return self.fetch(
-            '/upload', method='POST', headers=headers, body=body,
+            '/upload',
+            method='POST',
+            headers=headers,
+            body=body,
             follow_redirects=False,
         )
 
@@ -198,9 +200,7 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         response = self.fetch(self._view_url(q='not present'))
 
         self.assertEqual(response.code, 200)
-        self.assertIn(
-            b'No examples match the current search.', response.body
-        )
+        self.assertIn(b'No examples match the current search.', response.body)
 
     def test_invalid_pagination_and_sorting_return_400(self):
         for params in ({'p_no': 0}, {'p_sz': 101}, {'s': 999}):
@@ -209,19 +209,19 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
                 self.assertEqual(response.code, 400)
 
     def test_page_data_forwards_metric_sorting_and_returns_json(self):
-        query = urllib.parse.urlencode({
-            't': 'test_task',
-            'm': 'model',
-            's': 6,
-            's_metric': 'wer',
-        })
+        query = urllib.parse.urlencode(
+            {
+                't': 'test_task',
+                'm': 'model',
+                's': 6,
+                's_metric': 'wer',
+            }
+        )
         response = self.fetch('/page_data?' + query)
         payload = json.loads(response.body)
 
         self.assertEqual(response.code, 200)
-        self.assertTrue(
-            response.headers['Content-Type'].startswith('application/json')
-        )
+        self.assertTrue(response.headers['Content-Type'].startswith('application/json'))
         self.assertEqual(payload['cur_idx'][:3], [1, 3, 5])
 
     def test_page_tags_follow_paginated_indices(self):
@@ -249,7 +249,9 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         headers = self._xsrf_headers(token)
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
         missing_response = self.fetch(
-            '/upload', method='POST', headers=headers,
+            '/upload',
+            method='POST',
+            headers=headers,
             body=urllib.parse.urlencode({'_xsrf': token}),
         )
 
@@ -266,9 +268,7 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         response = self._post_zip('new_task.zip', archive.getvalue())
 
         self.assertEqual(response.code, 303)
-        self.assertTrue(
-            os.path.exists(os.path.join(self.data_root, 'new_task', 'src_0.txt'))
-        )
+        self.assertTrue(os.path.exists(os.path.join(self.data_root, 'new_task', 'src_0.txt')))
         # The archive itself is unpacked and cleaned up, not left behind.
         self.assertFalse(os.path.exists(os.path.join(self.data_root, 'new_task.zip')))
 
@@ -279,17 +279,23 @@ class VizSeqWebTestCase(AsyncHTTPTestCase):
         body, content_type = self._multipart_zip('new_task.zip', archive.getvalue())
 
         upload = self.fetch(
-            '/upload', method='POST', headers={'Content-Type': content_type},
-            body=body, follow_redirects=False,
+            '/upload',
+            method='POST',
+            headers={'Content-Type': content_type},
+            body=body,
+            follow_redirects=False,
         )
         task_cfg = self.fetch(
             '/task_cfg?' + urllib.parse.urlencode({'t': 'test_task', 'n': 'renamed'}),
-            method='POST', body=b'',
+            method='POST',
+            body=b'',
         )
         config = self.fetch('/config', method='POST', body=b'')
 
         for name, response in (
-            ('upload', upload), ('task_cfg', task_cfg), ('config', config),
+            ('upload', upload),
+            ('task_cfg', task_cfg),
+            ('config', config),
         ):
             with self.subTest(endpoint=name):
                 self.assertEqual(response.code, 403)

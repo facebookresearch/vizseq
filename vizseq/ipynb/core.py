@@ -12,19 +12,28 @@ import matplotlib.pyplot as plt
 import numpy as np
 from IPython.display import HTML, display
 
-from vizseq._data import (VizSeqDataSources, PathOrPathsOrDictOfStrList,
-                          VizSeqNGrams, VizSeqStats, get_g_translate,
-                          set_g_cred_path as _set_g_cred_path)
+from vizseq._data import (
+    VizSeqDataSources,
+    PathOrPathsOrDictOfStrList,
+    VizSeqNGrams,
+    VizSeqStats,
+    get_g_translate,
+    set_g_cred_path as _set_g_cred_path,
+)
 from vizseq._visualizers import SPAN_HIGHTLIGHT_JS
-from vizseq._view import (VizSeqDataPageView, VizSeqWebView, VizSeqSortingType,
-                          DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NO)
+from vizseq._view import (
+    VizSeqDataPageView,
+    VizSeqWebView,
+    VizSeqSortingType,
+    DEFAULT_PAGE_SIZE,
+    DEFAULT_PAGE_NO,
+)
 from vizseq.scorers import get_scorer_ids, get_scorer, get_scorer_name
 from vizseq._utils.logger import logger
 
 
 env = Environment(
-    loader=PackageLoader('vizseq', '_templates'),
-    autoescape=select_autoescape(['html', 'xml'])
+    loader=PackageLoader('vizseq', '_templates'), autoescape=select_autoescape(['html', 'xml'])
 )
 
 
@@ -34,16 +43,16 @@ def available_scorers():
 
 
 def view_examples(
-        sources: PathOrPathsOrDictOfStrList,
-        references: PathOrPathsOrDictOfStrList,
-        hypothesis: Optional[PathOrPathsOrDictOfStrList] = None,
-        metrics: Optional[List[str]] = None,
-        query: str = '',
-        page_sz: int = DEFAULT_PAGE_SIZE,
-        page_no: int = DEFAULT_PAGE_NO,
-        sorting: VizSeqSortingType = VizSeqSortingType.original,
-        need_g_translate: bool = False,
-        disable_alignment: bool = False,
+    sources: PathOrPathsOrDictOfStrList,
+    references: PathOrPathsOrDictOfStrList,
+    hypothesis: Optional[PathOrPathsOrDictOfStrList] = None,
+    metrics: Optional[List[str]] = None,
+    query: str = '',
+    page_sz: int = DEFAULT_PAGE_SIZE,
+    page_no: int = DEFAULT_PAGE_NO,
+    sorting: VizSeqSortingType = VizSeqSortingType.original,
+    need_g_translate: bool = False,
+    disable_alignment: bool = False,
 ):
     _src = VizSeqDataSources(sources)
     _ref = VizSeqDataSources(references)
@@ -52,20 +61,25 @@ def view_examples(
         metrics = None
     if len(_src) != len(_ref):
         raise ValueError(
-            f'Source and reference must have the same length, '
-            f'got {len(_src)} and {len(_ref)}'
+            f'Source and reference must have the same length, got {len(_src)} and {len(_ref)}'
         )
     if _hypo.n_sources > 0 and len(_ref) != len(_hypo):
         raise ValueError(
-            f'Reference and hypothesis must have the same length, '
-            f'got {len(_ref)} and {len(_hypo)}'
+            f'Reference and hypothesis must have the same length, got {len(_ref)} and {len(_hypo)}'
         )
 
     _need_g_translate = need_g_translate and _src.has_text
     view = VizSeqDataPageView.get(
-        _src, _ref, _hypo, page_sz, page_no, metrics=metrics, query=query,
-        sorting=sorting.value, need_lang_tags=_need_g_translate,
-        disable_alignment=disable_alignment
+        _src,
+        _ref,
+        _hypo,
+        page_sz,
+        page_no,
+        metrics=metrics,
+        query=query,
+        sorting=sorting.value,
+        need_lang_tags=_need_g_translate,
+        disable_alignment=disable_alignment,
     )
 
     google_translation = []
@@ -76,7 +90,9 @@ def view_examples(
     html = env.get_template('ipynb_view.html').render(
         enum_metrics=VizSeqDataPageView.get_enum(metrics),
         enum_models=VizSeqDataPageView.get_enum(_hypo.text_names),
-        cur_idx=view.cur_idx, src=view.viz_src, ref=view.viz_ref,
+        cur_idx=view.cur_idx,
+        src=view.viz_src,
+        ref=view.viz_ref,
         hypo=view.viz_hypo,
         enum_src_names_and_types=VizSeqDataPageView.get_enum(
             zip(_src.names, [t.name for t in _src.data_types])
@@ -95,18 +111,15 @@ def view_examples(
 def view_n_grams(data: PathOrPathsOrDictOfStrList, k: int = 64):
     _data = VizSeqDataSources(data, text_merged=True)
     n_grams = VizSeqNGrams.extract(_data, k=k)
-    html = env.get_template('ipynb_n_grams.html').render(
-        n=list(n_grams.keys()),
-        n_grams=n_grams
-    )
+    html = env.get_template('ipynb_n_grams.html').render(n=list(n_grams.keys()), n_grams=n_grams)
     return HTML(html)
 
 
 # TODO: add tag count
 def view_stats(
-        sources: PathOrPathsOrDictOfStrList,
-        references: PathOrPathsOrDictOfStrList,
-        tags: Optional[PathOrPathsOrDictOfStrList] = None,
+    sources: PathOrPathsOrDictOfStrList,
+    references: PathOrPathsOrDictOfStrList,
+    tags: Optional[PathOrPathsOrDictOfStrList] = None,
 ):
     _src = VizSeqDataSources(sources, text_merged=True)
     _ref = VizSeqDataSources(references, text_merged=True)
@@ -118,7 +131,7 @@ def view_stats(
         enum_src_names_and_types=VizSeqDataPageView.get_enum(
             zip(_src.names, [t.name.title() for t in _src.data_types])
         ),
-        enum_ref_names=VizSeqDataPageView.get_enum(_ref.names)
+        enum_ref_names=VizSeqDataPageView.get_enum(_ref.names),
     )
     display(HTML(html))
 
@@ -146,10 +159,10 @@ def view_stats(
 # TODO: add visualization
 # TODO: add sentence scores distribution
 def view_scores(
-        references: PathOrPathsOrDictOfStrList,
-        hypothesis: Optional[PathOrPathsOrDictOfStrList],
-        metrics: List[str],
-        tags: Optional[PathOrPathsOrDictOfStrList] = None
+    references: PathOrPathsOrDictOfStrList,
+    hypothesis: Optional[PathOrPathsOrDictOfStrList],
+    metrics: List[str],
+    tags: Optional[PathOrPathsOrDictOfStrList] = None,
 ):
     _ref = VizSeqDataSources(references)
     _hypo = VizSeqDataSources(hypothesis)
@@ -171,25 +184,24 @@ def view_scores(
         s: {
             m: get_scorer(s)(corpus_level=True, sent_level=False).score(
                 _hypo.data[i].text, _ref.text, tags=_tags
-            ) for i, m in enumerate(models)
-        } for s in _metrics
+            )
+            for i, m in enumerate(models)
+        }
+        for s in _metrics
     }
 
-    corpus_scores = {
-        s: {m: scores[s][m].corpus_score for m in models} for s in _metrics
-    }
+    corpus_scores = {s: {m: scores[s][m].corpus_score for m in models} for s in _metrics}
     group_scores = {
-        s: {
-            t: {
-                m: scores[s][m].group_scores[t] for m in models
-            } for t in tag_set
-        } for s in _metrics
+        s: {t: {m: scores[s][m].group_scores[t] for m in models} for t in tag_set} for s in _metrics
     }
 
     metrics_and_names = [[s, get_scorer_name(s)] for s in _metrics]
     html = env.get_template('ipynb_scores.html').render(
-        metrics_and_names=metrics_and_names, models=models, tag_set=tag_set,
-        corpus_scores=corpus_scores, group_scores=group_scores,
+        metrics_and_names=metrics_and_names,
+        models=models,
+        tag_set=tag_set,
+        corpus_scores=corpus_scores,
+        group_scores=group_scores,
         corpus_and_group_score_latex=VizSeqWebView.latex_corpus_group_scores(
             corpus_scores, group_scores
         ),

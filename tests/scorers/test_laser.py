@@ -18,6 +18,4 @@ from vizseq.scorers.laser import LaserScorer
 )
 class LaserScorerTestCase(VizSeqScorerTestCase):
     def test(self):
-        return self._test_embedding_based(
-            LaserScorer, extra_args={'laser_trg_lang': 'de'}
-        )
+        return self._test_embedding_based(LaserScorer, extra_args={'laser_trg_lang': 'de'})

@@ -11,4 +11,4 @@ from vizseq.scorers.nist import NISTScorer
 
 class NISTScorerTestCase(VizSeqScorerTestCase):
     def test(self):
-        return self._test_n_grams_based(NISTScorer, 32.)
+        return self._test_n_grams_based(NISTScorer, 32.0)
